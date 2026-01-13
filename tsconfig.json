@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "ESNext",
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -10,8 +10,11 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src",
+    "playwright.config.ts",
+    "components",
+    "fixtures",
     "pages",
     "tests",
-    "constants"]
+    "constants"
+  ]
 }

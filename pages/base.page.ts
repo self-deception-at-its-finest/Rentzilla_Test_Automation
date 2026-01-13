@@ -1,12 +1,12 @@
-import { expect, type Locator, type Page } from '@playwright/test'
+import { expect, type Locator, type Page } from '@playwright/test';
 
 
 export default class BasePage {
-    public page: Page
-    public endpoint = ''
+    public page: Page;
+    public endpoint = '';
 
     constructor(page: Page) {
-        this.page = page
+        this.page = page;
     }
 
     /**
@@ -14,6 +14,6 @@ export default class BasePage {
      * @param path
      */
     async open(path = ''): Promise<void> {
-        await this.page.goto('/' + path)
+        await this.page.goto('/' + path);
     }
 }
