@@ -47,18 +47,53 @@ test.describe(
                     });
                 });
 
-                await test.step(``, async () => {});
-            }
-        );
+                await test.step("Other tabs: ⤵️", async () => {
+                    const tabTitlesFromJSON = Object.values(
+                        createUnitConstants.tabs
+                    ).map((tab) => tab.title);
 
-        test(
-            "Verify tab titles and numbers",
-            {
-                tag: "@UI",
-                annotation: [{ type: "Test case", description: "C295" }],
-            },
-            async ({ createUnitPage }) => {
-                console.log("another test");
+                    await test.step("• are not active;", async () => {
+                        for (
+                            let i = 1;
+                            i < createUnitPage.tabNumbers.length;
+                            i++
+                        ) {
+                            expect(
+                                createUnitPage.tabList.nth(i)
+                            ).toHaveAttribute("aria-selected", "false");
+                        }
+                    });
+
+                    await test.step(`• have these titles: ${tabTitlesFromJSON
+                        .map((title) => `«${title}»`)
+                        .join(", ")}`, async () => {
+                        for (
+                            let i = 1;
+                            i < createUnitPage.tabNumbers.length;
+                            i++
+                        ) {
+                            const tabKey = createUnitPage.tabNumbers[i];
+                            const { title: tabTitle } =
+                                await createUnitPage.getTabMetaInfo(tabKey);
+
+                            expect(tabTitle).toEqual(tabTitlesFromJSON[i]);
+                        }
+                    });
+
+                    await test.step("• have correct numbers.", async () => {
+                        for (
+                            let i = 1;
+                            i < createUnitPage.tabNumbers.length;
+                            i++
+                        ) {
+                            const tabKey = createUnitPage.tabNumbers[i];
+                            const { number: tabNumber } =
+                                await createUnitPage.getTabMetaInfo(tabKey);
+
+                            expect(tabNumber).toEqual(tabKey);
+                        }
+                    });
+                });
             }
         );
     }
