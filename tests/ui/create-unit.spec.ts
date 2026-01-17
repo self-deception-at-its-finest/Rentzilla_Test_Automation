@@ -1,6 +1,7 @@
 import { expect, test } from "../../fixtures/fixtures";
-import createUnitConstants from "../../constants/create-unit.constants.json";
+import createUnitConsts from "../../constants/create-unit.constants.json";
 import endpoints from "../../constants/endpoints.constants.json";
+import { MainInfoComponent } from "../../components/create-unit/1/main-info.component";
 
 test.describe(
     "“Create unit” page",
@@ -24,7 +25,7 @@ test.describe(
                     });
                     await test.step("• correct", async () => {
                         await expect(createUnitPage.pageTitle).toHaveText(
-                            createUnitConstants["page title"]
+                            createUnitConsts["page title"]
                         );
                     });
                 });
@@ -39,9 +40,11 @@ test.describe(
                             "true"
                         );
                     });
+
                     await test.step(`• has the “${tabTitle}” title;`, async () => {
                         expect(tabTitle).toEqual(tabTitle);
                     });
+
                     await test.step(`• has the “${tabNumber}” number.`, async () => {
                         expect(tabNumber).toEqual("1");
                     });
@@ -49,7 +52,7 @@ test.describe(
 
                 await test.step("Other tabs: ⤵️", async () => {
                     const tabTitlesFromJSON = Object.values(
-                        createUnitConstants.tabs
+                        createUnitConsts.tabs
                     ).map((tab) => tab.title);
 
                     await test.step("• are not active;", async () => {
@@ -93,6 +96,69 @@ test.describe(
                             expect(tabNumber).toEqual(tabKey);
                         }
                     });
+                });
+            }
+        );
+
+        test.only(
+            "Verify category (Категорія) section",
+            {
+                tag: "@UI",
+                annotation: [{ type: "Test case", description: "C296" }],
+            },
+            async ({ createUnitPage, page }) => {
+                const mainInfoComponent = new MainInfoComponent(page);
+
+                await test.step("The title: ⤵️", async () => {
+                    await test.step(`• has the «${createUnitConsts["tabs"]["1"]["category"]["label"]}» text;`, async () => {
+                        await expect(mainInfoComponent.label).toContainText(
+                            createUnitConsts["tabs"]["1"]["category"]["label"]
+                        );
+                    });
+
+                    await test.step("• is visible;", async () => {
+                        await expect(mainInfoComponent.label).toBeVisible();
+                    });
+
+                    await test.step("• has an asterisk.", async () => {
+                        await expect(
+                            mainInfoComponent.requiredSymbol
+                        ).toBeVisible();
+                    });
+                });
+
+                await test.step("The input field: ⤵️", async () => {
+                    await test.step(`• has the «${createUnitConsts["tabs"]["1"]["category"]["placeholder"]}» background text;`, async () => {
+                        await expect(
+                            mainInfoComponent.fieldPlaceholder
+                        ).toHaveText(
+                            createUnitConsts["tabs"]["1"]["category"][
+                                "placeholder"
+                            ]
+                        );
+                    });
+
+                    await test.step("• to contain arrow in the right side of field. ", async () => {
+                        await expect(
+                            mainInfoComponent.fieldArrow
+                        ).toBeVisible();
+                    });
+
+                    // TODO
+                    // await test.step("• requires filling.", async () => {
+                    //     await expect(mainInfoComponent.field).toHaveCSS(
+                    //         "border",
+                    //         "1px solid "
+                    //     );
+
+                    //     await expect(
+                    //         mainInfoComponent.errorBlock
+                    //     ).toBeVisible();
+
+                    //     await expect(mainInfoComponent.errorBlock).toHaveText(
+                    //         createUnitConsts["error message"]
+                    //     );
+                    // });
                 });
             }
         );

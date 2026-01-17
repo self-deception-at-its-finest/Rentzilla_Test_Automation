@@ -1,6 +1,6 @@
 import { Locator, Page, expect, test } from "@playwright/test";
 import BasePage from "./base.page";
-import createUnitConstants from "../constants/create-unit.constants.json";
+import createUnitConsts from "../constants/create-unit.constants.json";
 
 type TabInfo = {
     title: string;
@@ -10,27 +10,23 @@ type TabInfo = {
 export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
-    readonly tabNumbers: (keyof typeof createUnitConstants.tabs)[];
+    readonly tabNumbers: (keyof typeof createUnitConsts.tabs)[];
+    readonly nextButton: Locator;
 
     constructor(page: Page) {
         super(page);
-        this.pageTitle = page
-            .getByText(createUnitConstants["page title"])
-            .first();
+        this.pageTitle = page.getByText(createUnitConsts["page title"]).first();
         this.tabList = page.locator('[role="tablist"] > button');
 
         this.tabNumbers = Object.keys(
-            createUnitConstants.tabs
-        ) as (keyof typeof createUnitConstants.tabs)[];
+            createUnitConsts.tabs
+        ) as (keyof typeof createUnitConsts.tabs)[];
+
+        this.nextButton = page.getByTestId("nextButton");
     }
 
-    /**
-     *
-     * @param tabNumber - tab number as string
-     * @returns
-     */
     async getTabMetaInfo(
-        tabNumber: keyof typeof createUnitConstants.tabs
+        tabNumber: keyof typeof createUnitConsts.tabs
     ): Promise<TabInfo> {
         const index = this.tabNumbers.indexOf(tabNumber);
         if (index === -1)
@@ -42,7 +38,7 @@ export class CreateUnitPage extends BasePage {
             .textContent();
         const title = await tab
             .locator("span", {
-                hasText: createUnitConstants.tabs[tabNumber].title,
+                hasText: createUnitConsts["tabs"][tabNumber]["title"],
             })
             .textContent();
 
@@ -50,5 +46,9 @@ export class CreateUnitPage extends BasePage {
             number: number?.trim() ?? "",
             title: title?.trim() ?? "",
         };
+    }
+
+    async clickNextButton() {
+        await this.nextButton.click();
     }
 }
