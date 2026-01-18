@@ -15,6 +15,7 @@
     "fixtures",
     "pages",
     "tests",
-    "constants"
+    "constants",
+    "utils"
   ]
 }

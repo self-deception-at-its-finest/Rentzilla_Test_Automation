@@ -45,15 +45,16 @@ export const test = base.extend<Fixtures>({
             await page.goto(endpoints["create unit"]);
             await use(new CreateUnitPage(page));
         },
-        { box: true },
+        { box: false },
     ],
 
     homePage: [
         async ({ page }, use) => {
             await page.goto(endpoints.home);
             await use(new HomePage(page));
-        }, { box: true }
-    ]
+        },
+        { box: true },
+    ],
 });
 
 export {

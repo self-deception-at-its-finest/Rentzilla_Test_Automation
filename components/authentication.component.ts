@@ -1,6 +1,8 @@
 import { Page, Locator } from "@playwright/test";
 import { HeaderComponent } from "./header.component";
 import { expect } from "playwright/test";
+import { MobNavbarComponent } from "./mob-navbar.component";
+import { isDesktop } from "../utils/viewportGuard";
 
 export class AuthenticationComponent {
     readonly page: Page;
@@ -10,6 +12,7 @@ export class AuthenticationComponent {
     readonly emailInput: Locator;
     readonly passwordInput: Locator;
     readonly submitButton: Locator;
+    readonly profileButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -22,6 +25,7 @@ export class AuthenticationComponent {
             name: "Увійти",
             exact: true,
         });
+        this.profileButton = page.getByText("Профіль");
     }
 
     async fillEmail(email: string) {
@@ -33,9 +37,11 @@ export class AuthenticationComponent {
     }
 
     async login(creds?: { email?: string; password?: string }) {
-        const headerComponent = new HeaderComponent(this.page);
-
-        await headerComponent.authenticationButton.click();
+        if (isDesktop(this.page)) {
+            await new HeaderComponent(this.page).authenticationButton.click();
+        } else {
+            await new MobNavbarComponent(this.page).clickProfileBtn();
+        }
         await expect(this.authContainer).toBeVisible();
 
         const { email, password } = creds ?? {};

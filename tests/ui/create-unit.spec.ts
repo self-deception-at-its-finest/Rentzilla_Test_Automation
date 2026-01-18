@@ -2,6 +2,8 @@ import { expect, test } from "../../fixtures/fixtures";
 import createUnitConsts from "../../constants/create-unit.constants.json";
 import endpoints from "../../constants/endpoints.constants.json";
 import { MainInfoComponent } from "../../components/create-unit/1/main-info.component";
+import { isDesktop } from "../../utils/viewportGuard";
+import { markStepAsSkipped } from "../../utils/skipTest";
 
 test.describe(
     "“Create unit” page",
@@ -25,7 +27,7 @@ test.describe(
                     });
                     await test.step("• correct", async () => {
                         await expect(createUnitPage.pageTitle).toHaveText(
-                            createUnitConsts["page title"]
+                            createUnitConsts["page title"],
                         );
                     });
                 });
@@ -37,7 +39,7 @@ test.describe(
                     await test.step(`• is selected;`, async () => {
                         expect(createUnitPage.tabList.first()).toHaveAttribute(
                             "aria-selected",
-                            "true"
+                            "true",
                         );
                     });
 
@@ -52,7 +54,7 @@ test.describe(
 
                 await test.step("Other tabs: ⤵️", async () => {
                     const tabTitlesFromJSON = Object.values(
-                        createUnitConsts.tabs
+                        createUnitConsts.tabs,
                     ).map((tab) => tab.title);
 
                     await test.step("• are not active;", async () => {
@@ -62,7 +64,7 @@ test.describe(
                             i++
                         ) {
                             expect(
-                                createUnitPage.tabList.nth(i)
+                                createUnitPage.tabList.nth(i),
                             ).toHaveAttribute("aria-selected", "false");
                         }
                     });
@@ -97,7 +99,7 @@ test.describe(
                         }
                     });
                 });
-            }
+            },
         );
 
         test.only(
@@ -112,7 +114,7 @@ test.describe(
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${createUnitConsts["tabs"]["1"]["category"]["label"]}» text;`, async () => {
                         await expect(mainInfoComponent.label).toContainText(
-                            createUnitConsts["tabs"]["1"]["category"]["label"]
+                            createUnitConsts["tabs"]["1"]["category"]["label"],
                         );
                     });
 
@@ -122,7 +124,7 @@ test.describe(
 
                     await test.step("• has an asterisk.", async () => {
                         await expect(
-                            mainInfoComponent.requiredSymbol
+                            mainInfoComponent.requiredSymbol,
                         ).toBeVisible();
                     });
                 });
@@ -130,17 +132,17 @@ test.describe(
                 await test.step("The input field: ⤵️", async () => {
                     await test.step(`• has the «${createUnitConsts["tabs"]["1"]["category"]["placeholder"]}» background text;`, async () => {
                         await expect(
-                            mainInfoComponent.fieldPlaceholder
+                            mainInfoComponent.fieldPlaceholder,
                         ).toHaveText(
                             createUnitConsts["tabs"]["1"]["category"][
                                 "placeholder"
-                            ]
+                            ],
                         );
                     });
 
                     await test.step("• to contain arrow in the right side of field. ", async () => {
                         await expect(
-                            mainInfoComponent.fieldArrow
+                            mainInfoComponent.fieldArrow,
                         ).toBeVisible();
                     });
 
@@ -149,15 +151,15 @@ test.describe(
 
                         await expect(mainInfoComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${mainInfoComponent.borderColor}`
+                            `1px solid ${mainInfoComponent.borderColor}`,
                         );
 
                         await expect(
-                            mainInfoComponent.errorBlock
+                            mainInfoComponent.errorBlock,
                         ).toBeVisible();
 
                         await expect(mainInfoComponent.errorBlock).toHaveText(
-                            createUnitConsts["error message"]
+                            createUnitConsts["error message"],
                         );
                     });
                 });
@@ -166,45 +168,56 @@ test.describe(
                     await test.step("• opens when the field is clicked;", async () => {
                         mainInfoComponent.clickCategorySelect();
                         await expect(
-                            mainInfoComponent.categoryPopup
+                            mainInfoComponent.categoryPopup,
                         ).toBeVisible();
                     });
 
-                    await test.step(`• has the «${createUnitConsts["tabs"]["1"]["category"]["popup title"]}» title;`, async () => {
+                    await test.step(`• has the «${
+                        isDesktop(page)
+                            ? createUnitConsts["tabs"]["1"]["category"][
+                                  "popup title"
+                              ]
+                            : createUnitConsts["tabs"]["1"]["category"][
+                                  "mobile popup title"
+                              ]
+                    }» title;`, async () => {
                         await expect(mainInfoComponent.popupTitle).toHaveText(
-                            createUnitConsts["tabs"]["1"]["category"][
-                                "popup title"
-                            ]
+                            isDesktop(page)
+                                ? createUnitConsts["tabs"]["1"]["category"][
+                                      "popup title"
+                                  ]
+                                : createUnitConsts["tabs"]["1"]["category"][
+                                      "mobile popup title"
+                                  ],
                         );
                     });
 
                     await test.step("• has the Close button;", async () => {
                         await expect(
-                            mainInfoComponent.popupCloseBtn
+                            mainInfoComponent.popupCloseBtn,
                         ).toBeVisible();
                     });
 
                     await test.step("• disappears when the Close button is clicked;", async () => {
                         await mainInfoComponent.clickCloseBtn();
                         await expect(
-                            mainInfoComponent.categoryPopup
+                            mainInfoComponent.categoryPopup,
                         ).toBeHidden();
                     });
 
                     await test.step("• disappears when clicking outside of it.", async () => {
-                        const viewport = page.viewportSize();
-                        test.skip(
-                            !viewport || viewport.width < 1280,
-                            "Requires desktop resolution"
-                        );
+                        if (!isDesktop(page)) {
+                            markStepAsSkipped("Clicking outside of modal");
+                            return;
+                        }
                         await mainInfoComponent.clickCategorySelect();
                         await mainInfoComponent.clickPopupOutside();
                         await expect(
-                            mainInfoComponent.categoryPopup
+                            mainInfoComponent.categoryPopup,
                         ).toBeHidden();
                     });
                 });
-            }
+            },
         );
-    }
+    },
 );

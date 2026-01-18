@@ -1,5 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import createUnitConsts from "../../../constants/create-unit.constants.json";
+import { isDesktop } from "../../../utils/viewportGuard";
+import catalogConsts from "../../../constants/catalog.constants.json";
 
 export class MainInfoComponent {
     readonly borderColor = "rgb(247, 56, 89)";
@@ -18,11 +20,14 @@ export class MainInfoComponent {
     readonly popupTitle: Locator;
     readonly popupCloseBtn: Locator;
     readonly popupOutside: Locator;
+    // readonly firstCategory: Locator;
+    // readonly firstSubCategory: Locator;
+    // readonly firstTwoSubCategory: Locator;
 
     constructor(page: Page) {
         this.page = page;
 
-        this.categorySection = page
+        this.categorySection = this.page
             .getByText(createUnitConsts["tabs"]["1"]["category"]["label"])
             .locator("..");
 
@@ -41,12 +46,21 @@ export class MainInfoComponent {
             `text=${createUnitConsts["error message"]}`
         );
 
-        this.categoryPopup = page.getByTestId("categoryPopupWrapper");
+        this.categoryPopup = this.page.getByTestId("categoryPopupWrapper");
         this.popupTitle = this.categoryPopup.locator(
-            `text=${createUnitConsts["tabs"]["1"]["category"]["popup title"]}`
+            `text=${
+                isDesktop(this.page)
+                    ? createUnitConsts["tabs"]["1"]["category"]["popup title"]
+                    : createUnitConsts["tabs"]["1"]["category"][
+                          "mobile popup title"
+                      ]
+            }`
         );
         this.popupCloseBtn = this.categoryPopup.getByTestId("closeIcon");
-        this.popupOutside = page.getByTestId("categoryPopup");
+        this.popupOutside = this.page.getByTestId("categoryPopup");
+
+        // this.firstCategory = this.page.getByTestId("firstCategoryWrapper");
+        // this.firstSubCategory = this.page.getByText(createUnitConsts["tabs"]["1"])
     }
 
     async clickCloseBtn() {
