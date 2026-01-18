@@ -144,21 +144,65 @@ test.describe(
                         ).toBeVisible();
                     });
 
-                    // TODO
-                    // await test.step("• requires filling.", async () => {
-                    //     await expect(mainInfoComponent.field).toHaveCSS(
-                    //         "border",
-                    //         "1px solid "
-                    //     );
+                    await test.step("• requires filling.", async () => {
+                        await createUnitPage.clickNextButton();
 
-                    //     await expect(
-                    //         mainInfoComponent.errorBlock
-                    //     ).toBeVisible();
+                        await expect(mainInfoComponent.field).toHaveCSS(
+                            "border",
+                            `1px solid ${mainInfoComponent.borderColor}`
+                        );
 
-                    //     await expect(mainInfoComponent.errorBlock).toHaveText(
-                    //         createUnitConsts["error message"]
-                    //     );
-                    // });
+                        await expect(
+                            mainInfoComponent.errorBlock
+                        ).toBeVisible();
+
+                        await expect(mainInfoComponent.errorBlock).toHaveText(
+                            createUnitConsts["error message"]
+                        );
+                    });
+                });
+
+                await test.step("The category popup: ⤵️", async () => {
+                    await test.step("• opens when the field is clicked;", async () => {
+                        mainInfoComponent.clickCategorySelect();
+                        await expect(
+                            mainInfoComponent.categoryPopup
+                        ).toBeVisible();
+                    });
+
+                    await test.step(`• has the «${createUnitConsts["tabs"]["1"]["category"]["popup title"]}» title;`, async () => {
+                        await expect(mainInfoComponent.popupTitle).toHaveText(
+                            createUnitConsts["tabs"]["1"]["category"][
+                                "popup title"
+                            ]
+                        );
+                    });
+
+                    await test.step("• has the Close button;", async () => {
+                        await expect(
+                            mainInfoComponent.popupCloseBtn
+                        ).toBeVisible();
+                    });
+
+                    await test.step("• disappears when the Close button is clicked;", async () => {
+                        await mainInfoComponent.clickCloseBtn();
+                        await expect(
+                            mainInfoComponent.categoryPopup
+                        ).toBeHidden();
+                    });
+
+                    await test.step("• disappears when clicking outside of it.", async () => {
+                        const viewport = page.viewportSize();
+                        test.skip(
+                            !viewport || viewport.width < 1280,
+                            "Requires desktop resolution"
+                        );
+                        await mainInfoComponent.clickCategorySelect();
+                        await mainInfoComponent.clickPopupOutside();
+                        await expect(
+                            mainInfoComponent.categoryPopup
+                        ).toBeHidden();
+                    });
                 });
             }
         );
