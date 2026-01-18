@@ -9,7 +9,6 @@ type Fixtures = {
     authorizedHomePage: HomePage;
     authComponent: AuthenticationComponent;
     createUnitPage: CreateUnitPage;
-    homePage: HomePage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -46,14 +45,6 @@ export const test = base.extend<Fixtures>({
             await use(new CreateUnitPage(page));
         },
         { box: false },
-    ],
-
-    homePage: [
-        async ({ page }, use) => {
-            await page.goto(endpoints.home);
-            await use(new HomePage(page));
-        },
-        { box: true },
     ],
 });
 

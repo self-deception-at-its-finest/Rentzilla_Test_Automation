@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./base.page";
-import createUnitConsts from "../constants/create-unit.constants.json";
+import createUnitConstsJSON from "../constants/create-unit/create-unit.constants.json";
 
 type TabInfo = {
     title: string;
@@ -10,23 +10,23 @@ type TabInfo = {
 export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
-    readonly tabNumbers: (keyof typeof createUnitConsts.tabs)[];
+    readonly tabNumbers: (keyof typeof createUnitConstsJSON.tabs)[];
     readonly nextButton: Locator;
 
     constructor(page: Page) {
         super(page);
-        this.pageTitle = page.getByText(createUnitConsts["page title"]).first();
+        this.pageTitle = page.getByText(createUnitConstsJSON["page title"]).first();
         this.tabList = page.locator('[role="tablist"] > button');
 
         this.tabNumbers = Object.keys(
-            createUnitConsts.tabs
-        ) as (keyof typeof createUnitConsts.tabs)[];
+            createUnitConstsJSON.tabs
+        ) as (keyof typeof createUnitConstsJSON.tabs)[];
 
         this.nextButton = page.getByTestId("nextButton");
     }
 
     async getTabMetaInfo(
-        tabNumber: keyof typeof createUnitConsts.tabs
+        tabNumber: keyof typeof createUnitConstsJSON.tabs
     ): Promise<TabInfo> {
         const index = this.tabNumbers.indexOf(tabNumber);
         if (index === -1)
@@ -38,7 +38,7 @@ export class CreateUnitPage extends BasePage {
             .textContent();
         const title = await tab
             .locator("span", {
-                hasText: createUnitConsts["tabs"][tabNumber]["title"],
+                hasText: createUnitConstsJSON["tabs"][tabNumber]["title"],
             })
             .textContent();
 
