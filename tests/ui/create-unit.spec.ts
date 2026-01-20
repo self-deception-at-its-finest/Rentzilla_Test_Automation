@@ -1,6 +1,9 @@
 import { expect, test } from "../../fixtures/fixtures";
 import createUnitConstsJSON from "../../constants/create-unit/create-unit.constants.json";
-import { createUnitConsts } from "../../constants/create-unit/create-unit.constants";
+import {
+    createUnitConsts,
+    tabNumbers,
+} from "../../constants/create-unit/create-unit.constants";
 import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
 import { isDesktop } from "../../utils/viewport-guard";
@@ -35,13 +38,13 @@ test.describe(
                     });
                     await test.step("• correct", async () => {
                         await expect(createUnitPage.pageTitle).toHaveText(
-                            createUnitConsts.pageTitle,
+                            createUnitConsts.PAGE_TITLE,
                         );
                     });
                 });
 
                 await test.step(`The first tab: ⤵️`, async () => {
-                    const { number: tabNumber, title: tabTitle } =
+                    const { tabNumber, tabTitle } =
                         await createUnitPage.getTabMetaInfo("1");
 
                     await test.step(`• is selected`, async () => {
@@ -66,11 +69,7 @@ test.describe(
                     ).map((tab) => tab.title);
 
                     await test.step("• are not active", async () => {
-                        for (
-                            let i = 1;
-                            i < createUnitPage.tabNumbers.length;
-                            i++
-                        ) {
+                        for (let i = 1; i < tabNumbers.length; i++) {
                             expect(
                                 createUnitPage.tabList.nth(i),
                             ).toHaveAttribute("aria-selected", "false");
@@ -80,13 +79,9 @@ test.describe(
                     await test.step(`• have these titles: ${tabTitlesFromJSON
                         .map((title) => `«${title}»`)
                         .join(", ")}`, async () => {
-                        for (
-                            let i = 1;
-                            i < createUnitPage.tabNumbers.length;
-                            i++
-                        ) {
-                            const tabKey = createUnitPage.tabNumbers[i];
-                            const { title: tabTitle } =
+                        for (let i = 1; i < tabNumbers.length; i++) {
+                            const tabKey = tabNumbers[i];
+                            const { tabTitle: tabTitle } =
                                 await createUnitPage.getTabMetaInfo(tabKey);
 
                             expect(tabTitle).toEqual(tabTitlesFromJSON[i]);
@@ -94,13 +89,9 @@ test.describe(
                     });
 
                     await test.step("• have correct numbers.", async () => {
-                        for (
-                            let i = 1;
-                            i < createUnitPage.tabNumbers.length;
-                            i++
-                        ) {
-                            const tabKey = createUnitPage.tabNumbers[i];
-                            const { number: tabNumber } =
+                        for (let i = 1; i < tabNumbers.length; i++) {
+                            const tabKey = tabNumbers[i];
+                            const { tabNumber: tabNumber } =
                                 await createUnitPage.getTabMetaInfo(tabKey);
 
                             expect(tabNumber).toEqual(tabKey);
@@ -155,7 +146,7 @@ test.describe(
 
                         await expect(categoryComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
                         );
 
                         await expect(
@@ -281,7 +272,7 @@ test.describe(
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
                         );
 
                         await expect(adComponent.errorBlock).toBeVisible();
@@ -303,7 +294,7 @@ test.describe(
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
                         );
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
@@ -319,7 +310,7 @@ test.describe(
                         await expect(adComponent.field).toHaveText("");
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
                         );
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
@@ -342,7 +333,7 @@ test.describe(
                         await expect(adComponent.field).toHaveValue(validStr);
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.defaultBorderColor}`,
+                            `1px solid ${createUnitConsts.BORDER_COLOR}`,
                         );
                         await expect(adComponent.errorBlock).toBeHidden();
                     });
