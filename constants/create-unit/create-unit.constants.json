@@ -19,7 +19,10 @@
                 "placeholder": "Введіть назву оголошення",
                 "forbiddenSymbols": "<>{};^"
             },
-            "manufacturer label": "Виробник транспортного засобу",
+            "manufacturer": {
+                "label": "Виробник транспортного засобу",
+                "placeholder": "Введіть виробника транспортного засобу"
+            },
             "model label": "Назва моделі",
             "tech specs label": "Технічні характеристики моделі",
             "details label": "Детальний опис",

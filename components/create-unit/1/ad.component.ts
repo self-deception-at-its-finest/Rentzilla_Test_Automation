@@ -1,28 +1,12 @@
 import { Page, Locator } from "@playwright/test";
-import createUnitConstsJSON from "../../../constants/create-unit/create-unit.constants.json";
+import { BaseComponent } from "./base.component";
 
-export class AdComponent {
-    readonly page: Page;
-    readonly section: Locator;
-    readonly label: Locator;
-    readonly requiredSymbol: Locator;
-    readonly field: Locator;
+export class AdComponent extends BaseComponent {
     readonly errorBlock: Locator;
+    readonly field: Locator;
 
     constructor(page: Page) {
-        this.page = page;
-        this.section = this.page
-            .getByText(createUnitConstsJSON["tabs"]["1"]["ad"]["label"])
-            .locator("..");
-
-        this.label = this.section.getByText(
-            new RegExp(
-                `^${createUnitConstsJSON["tabs"]["1"]["ad"]["label"]}.*`,
-            ),
-        );
-        this.requiredSymbol = this.section.locator("span", {
-            hasText: "*",
-        });
+        super(page, "ad");
         this.field = this.section.getByRole("textbox");
         this.errorBlock = this.section.getByTestId("descriptionError");
     }
@@ -34,6 +18,6 @@ export class AdComponent {
     }
 
     async clearTheField() {
-        await this.field.fill('');
+        await this.field.fill("");
     }
 }

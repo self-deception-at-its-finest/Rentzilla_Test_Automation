@@ -1,13 +1,17 @@
 import { expect, test } from "../../fixtures/fixtures";
 import createUnitConstsJSON from "../../constants/create-unit/create-unit.constants.json";
-import { createUnitConstsTS } from "../../constants/create-unit/create-unit.constants";
+import { createUnitConsts } from "../../constants/create-unit/create-unit.constants";
 import endpoints from "../../constants/endpoints.constants.json";
-import catalogConstsJSON from "../../constants/catalog.constants.json";
+import catalog from "../../constants/catalog.constants.json";
 import { isDesktop } from "../../utils/viewport-guard";
 import { markStepAsSkipped } from "../../utils/skip-test";
 import { CategoryComponent } from "../../components/create-unit/1/category.component";
 import { AdComponent } from "../../components/create-unit/1/ad.component";
 import { fieldPlaceholder } from "../../utils/form-helper";
+import {
+    fieldErrors,
+    firstTabFields,
+} from "../../constants/create-unit/fields.constants";
 
 test.describe(
     "“Create unit” page",
@@ -31,7 +35,7 @@ test.describe(
                     });
                     await test.step("• correct", async () => {
                         await expect(createUnitPage.pageTitle).toHaveText(
-                            createUnitConstsJSON["page title"],
+                            createUnitConsts.pageTitle,
                         );
                     });
                 });
@@ -116,11 +120,9 @@ test.describe(
                 const categoryComponent = new CategoryComponent(page);
 
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${createUnitConstsJSON["tabs"]["1"]["category"]["label"]}» text`, async () => {
+                    await test.step(`• has the «${firstTabFields.category.label}» text`, async () => {
                         await expect(categoryComponent.label).toContainText(
-                            createUnitConstsJSON["tabs"]["1"]["category"][
-                                "label"
-                            ],
+                            firstTabFields.category.label,
                         );
                     });
 
@@ -136,14 +138,10 @@ test.describe(
                 });
 
                 await test.step("The input field: ⤵️", async () => {
-                    await test.step(`• has the «${createUnitConstsJSON["tabs"]["1"]["category"]["placeholder"]}» background text`, async () => {
+                    await test.step(`• has the «${firstTabFields.category.placeholder}» background text`, async () => {
                         await expect(
                             categoryComponent.fieldPlaceholder,
-                        ).toHaveText(
-                            createUnitConstsJSON["tabs"]["1"]["category"][
-                                "placeholder"
-                            ],
-                        );
+                        ).toHaveText(firstTabFields.category.placeholder);
                     });
 
                     await test.step("• to contain arrow in the right side of field. ", async () => {
@@ -157,7 +155,7 @@ test.describe(
 
                         await expect(categoryComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConstsTS.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.errorBorderColor}`,
                         );
 
                         await expect(
@@ -165,7 +163,7 @@ test.describe(
                         ).toBeVisible();
 
                         await expect(categoryComponent.errorBlock).toHaveText(
-                            createUnitConstsJSON["error messages"]["empty"],
+                            fieldErrors.empty,
                         );
                     });
                 });
@@ -178,21 +176,13 @@ test.describe(
 
                     await test.step(`• has the «${
                         isDesktop(page)
-                            ? createUnitConstsJSON["tabs"]["1"]["category"][
-                                  "popup title"
-                              ]
-                            : createUnitConstsJSON["tabs"]["1"]["category"][
-                                  "mobile popup title"
-                              ]
+                            ? firstTabFields.category.popupTitle
+                            : firstTabFields.category.mobPopupTitle
                     }» title`, async () => {
                         await expect(categoryComponent.popupTitle).toHaveText(
                             isDesktop(page)
-                                ? createUnitConstsJSON["tabs"]["1"]["category"][
-                                      "popup title"
-                                  ]
-                                : createUnitConstsJSON["tabs"]["1"]["category"][
-                                      "mobile popup title"
-                                  ],
+                                ? firstTabFields.category.popupTitle
+                                : firstTabFields.category.mobPopupTitle,
                         );
                     });
 
@@ -218,6 +208,7 @@ test.describe(
                     });
 
                     await test.step("• disappears when chosing the particular category, and the field is filled correctly", async () => {
+                        // Open the category popup if hidden
                         if (await categoryComponent.popup.isHidden()) {
                             await categoryComponent.clickCategorySelect();
                         }
@@ -235,12 +226,14 @@ test.describe(
                         await categoryComponent.selectThirdCategory();
                         await expect(categoryComponent.popup).toBeHidden();
 
+                        // Get the last unit title
                         const pileDrivingTitle =
-                            catalogConstsJSON["special equipment"].categories[
+                            catalog["special equipment"].categories[
                                 "building equipment"
                             ].subcategories["drilling rigs"].subcategories[
                                 "pile-driving rigs"
                             ].title;
+
                         await expect(
                             categoryComponent.fieldPlaceholder,
                         ).toHaveText(new RegExp(`^${pileDrivingTitle}$`, "i"));
@@ -261,9 +254,9 @@ test.describe(
             async ({ createUnitPage, page }) => {
                 const adComponent = new AdComponent(page);
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${createUnitConstsJSON["tabs"]["1"]["ad"]["label"]}» text`, async () => {
+                    await test.step(`• has the «${firstTabFields.ad.label}» text`, async () => {
                         await expect(adComponent.label).toContainText(
-                            createUnitConstsJSON["tabs"]["1"]["ad"]["label"],
+                            firstTabFields.ad.label,
                         );
                     });
 
@@ -277,15 +270,10 @@ test.describe(
                 });
 
                 await test.step("The input field: ⤵️", async () => {
-                    const placeholder =
-                        createUnitConstsJSON["tabs"]["1"]["ad"]["placeholder"];
-                    const emptyErrMsg =
-                        createUnitConstsJSON["error messages"]["empty"];
-
-                    await test.step(`• has the «${placeholder}» background text`, async () => {
+                    await test.step(`• has the «${firstTabFields.ad.placeholder}» background text`, async () => {
                         expect(
                             await fieldPlaceholder(adComponent.field),
-                        ).toEqual(placeholder);
+                        ).toEqual(firstTabFields.ad.placeholder);
                     });
 
                     await test.step("• requires filling", async () => {
@@ -293,13 +281,13 @@ test.describe(
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConstsTS.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.errorBorderColor}`,
                         );
 
                         await expect(adComponent.errorBlock).toBeVisible();
 
                         await expect(adComponent.errorBlock).toHaveText(
-                            emptyErrMsg,
+                            fieldErrors.empty,
                         );
                     });
                 });
@@ -308,15 +296,6 @@ test.describe(
                     const less10 = "123456789"; // less than 10 symbols string
                     const more100 = // more than 100 symbols string
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Vivamus ultricies esa";
-                    const forbiddenSymbols =
-                        createUnitConstsJSON["tabs"]["1"]["ad"][
-                            "forbiddenSymbols"
-                        ];
-
-                    const fewErrMsg =
-                        createUnitConstsJSON["error messages"]["too few"];
-                    const fullErrMsg =
-                        createUnitConstsJSON["error messages"]["full"];
 
                     await test.step("• string cannot be less than 10 symbols", async () => {
                         await adComponent.typeIntoField(less10);
@@ -324,11 +303,11 @@ test.describe(
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConstsTS.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.errorBorderColor}`,
                         );
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
-                            fewErrMsg,
+                            fieldErrors.tooFew,
                         );
                         await adComponent.clearTheField();
                     });
@@ -340,17 +319,19 @@ test.describe(
                         await expect(adComponent.field).toHaveText("");
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConstsTS.errorBorderColor}`,
+                            `1px solid ${createUnitConsts.errorBorderColor}`,
                         );
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
-                            fullErrMsg,
+                            fieldErrors.full,
                         );
                         await adComponent.clearTheField();
                     });
 
-                    await test.step("• string cannot have these symbols: <>{};^", async () => {
-                        await adComponent.typeIntoField(forbiddenSymbols);
+                    await test.step(`• string cannot have these symbols: ${firstTabFields.ad.forbiddenSymbols}`, async () => {
+                        await adComponent.typeIntoField(
+                            firstTabFields.ad.forbiddenSymbols,
+                        );
                         await expect(adComponent.field).toHaveValue("");
                     });
 
@@ -361,12 +342,21 @@ test.describe(
                         await expect(adComponent.field).toHaveValue(validStr);
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConstsTS.defaultBorderColor}`,
+                            `1px solid ${createUnitConsts.defaultBorderColor}`,
                         );
                         await expect(adComponent.errorBlock).toBeHidden();
                     });
                 });
             },
+        );
+
+        test(
+            "Verify vehicle manufacturer section",
+            {
+                tag: "@UI",
+                annotation: { type: "Test case", description: "C298" },
+            },
+            async ({ createUnitPage, page }) => {},
         );
     },
 );

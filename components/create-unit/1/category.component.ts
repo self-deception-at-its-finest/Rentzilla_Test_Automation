@@ -1,12 +1,12 @@
 import { Locator, Page } from "@playwright/test";
-import createUnitConstsJSON from "../../../constants/create-unit/create-unit.constants.json";
 import { isDesktop } from "../../../utils/viewport-guard";
+import { BaseComponent } from "./base.component";
+import {
+    fieldErrors,
+    firstTabFields,
+} from "../../../constants/create-unit/fields.constants";
 
-export class CategoryComponent {
-    readonly page: Page;
-    readonly section: Locator;
-    readonly label: Locator;
-    readonly requiredSymbol: Locator;
+export class CategoryComponent extends BaseComponent {
     readonly field: Locator;
     readonly fieldPlaceholder: Locator;
     readonly fieldArrow: Locator;
@@ -25,37 +25,18 @@ export class CategoryComponent {
     readonly thirdCategory: Locator;
 
     constructor(page: Page) {
-        this.page = page;
-
-        this.section = this.page
-            .getByText(createUnitConstsJSON["tabs"]["1"]["category"]["label"])
-            .locator("..");
-
-        this.label = this.section.getByText(
-            new RegExp(
-                `^${createUnitConstsJSON["tabs"]["1"]["category"]["label"]}.*`,
-            ),
-        );
-        this.requiredSymbol = this.section.locator("span", {
-            hasText: "*",
-        });
+        super(page, "category");
         this.field = this.section.getByTestId("buttonDiv");
         this.fieldPlaceholder = this.field.getByTestId("categoryName");
         this.fieldArrow = this.field.locator("img[alt='Arrow-down']");
-        this.errorBlock = this.section.locator(
-            `text=${createUnitConstsJSON["error messages"]["empty"]}`,
-        );
+        this.errorBlock = this.section.locator(`text=${fieldErrors.empty}`);
 
         this.popup = this.page.getByTestId("categoryPopupWrapper");
         this.popupTitle = this.popup.locator(
             `text=${
                 isDesktop(this.page)
-                    ? createUnitConstsJSON["tabs"]["1"]["category"][
-                          "popup title"
-                      ]
-                    : createUnitConstsJSON["tabs"]["1"]["category"][
-                          "mobile popup title"
-                      ]
+                    ? firstTabFields.category.popupTitle
+                    : firstTabFields.category.mobPopupTitle
             }`,
         );
         this.popupCloseBtn = this.popup.getByTestId("closeIcon");
