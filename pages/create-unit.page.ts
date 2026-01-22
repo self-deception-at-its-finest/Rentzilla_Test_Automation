@@ -1,32 +1,29 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./base.page";
-import {
-    createUnitConsts,
-    tabNumbers,
-    Tab,
-    data,
-} from "../constants/create-unit/create-unit.constants";
+import { CREATE_UNIT_CONSTS } from "../constants/create-unit/create-unit.constants";
+import { data, TabNumber } from "../types/tabs";
+import { TAB_NUMBERS } from "../constants/create-unit/create-unit.constants";
 
 type TabInfo = {
-    tabTitle: string;
-    tabNumber: string;
-};
+    title: string;
+    number: string;
+}
 
 export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
     readonly nextButton: Locator;
 
+
     constructor(page: Page) {
         super(page);
-        this.pageTitle = page.getByText(createUnitConsts.PAGE_TITLE).first();
+        this.pageTitle = page.getByText(CREATE_UNIT_CONSTS.PAGE_TITLE).first();
         this.tabList = page.locator('[role="tablist"] > button');
-
         this.nextButton = page.getByTestId("nextButton");
     }
 
-    async getTabMetaInfo(tabNumber: Tab): Promise<TabInfo> {
-        const index = tabNumbers.indexOf(tabNumber);
+    async getTabMetaInfo(tabNumber: TabNumber): Promise<TabInfo> {
+        const index = TAB_NUMBERS.indexOf(tabNumber);
         if (index === -1)
             throw new Error(`The “${tabNumber}” tab key is not found`);
 
@@ -41,8 +38,8 @@ export class CreateUnitPage extends BasePage {
             .textContent();
 
         return {
-            tabNumber: number?.trim() ?? "",
-            tabTitle: title?.trim() ?? "",
+            number: number?.trim() ?? "",
+            title: title?.trim() ?? "",
         };
     }
 

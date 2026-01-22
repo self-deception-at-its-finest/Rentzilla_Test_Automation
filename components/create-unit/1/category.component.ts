@@ -1,10 +1,8 @@
 import { Locator, Page } from "@playwright/test";
 import { isDesktop } from "../../../utils/viewport-guard";
 import { BaseComponent } from "./base.component";
-import {
-    fieldErrors,
-    firstTabFields,
-} from "../../../constants/create-unit/fields.constants";
+import { firstTabFields } from "../../../constants/create-unit/fields.constants";
+import { FIELDS_ERRORS } from "../../../constants/create-unit/create-unit.constants";
 
 export class CategoryComponent extends BaseComponent {
     readonly field: Locator;
@@ -29,7 +27,7 @@ export class CategoryComponent extends BaseComponent {
         this.field = this.section.getByTestId("buttonDiv");
         this.fieldPlaceholder = this.field.getByTestId("categoryName");
         this.fieldArrow = this.field.locator("img[alt='Arrow-down']");
-        this.errorBlock = this.section.locator(`text=${fieldErrors.empty}`);
+        this.errorBlock = this.section.locator(`text=${FIELDS_ERRORS.EMPTY}`);
 
         this.popup = this.page.getByTestId("categoryPopupWrapper");
         this.popupTitle = this.popup.locator(

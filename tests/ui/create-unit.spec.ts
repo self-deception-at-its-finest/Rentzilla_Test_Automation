@@ -1,8 +1,13 @@
 import { expect, test } from "../../fixtures/fixtures";
-import createUnitConstsJSON from "../../constants/create-unit/create-unit.constants.json";
 import {
-    createUnitConsts,
-    tabNumbers,
+    FORBIDDEN_SYMBOLS,
+    MANUFACTURERS,
+    TAB_NUMBERS,
+    TAB_TITLES,
+} from "../../constants/create-unit/create-unit.constants";
+import {
+    CREATE_UNIT_CONSTS,
+    FIELDS_ERRORS,
 } from "../../constants/create-unit/create-unit.constants";
 import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
@@ -10,11 +15,17 @@ import { isDesktop } from "../../utils/viewport-guard";
 import { markStepAsSkipped } from "../../utils/skip-test";
 import { CategoryComponent } from "../../components/create-unit/1/category.component";
 import { AdComponent } from "../../components/create-unit/1/ad.component";
-import { fieldPlaceholder } from "../../utils/form-helper";
+import { getFieldPlaceholder } from "../../utils/form-helper";
+import { firstTabFields } from "../../constants/create-unit/fields.constants";
+import { ManufacturerComponent } from "../../components/create-unit/1/manufacturer.component";
 import {
-    fieldErrors,
-    firstTabFields,
-} from "../../constants/create-unit/fields.constants";
+    generateText,
+    generateMediumText,
+    generateShortText,
+} from "../../utils/fake-data";
+import { formatMissingManufacturerError } from "../../utils/format-manufacturer-error";
+import { getRandomStringElement } from "../../utils/get-elements";
+import { ModelComponent } from "../../components/create-unit/1/model.component";
 
 test.describe(
     "“Create unit” page",
@@ -31,22 +42,19 @@ test.describe(
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C294" },
             },
-            async ({ createUnitPage }) => {
+            async ({ createUnitPage, page }) => {
                 await test.step("The page title is: ⤵️", async () => {
                     await test.step("• visible", async () => {
                         await expect(createUnitPage.pageTitle).toBeVisible();
                     });
                     await test.step("• correct", async () => {
                         await expect(createUnitPage.pageTitle).toHaveText(
-                            createUnitConsts.PAGE_TITLE,
+                            CREATE_UNIT_CONSTS.PAGE_TITLE,
                         );
                     });
                 });
 
                 await test.step(`The first tab: ⤵️`, async () => {
-                    const { tabNumber, tabTitle } =
-                        await createUnitPage.getTabMetaInfo("1");
-
                     await test.step(`• is selected`, async () => {
                         expect(createUnitPage.tabList.first()).toHaveAttribute(
                             "aria-selected",
@@ -54,46 +62,46 @@ test.describe(
                         );
                     });
 
-                    await test.step(`• has the “${tabTitle}” title`, async () => {
-                        expect(tabTitle).toEqual(tabTitle);
+                    await test.step(`• has the “${CREATE_UNIT_CONSTS.PAGE_TITLE}” title`, async () => {
+                        expect(createUnitPage.pageTitle).toHaveText(
+                            CREATE_UNIT_CONSTS.PAGE_TITLE,
+                        );
                     });
 
-                    await test.step(`• has the “${tabNumber}” number.`, async () => {
-                        expect(tabNumber).toEqual("1");
+                    await test.step(`• has the “${TAB_NUMBERS[0]}” number.`, async () => {
+                        expect(createUnitPage.tabList.first()).toContainText(
+                            TAB_NUMBERS[0],
+                        );
                     });
                 });
 
                 await test.step("Other tabs: ⤵️", async () => {
-                    const tabTitlesFromJSON = Object.values(
-                        createUnitConstsJSON.tabs,
-                    ).map((tab) => tab.title);
-
                     await test.step("• are not active", async () => {
-                        for (let i = 1; i < tabNumbers.length; i++) {
+                        for (let i = 1; i < TAB_NUMBERS.length; i++) {
                             expect(
                                 createUnitPage.tabList.nth(i),
                             ).toHaveAttribute("aria-selected", "false");
                         }
                     });
 
-                    await test.step(`• have these titles: ${tabTitlesFromJSON
-                        .map((title) => `«${title}»`)
-                        .join(", ")}`, async () => {
-                        for (let i = 1; i < tabNumbers.length; i++) {
-                            const tabKey = tabNumbers[i];
-                            const { tabTitle: tabTitle } =
-                                await createUnitPage.getTabMetaInfo(tabKey);
+                    await test.step(`• have these titles: ${TAB_TITLES.map(
+                        (title) => `«${title}»`,
+                    ).join(", ")}`, async () => {
+                        for (let i = 1; i < TAB_NUMBERS.length; i++) {
+                            const { title: tabTitle } =
+                                await createUnitPage.getTabMetaInfo(
+                                    TAB_NUMBERS[i],
+                                );
 
-                            expect(tabTitle).toEqual(tabTitlesFromJSON[i]);
+                            expect(tabTitle).toEqual(TAB_TITLES[i]);
                         }
                     });
 
                     await test.step("• have correct numbers.", async () => {
-                        for (let i = 1; i < tabNumbers.length; i++) {
-                            const tabKey = tabNumbers[i];
-                            const { tabNumber: tabNumber } =
+                        for (let i = 1; i < TAB_NUMBERS.length; i++) {
+                            const tabKey = TAB_NUMBERS[i];
+                            const { number: tabNumber } =
                                 await createUnitPage.getTabMetaInfo(tabKey);
-
                             expect(tabNumber).toEqual(tabKey);
                         }
                     });
@@ -123,7 +131,7 @@ test.describe(
 
                     await test.step("• has an asterisk.", async () => {
                         await expect(
-                            categoryComponent.requiredSymbol,
+                            categoryComponent.requiredSymbol!,
                         ).toBeVisible();
                     });
                 });
@@ -146,7 +154,7 @@ test.describe(
 
                         await expect(categoryComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
+                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
                         );
 
                         await expect(
@@ -154,7 +162,7 @@ test.describe(
                         ).toBeVisible();
 
                         await expect(categoryComponent.errorBlock).toHaveText(
-                            fieldErrors.empty,
+                            FIELDS_ERRORS.EMPTY,
                         );
                     });
                 });
@@ -256,14 +264,16 @@ test.describe(
                     });
 
                     await test.step("• has an asterisk", async () => {
-                        await expect(adComponent.requiredSymbol).toBeVisible();
+                        await expect(
+                            adComponent.requiredSymbol!!,
+                        ).toBeVisible();
                     });
                 });
 
                 await test.step("The input field: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.ad.placeholder}» background text`, async () => {
                         expect(
-                            await fieldPlaceholder(adComponent.field),
+                            await getFieldPlaceholder(adComponent.field),
                         ).toEqual(firstTabFields.ad.placeholder);
                     });
 
@@ -272,68 +282,64 @@ test.describe(
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
+                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
                         );
 
                         await expect(adComponent.errorBlock).toBeVisible();
 
                         await expect(adComponent.errorBlock).toHaveText(
-                            fieldErrors.empty,
+                            FIELDS_ERRORS.EMPTY,
                         );
                     });
                 });
 
                 await test.step("Validate field requirements: ⤵️", async () => {
-                    const less10 = "123456789"; // less than 10 symbols string
-                    const more100 = // more than 100 symbols string
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. Vivamus ultricies esa";
+                    const less10 = generateShortText();
+                    const validText = generateMediumText();
+                    const more100 = generateText(101);
 
                     await test.step("• string cannot be less than 10 symbols", async () => {
-                        await adComponent.typeIntoField(less10);
+                        await adComponent.typeAd(less10);
                         await createUnitPage.clickNextButton();
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
+                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
                         );
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
-                            fieldErrors.tooFew,
+                            FIELDS_ERRORS.LESS_10_SYMBOLS,
                         );
-                        await adComponent.clearTheField();
+                        await adComponent.clearAdField();
                     });
 
                     await test.step("• string cannot be more than 100 symbols", async () => {
-                        await adComponent.typeIntoField(more100);
+                        await adComponent.typeAd(more100);
                         await createUnitPage.clickNextButton();
 
                         await expect(adComponent.field).toHaveText("");
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.ERR_BORDER_COLOR}`,
+                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
                         );
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
-                            fieldErrors.full,
+                            FIELDS_ERRORS.MORE_100_SYMBOLS,
                         );
-                        await adComponent.clearTheField();
+                        await adComponent.clearAdField();
                     });
 
-                    await test.step(`• string cannot have these symbols: ${firstTabFields.ad.forbiddenSymbols}`, async () => {
-                        await adComponent.typeIntoField(
-                            firstTabFields.ad.forbiddenSymbols,
-                        );
+                    await test.step(`• string cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await adComponent.typeAd(FORBIDDEN_SYMBOLS);
                         await expect(adComponent.field).toHaveValue("");
                     });
 
                     await test.step("• string can contain from 10 to 100 symbols", async () => {
-                        const validStr = less10 + less10;
-
-                        await adComponent.typeIntoField(validStr);
-                        await expect(adComponent.field).toHaveValue(validStr);
+                        await adComponent.typeAd(validText);
+                        await expect(adComponent.field).toHaveValue(validText);
                         await expect(adComponent.field).toHaveCSS(
                             "border",
-                            `1px solid ${createUnitConsts.BORDER_COLOR}`,
+                            `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
                         );
                         await expect(adComponent.errorBlock).toBeHidden();
                     });
@@ -347,7 +353,206 @@ test.describe(
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C298" },
             },
-            async ({ createUnitPage, page }) => {},
+            async ({ createUnitPage, page }) => {
+                const manufacturerComponent = new ManufacturerComponent(page);
+                await test.step("The title: ⤵️", async () => {
+                    await test.step(`• has the «${firstTabFields.manufacturer.label}» text`, async () => {
+                        await expect(manufacturerComponent.label).toContainText(
+                            firstTabFields.manufacturer.label,
+                        );
+                    });
+
+                    await test.step("• is visible", async () => {
+                        await expect(manufacturerComponent.label).toBeVisible();
+                    });
+
+                    await test.step("• has an asterisk", async () => {
+                        await expect(
+                            manufacturerComponent.requiredSymbol!,
+                        ).toBeVisible();
+                    });
+                });
+
+                await test.step("The input field: ⤵️", async () => {
+                    await test.step(`• has the «${firstTabFields.manufacturer.placeholder}» background text`, async () => {
+                        expect(
+                            await getFieldPlaceholder(
+                                manufacturerComponent.field,
+                            ),
+                        ).toEqual(firstTabFields.manufacturer.placeholder);
+                    });
+
+                    await test.step("• requires filling", async () => {
+                        await createUnitPage.clickNextButton();
+
+                        await expect(
+                            manufacturerComponent.fieldWrapper,
+                        ).toHaveCSS(
+                            "border",
+                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
+                        );
+
+                        await expect(
+                            manufacturerComponent.errorBlock,
+                        ).toBeVisible();
+
+                        await expect(
+                            manufacturerComponent.errorBlock,
+                        ).toHaveText(FIELDS_ERRORS.EMPTY);
+                    });
+
+                    await test.step("• shows the correct message about missing manufacturer", async () => {
+                        await manufacturerComponent.clearManufacturerField();
+                        let fakeManufacturer = "123456789";
+                        await manufacturerComponent.typeManufacturer(
+                            fakeManufacturer,
+                        );
+                        await expect(
+                            manufacturerComponent.missingResults,
+                        ).toHaveText(
+                            formatMissingManufacturerError(fakeManufacturer),
+                        );
+                    });
+                });
+
+                await test.step("Dropdown list is displayed correct", async () => {
+                    await manufacturerComponent.clearManufacturerField();
+                    await manufacturerComponent.typeManufacturer("А");
+                    await expect(
+                        manufacturerComponent.firstResult,
+                    ).toBeVisible();
+
+                    await manufacturerComponent.typeManufacturer("тэк");
+                    let fieldValue =
+                        await manufacturerComponent.field.getAttribute("value");
+                    let result =
+                        await manufacturerComponent.firstResult.textContent();
+
+                    expect(fieldValue?.toUpperCase()).toEqual(result);
+
+                    await manufacturerComponent.clearManufacturerField();
+                    await manufacturerComponent.typeManufacturer("АТЭК");
+                    let result2 =
+                        await manufacturerComponent.firstResult.textContent();
+
+                    expect(fieldValue?.toUpperCase()).toEqual(result2);
+                    expect(result).toEqual(result2);
+                });
+
+                await test.step("Validate field requirements: ⤵️", async () => {
+                    await test.step("• string cannot be more than 100 symbols", async () => {
+                        let more100 = generateText(101);
+
+                        await manufacturerComponent.clearManufacturerField();
+                        await manufacturerComponent.typeManufacturer(more100);
+
+                        await expect(
+                            manufacturerComponent.field,
+                        ).not.toHaveValue(more100);
+                        await manufacturerComponent.clearManufacturerField();
+                    });
+
+                    await test.step(`• string cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await manufacturerComponent.clearManufacturerField();
+                        await manufacturerComponent.typeManufacturer(
+                            FORBIDDEN_SYMBOLS,
+                        );
+                        await expect(manufacturerComponent.field).toHaveValue(
+                            "",
+                        );
+                    });
+
+                    await test.step("• accept the correct manufacturer", async () => {
+                        let validManufacturer =
+                            getRandomStringElement(MANUFACTURERS).toLowerCase();
+
+                        await manufacturerComponent.clearManufacturerField();
+                        await manufacturerComponent.typeManufacturer(
+                            validManufacturer,
+                        );
+                        await manufacturerComponent.selectManufacturer();
+                        await expect(
+                            manufacturerComponent.chosenManufacturer,
+                        ).toHaveText(validManufacturer, { ignoreCase: true });
+                    });
+
+                    await test.step("• is cleared by the cross button", async () => {
+                        await manufacturerComponent.clearManufacturerField();
+                        await expect(manufacturerComponent.field).toHaveValue(
+                            "",
+                        );
+                    });
+                });
+            },
+        );
+
+        test(
+            "Verify model name input field",
+            {
+                tag: ["@UI"],
+                annotation: { type: "Test case", description: "C299" },
+            },
+            async ({ createUnitPage, page }) => {
+                const modelComponent = new ModelComponent(page);
+
+                await test.step("The title: ⤵️", async () => {
+                    await test.step(`• has the «${firstTabFields.model.label}» text`, async () => {
+                        await expect(modelComponent.label).toContainText(
+                            firstTabFields.model.label,
+                        );
+                    });
+
+                    await test.step("• is visible", async () => {
+                        await expect(modelComponent.label).toBeVisible();
+                    });
+                });
+
+                await test.step(`The field has the «${firstTabFields.model.placeholder}» background text`, async () => {
+                    expect(
+                        await getFieldPlaceholder(modelComponent.field),
+                    ).toEqual(firstTabFields.model.placeholder);
+                });
+
+                await test.step("Validate field requirements: ⤵️", async () => {
+                    await modelComponent.clearModelField();
+
+                    await test.step("• string cannot be more than 15 symbols", async () => {
+                        let texts = [
+                            generateText(16),
+                            generateText(7) + " " + generateText(8),
+                            generateText(15) + " ",
+                        ];
+                        for (const text of texts) {
+                            await modelComponent.typeModel(text);
+
+                            await expect(modelComponent.errorBlock).toHaveText(
+                                FIELDS_ERRORS.MORE_15_SYMBOLS,
+                            );
+
+                            await expect(modelComponent.field).toHaveCSS(
+                                "border",
+                                `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
+                            );
+
+                            await modelComponent.clearModelField();
+                        }
+                    });
+
+                    await test.step(`• string cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await modelComponent.typeModel(FORBIDDEN_SYMBOLS);
+                        await expect(modelComponent.field).toHaveValue("");
+                    });
+
+                    await test.step("• string accept 15 or less symbols", async () => {
+                        let text = generateText(15);
+                        await modelComponent.typeModel(text);
+                        await expect(modelComponent.field).toHaveCSS(
+                            "border",
+                            `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
+                        );
+                    });
+                });
+            },
         );
     },
 );

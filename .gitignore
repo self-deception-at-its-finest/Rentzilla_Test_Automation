@@ -22,4 +22,5 @@ node_modules/
 
 # Environment
 .env
-utils/get-categories.ts
+eslint.config.ts
+eslint.config.mts
