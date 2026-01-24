@@ -28,12 +28,20 @@ export class ManufacturerComponent extends BaseComponent {
         this.missingResults = this.page.getByTestId("p2-notFound-addNewItem");
     }
 
-    async selectManufacturer(): Promise<void> {
-        await this.firstResult.click();
+    /**
+     * Entire flow setting the manufacturer
+     */
+    async setTheManufacturer(manufacturer: string): Promise<void> {
+        await this.typeManufacturer(manufacturer);
+        await this.clickTheManufacturer();
     }
 
-    async typeManufacturer(str: string): Promise<void> {
-        await super.typeIntoField(this.field, str);
+    async typeManufacturer(manufacturer: string): Promise<void> {
+        await super.typeIntoField(this.field, manufacturer);
+    }
+
+    async clickTheManufacturer(): Promise<void> {
+        await this.firstResult.click();
     }
 
     async clearManufacturerField(): Promise<void> {

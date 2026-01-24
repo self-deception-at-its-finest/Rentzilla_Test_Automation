@@ -1,4 +1,5 @@
 {
+    "admin": "/admin",
     "home": "",
     "create unit": "/create-unit"
 }

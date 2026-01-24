@@ -74,4 +74,14 @@ export class CategoryComponent extends BaseComponent {
     async clickCategorySelect() {
         await this.field.click();
     }
+
+    /**
+     * Entire flow selecting of category
+     */
+    async selectTheCategory() {
+        await this.clickCategorySelect();
+        await this.selectFirstCategory();
+        await this.selectSecondCategory();
+        await this.selectThirdCategory();
+    }
 }

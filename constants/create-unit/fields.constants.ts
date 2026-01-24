@@ -1,6 +1,10 @@
 import { data } from "../../types/tabs";
 
-const t = "1" as const;
+const first = "1";
+const second = "2";
+const third = "3";
+const fourth = "4";
+const fifth = "5";
 
 type Tab1 = (typeof data)["tabs"]["1"];
 
@@ -23,26 +27,31 @@ type FirstTabFields = {
     ad: FieldSection;
     manufacturer: FieldSection;
     model: FieldSection;
+    location: FieldSection;
 };
 
 const firstTabFields: FirstTabFields = {
     category: {
-        label: data.tabs[t].category.label,
-        placeholder: data.tabs[t].category.placeholder,
-        popupTitle: data.tabs[t].category["popup title"],
-        mobPopupTitle: data.tabs[t].category["mobile popup title"],
+        label: data.tabs[first].category.label,
+        placeholder: data.tabs[first].category.placeholder,
+        popupTitle: data.tabs[first].category["popup title"],
+        mobPopupTitle: data.tabs[first].category["mobile popup title"],
     },
     ad: {
-        label: data.tabs[t].ad.label,
-        placeholder: data.tabs[t].ad.placeholder,
+        label: data.tabs[first].ad.label,
+        placeholder: data.tabs[first].ad.placeholder,
     },
     manufacturer: {
-        label: data.tabs[t].manufacturer.label,
-        placeholder: data.tabs[t].manufacturer.placeholder,
+        label: data.tabs[first].manufacturer.label,
+        placeholder: data.tabs[first].manufacturer.placeholder,
     },
     model: {
-        label: data.tabs[t].model.label,
-        placeholder: data.tabs[t].model.placeholder
+        label: data.tabs[first].model.label,
+        placeholder: data.tabs[first].model.placeholder
+    },
+    location: {
+        label: data.tabs[first].location.label,
+        placeholder: data.tabs[first].location.label
     }
 
 } as const;

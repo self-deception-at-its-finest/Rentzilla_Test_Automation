@@ -1,25 +1,30 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./base.page";
 import { CREATE_UNIT_CONSTS } from "../constants/create-unit/create-unit.constants";
-import { data, TabNumber } from "../types/tabs";
+import { data, TabNumber, TestAdData } from "../types/tabs";
 import { TAB_NUMBERS } from "../constants/create-unit/create-unit.constants";
 
 type TabInfo = {
     title: string;
     number: string;
-}
+};
 
 export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
     readonly nextButton: Locator;
-
+    readonly successfullCreating: Locator;
 
     constructor(page: Page) {
         super(page);
-        this.pageTitle = page.getByText(CREATE_UNIT_CONSTS.PAGE_TITLE).first();
-        this.tabList = page.locator('[role="tablist"] > button');
-        this.nextButton = page.getByTestId("nextButton");
+        this.pageTitle = this.page
+            .getByText(CREATE_UNIT_CONSTS.PAGE_TITLE)
+            .first();
+        this.tabList = this.page.locator('[role="tablist"] > button');
+        this.nextButton = this.page.getByTestId("nextButton");
+        this.successfullCreating = this.page.getByText(
+            "Ваше оголошення подане на розгляд",
+        );
     }
 
     async getTabMetaInfo(tabNumber: TabNumber): Promise<TabInfo> {
@@ -46,4 +51,6 @@ export class CreateUnitPage extends BasePage {
     async clickNextButton() {
         await this.nextButton.click();
     }
+
+    
 }

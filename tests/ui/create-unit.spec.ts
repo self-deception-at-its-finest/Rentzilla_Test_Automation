@@ -470,7 +470,7 @@ test.describe(
                         await manufacturerComponent.typeManufacturer(
                             validManufacturer,
                         );
-                        await manufacturerComponent.selectManufacturer();
+                        await manufacturerComponent.clickTheManufacturer();
                         await expect(
                             manufacturerComponent.chosenManufacturer,
                         ).toHaveText(validManufacturer, { ignoreCase: true });

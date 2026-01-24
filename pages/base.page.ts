@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
 export default class BasePage {
-    private readonly page: Page;
+    protected readonly page: Page;
     protected endpoint = "";
 
     constructor(page: Page) {

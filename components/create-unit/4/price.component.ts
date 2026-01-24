@@ -11,9 +11,9 @@ export class PriceComponent {
 
     // TODO create the dynamical price
     // static price for now
-    async typePrice() {
+    async typePrice(price: string) {
         await this.field.click();
-        await this.page.keyboard.type("1000");
+        await this.page.keyboard.type(price);
     }
 
     async clearTheField() {

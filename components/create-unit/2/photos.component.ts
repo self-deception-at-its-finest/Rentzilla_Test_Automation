@@ -6,7 +6,6 @@ export class PhotosComponent {
     readonly uploadPhotoButtons: Locator;
     readonly uploadPhoto1: Locator;
     readonly fileInput: Locator;
-    readonly filePath: string;
 
     constructor(page: Page) {
         this.page = page;
@@ -15,13 +14,13 @@ export class PhotosComponent {
             .locator("..");
         this.uploadPhoto1 = this.uploadPhotoButtons.first();
         this.fileInput = this.page.locator('input[type="file"]');
-        this.filePath = path.resolve(
-            __dirname,
-            "../../../fixtures/photos/test-photo.png",
-        );
     }
 
-    async uploadPhoto() {
-        await this.fileInput.setInputFiles(this.filePath);
+    async uploadPhoto(fileName: string) {
+        let filePath = path.resolve(
+            __dirname,
+            `../../../fixtures/photos/${fileName}`,
+        );
+        await this.fileInput.setInputFiles(filePath);
     }
 }
