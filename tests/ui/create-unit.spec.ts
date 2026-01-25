@@ -4,20 +4,20 @@ import {
     MANUFACTURERS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/create-unit.constants";
+} from "../../constants/create-unit/createUnit.constants";
 import {
     CREATE_UNIT_CONSTS,
     FIELDS_ERRORS,
-} from "../../constants/create-unit/create-unit.constants";
+} from "../../constants/create-unit/createUnit.constants";
 import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
 import { isDesktop } from "../../utils/viewport-guard";
 import { markStepAsSkipped } from "../../utils/skip-test";
-import { CategoryComponent } from "../../components/create-unit/1/category.component";
-import { AdComponent } from "../../components/create-unit/1/ad.component";
+import { CategoryComponent } from "../../components/create-unit/1/Category.component";
+import { AdComponent } from "../../components/create-unit/1/Ad.component";
 import { getFieldPlaceholder } from "../../utils/form-helper";
 import { firstTabFields } from "../../constants/create-unit/fields.constants";
-import { ManufacturerComponent } from "../../components/create-unit/1/manufacturer.component";
+import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
 import {
     generateText,
     generateMediumText,
@@ -25,7 +25,7 @@ import {
 } from "../../utils/fake-data";
 import { formatMissingManufacturerError } from "../../utils/format-manufacturer-error";
 import { getRandomStringElement } from "../../utils/get-elements";
-import { ModelComponent } from "../../components/create-unit/1/model.component";
+import { ModelComponent } from "../../components/create-unit/1/Model.component";
 
 test.describe(
     "“Create unit” page",

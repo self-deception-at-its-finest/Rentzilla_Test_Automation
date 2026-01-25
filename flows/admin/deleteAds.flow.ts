@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import { TestAdData } from "../../types/tabs";
-import { AdminPage } from "../../pages/admin.page";
+import { AdminPage } from "../../pages/Admin.page";
 
 export async function deleteAdsFlow(page: Page, ads: TestAdData[]) {
     const adminPage = new AdminPage(page);

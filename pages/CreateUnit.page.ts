@@ -1,8 +1,8 @@
 import { Locator, Page } from "@playwright/test";
-import BasePage from "./base.page";
-import { CREATE_UNIT_CONSTS } from "../constants/create-unit/create-unit.constants";
+import BasePage from "./Base.page";
+import { CREATE_UNIT_CONSTS } from "../constants/create-unit/createUnit.constants";
 import { data, TabNumber, TestAdData } from "../types/tabs";
-import { TAB_NUMBERS } from "../constants/create-unit/create-unit.constants";
+import { TAB_NUMBERS } from "../constants/create-unit/createUnit.constants";
 
 type TabInfo = {
     title: string;
@@ -51,6 +51,4 @@ export class CreateUnitPage extends BasePage {
     async clickNextButton() {
         await this.nextButton.click();
     }
-
-    
 }

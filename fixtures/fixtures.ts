@@ -1,14 +1,14 @@
 import { test as base } from "@playwright/test";
-import { HomePage } from "../pages/home.page";
-import { CreateUnitPage } from "../pages/create-unit.page";
-import { AuthenticationComponent } from "../components/authentication.component";
-import { createAdsFlow } from "../flows/ads/create-ads.flow";
+import { HomePage } from "../pages/Home.page";
+import { CreateUnitPage } from "../pages/CreateUnit.page";
+import { AuthenticationComponent } from "../components/Authentication.component";
+import { createAdsFlow } from "../flows/ads/createAds.flow";
 import endpoints from "../constants/endpoints.constants.json";
 import { env } from "../config/env";
 import { buildTestAds } from "../utils/builders/ad.builder";
-import { switchToAdminFlow } from "../flows/admin/switch-to-admin.flow";
-import { approveAdsFlow } from "../flows/admin/approve-ads.flow";
-import { deleteAdsFlow } from "../flows/admin/delete-ads.flow";
+import { switchToAdminFlow } from "../flows/admin/switchToAdmin.flow";
+import { approveAdsFlow } from "../flows/admin/approveAds.flow";
+import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
 
 type Fixtures = {
     auth: void;

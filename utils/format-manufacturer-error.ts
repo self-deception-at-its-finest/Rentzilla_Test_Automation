@@ -1,4 +1,4 @@
-import { FIELDS_ERRORS } from "../constants/create-unit/create-unit.constants";
+import { FIELDS_ERRORS } from "../constants/create-unit/createUnit.constants";
 
 /**
  * Formats the missing manufacturer error message by inserting the manufacturer name

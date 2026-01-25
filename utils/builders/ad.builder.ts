@@ -1,11 +1,11 @@
 import { SERVICES } from "../../constants/catalog.constants";
-import { MANUFACTURERS } from "../../constants/create-unit/create-unit.constants";
+import { MANUFACTURERS } from "../../constants/create-unit/createUnit.constants";
 import { TestAdData } from "../../types/tabs";
 import { generateText } from "../fake-data";
 import { getRandomStringElement } from "../get-elements";
 
 /**
- * 
+ *
  * @param count the number of ads created
  * @returns the array of ads created
  */

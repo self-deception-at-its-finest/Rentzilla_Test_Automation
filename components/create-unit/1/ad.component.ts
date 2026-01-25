@@ -1,5 +1,5 @@
 import { Page, Locator } from "@playwright/test";
-import { BaseComponent } from "./base.component";
+import { BaseComponent } from "./Base.component";
 
 export class AdComponent extends BaseComponent {
     readonly errorBlock: Locator;

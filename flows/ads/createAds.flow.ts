@@ -1,15 +1,15 @@
-import { AdComponent } from "../../components/create-unit/1/ad.component";
-import { CategoryComponent } from "../../components/create-unit/1/category.component";
-import { LocationComponent } from "../../components/create-unit/1/location.component";
-import { ManufacturerComponent } from "../../components/create-unit/1/manufacturer.component";
-import { PhotosComponent } from "../../components/create-unit/2/photos.component";
-import { ServiceComponent } from "../../components/create-unit/3/service.component";
-import { PriceComponent } from "../../components/create-unit/4/price.component";
-import { ContactsComponent } from "../../components/create-unit/5/contacts.component";
-import { HeaderComponent } from "../../components/header.component";
+import { AdComponent } from "../../components/create-unit/1/Ad.component";
+import { CategoryComponent } from "../../components/create-unit/1/Category.component";
+import { LocationComponent } from "../../components/create-unit/1/Location.component";
+import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
+import { PhotosComponent } from "../../components/create-unit/2/Photos.component";
+import { ServiceComponent } from "../../components/create-unit/3/Service.component";
+import { PriceComponent } from "../../components/create-unit/4/Price.component";
+import { ContactsComponent } from "../../components/create-unit/5/Contacts.component";
+import { HeaderComponent } from "../../components/Header.component";
 import { TestAdData } from "../../types/tabs";
 import { Page } from "@playwright/test";
-import { CreateUnitPage } from "../../pages/create-unit.page";
+import { CreateUnitPage } from "../../pages/CreateUnit.page";
 /**
  * Entire flow creating of ads
  * @param ads Thе data object for creating new ads

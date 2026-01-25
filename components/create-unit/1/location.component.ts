@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./base.component";
+import { BaseComponent } from "./Base.component";
 
 export class LocationComponent extends BaseComponent {
     readonly selectPlaceButton: Locator;
@@ -19,8 +19,6 @@ export class LocationComponent extends BaseComponent {
 
     async selectLocation(city: string = "Київ, Україна") {
         await this.selectPlaceButton.click();
-        await this.addressInput.click();
-        await this.page.keyboard.type(city);
         await this.acceptPlaceButton.click();
         await this.section.locator("label", { hasText: city }).waitFor({
             state: "visible",
