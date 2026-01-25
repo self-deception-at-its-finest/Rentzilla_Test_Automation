@@ -2,7 +2,7 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 
 export default class BasePage {
-    public page: Page;
+    readonly page: Page;
     public endpoint = '';
 
     constructor(page: Page) {
@@ -14,6 +14,8 @@ export default class BasePage {
      * @param path
      */
     async open(path = ''): Promise<void> {
-        await this.page.goto('/' + path);
+        await this.page.goto('/' + path, {
+            waitUntil: 'domcontentloaded',
+        });
     }
 }

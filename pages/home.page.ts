@@ -4,9 +4,9 @@ import endpoints from '../constants/endpoints.constants.json';
 
 
 export class HomePage extends BasePage {
-    public servicesTitle : Locator;
-    public servicesPopularni : Locator;
-    public servicesSilskogospodarski : Locator;
+    readonly servicesTitle : Locator;
+    readonly servicesPopularni : Locator;
+    readonly servicesSilskogospodarski : Locator;
 
     constructor(page: Page) {
         super(page);

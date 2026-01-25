@@ -1,15 +1,25 @@
 import { Page, Locator } from "@playwright/test";
 import {HeaderComponent} from "./header.component";
 import {expect} from "playwright/test";
+import errorMessages from '../constants/errorMessages.constants.json';
+
 
 export class AuthenticationComponent {
-    public page: Page;
-    public authContainer: Locator;
-    public authTitle: Locator;
-    public authCloseButton: Locator;
-    public emailInput: Locator;
-    public passwordInput: Locator;
-    public submitButton: Locator;
+    readonly page: Page;
+    readonly authContainer: Locator;
+    readonly authTitle: Locator;
+    readonly authCloseButton: Locator;
+    readonly emailInput: Locator;
+    readonly passwordInput: Locator;
+    readonly submitButton: Locator;
+    readonly showPasswordButton: Locator;
+    readonly invalidEmailFormatMsg: Locator;
+    readonly invalidEmailOrPasswordMsg: Locator;
+    readonly invalidPasswordFormatMsg: Locator;
+    readonly emptyEmailFieldMsg: Locator;
+    readonly emptyPasswordFieldMsg: Locator;
+    readonly passwordLabel: Locator;
+    readonly emailLabel: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -18,7 +28,15 @@ export class AuthenticationComponent {
         this.authCloseButton = page.getByTestId("authClose");
         this.emailInput = page.locator("input#email");
         this.passwordInput = page.locator("input#password");
-        this.submitButton = page. getByRole('button', { name: 'Увійти', exact: true });
+        this.submitButton = page.getByRole('button', { name: 'Увійти', exact: true });
+        this.showPasswordButton = this.passwordInput.locator("..").getByTestId('reactHookButton');
+        this.invalidEmailFormatMsg = page.getByText(errorMessages.invalidEmailFormat);
+        this.invalidPasswordFormatMsg = page.getByText(errorMessages.invalidPasswordFormat);
+        this.invalidEmailOrPasswordMsg= page.getByTestId("errorMessage");
+        this.passwordLabel = page.getByTestId("labelTitle").getByText("Пароль");
+        this.emailLabel = page.getByTestId("labelTitle").getByText("E-mail або номер телефону");
+        this.emptyEmailFieldMsg = this.emailLabel.locator("..").locator("p")
+        this.emptyPasswordFieldMsg = this.passwordLabel.locator("..").locator("p")
     }
 
     async login(creds?: {email?: string; password?: string}) {
@@ -31,5 +49,35 @@ export class AuthenticationComponent {
         if(email !== undefined) await this.emailInput.fill(email);
         if(password !== undefined) await this.passwordInput.fill(password);
         await this.submitButton.click();
+    }
+
+    async verifySuccessfulLogin(emailOrPhone: string, password: string) {
+        const headerComponent = new HeaderComponent(this.page);
+        await headerComponent.authenticationButton.click();
+
+        await this.emailInput.fill(emailOrPhone);
+        await this.passwordInput.fill(password);
+
+        await this.showPasswordButton.click();
+        await expect(this.passwordInput).toHaveAttribute('type', 'text');
+        await this.showPasswordButton.click();
+        await expect(this.passwordInput).toHaveAttribute('type', 'password');
+
+        await this.submitRandomly();
+
+        await headerComponent.avatarBlock.click();
+
+        await expect(headerComponent.profileDropdownEmail).toBeVisible();
+        await expect(headerComponent.profileDropdownEmail).toHaveText(process.env.USER_EMAIL!);
+    }
+
+    async submitRandomly() {
+        const useEnter = Math.random() < 0.5;
+
+        if (useEnter) {
+            await this.passwordInput.press('Enter');
+        } else {
+            await this.submitButton.click();
+        }
     }
 }

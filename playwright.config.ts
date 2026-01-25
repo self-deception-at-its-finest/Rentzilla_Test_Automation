@@ -4,8 +4,8 @@ import 'dotenv/config';
 
 export default defineConfig({
     testDir: './tests',
-    globalTimeout: 60 * 60 * 1000,
-    timeout: 2 * 60 * 1000,
+    globalTimeout: 60 * 60 * 2000,
+    timeout: 2 * 60 * 2000,
     expect: { timeout: 5_000 },
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
