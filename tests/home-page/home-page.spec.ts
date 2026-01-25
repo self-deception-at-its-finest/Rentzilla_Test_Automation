@@ -6,8 +6,11 @@ import mainPageConsts from "../../constants/home-page/home-page.constants.json";
 test.describe(
     "Home Page tests",
     () => {
-        test(
-            "C212 - Checking *Послуги* section on the main page",
+        test("Checking *Послуги* section on the main page",
+            {
+                tag: "@UI",
+                annotation: { type: "Test case", description: "C212" },
+                    },
             async ({ page, homePage }) => {
                 
                 await test.step("1. Open home page and scroll to Services section", async () => {
