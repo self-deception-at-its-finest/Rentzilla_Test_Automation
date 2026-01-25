@@ -4,7 +4,12 @@ import footerConsts from "../../constants/home-page/footer.constants.json";
 
 test.describe("Home Page Footer Tests", () => {
     
-    test("C214 - Verify footer elements visibility and navigation", async ({ page, homePage }) => {
+    test("Verify footer elements visibility and navigation",
+        {
+            tag: "@UI",
+            annotation: { type: "Test case", description: "C214" },
+        },
+        async ({ page, homePage }) => {
         const footer = homePage.footer;
 
         await test.step("1-11. Visibility: Scroll to footer and check all static elements", async () => {

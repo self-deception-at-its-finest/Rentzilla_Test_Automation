@@ -2,17 +2,18 @@ import { expect, test } from "../../fixtures/fixtures";
 import endpoints from "../../constants/endpoints.constants.json";
 import { markStepAsSkipped } from "../../utils/skip-test";
 import mainPageConsts from "../../constants/home-page/home-page.constants.json";
+import { ProductsPage } from "../../pages/products.page";
 
 test.describe(
     "Home Page tests",
     () => {
-        test("Checking *Послуги* section on the main page",
+        test("Checking 'Послуги' section on the main page",
             {
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C212" },
-                    },
+            },
             async ({ page, homePage }) => {
-                
+                const productsPage = new ProductsPage(page);
                 await test.step("1. Open home page and scroll to Services section", async () => {
                     await homePage.open();
                     await homePage.servicesSection.scrollIntoViewIfNeeded();
@@ -41,9 +42,18 @@ test.describe(
                                 await expect(page).toHaveURL(/.*products.*/); 
                             });
 
-                            await test.step("--- [SKIPPED] Click on the first relevant unit", async () => {
-                                markStepAsSkipped("Selection of a relevant unit", "The website currently has no units.");
-                            });
+                            await test.step("--- Click on the first relevant unit", async () => {
+                                    await expect(page).toHaveURL(/.*\/products\//);
+                                    await productsPage.unitCards.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+                                    const unitsCount = await productsPage.unitCards.count();
+
+                                    if (unitsCount > 0) {
+                                        await productsPage.unitCards.first().click();
+                                        await expect(page).toHaveURL(/.*\/unit\//);
+                                    } else {
+                                        markStepAsSkipped("Selection of a relevant unit", "The website currently has no units in this category.");
+                                    }
+                                });
 
                             await test.step("--- Click on the logo to return home", async () => {
                                 await homePage.logo.click();
@@ -59,10 +69,13 @@ test.describe(
             }
         );
 
-        test(
-            "C213 - Checking *Спецтехніка* section on the main page",
+        test("Checking 'Спецтехніка' section on the main page",
+            {
+                tag: "@UI",
+                annotation: { type: "Test case", description: "C213" },
+            },
             async ({ page, homePage }) => {
-                
+                const productsPage = new ProductsPage(page);
                 await test.step("1. Open home page and scroll to Special Equipment section", async () => {
                     await homePage.open();
                     await homePage.specialEquipmentSection.scrollIntoViewIfNeeded();
@@ -89,9 +102,18 @@ test.describe(
                                 await expect(page).toHaveURL(/.*products.*/); 
                             });
 
-                            await test.step("--- [SKIPPED] Click on the first relevant unit", async () => {
-                                markStepAsSkipped("Selection of a relevant unit", "The website currently has no units.");
-                            });
+                            await test.step("--- Click on the first relevant unit", async () => {
+                                await expect(page).toHaveURL(/.*\/products\//);
+                                await productsPage.unitCards.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+                                const unitsCount = await productsPage.unitCards.count();
+
+                                if (unitsCount > 0) {
+                                    await productsPage.unitCards.first().click();
+                                    await expect(page).toHaveURL(/.*\/unit\//);
+                                } else {
+                                    markStepAsSkipped("Selection of a relevant unit", "The website currently has no units in this category.");
+                                }
+                            });                            
 
                             await test.step("--- Click on the logo to return home", async () => {
                                 await homePage.logo.click();

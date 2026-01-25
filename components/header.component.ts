@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class HeaderComponent {
     public page: Page;
@@ -6,6 +6,6 @@ export class HeaderComponent {
 
     constructor(page: Page) {
         this.page = page;
-        this.authenticationButton= page.getByText("Вхід");
+        this.authenticationButton = page.getByText("Вхід");
     }
 }

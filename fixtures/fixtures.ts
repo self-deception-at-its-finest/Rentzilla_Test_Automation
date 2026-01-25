@@ -1,6 +1,6 @@
 import { test as base } from "@playwright/test";
 import { HomePage } from "../pages/home.page";
-//import { CreateUnitPage } from "../pages/create-unit.page";
+import { CreateUnitPage } from "../pages/create-unit.page";
 import { AuthenticationComponent } from "../components/authentication.component";
 import endpoints from "../constants/endpoints.constants.json";
 
@@ -9,7 +9,7 @@ type Fixtures = {
     authorizedHomePage: HomePage;
     homePage: HomePage;
     authComponent: AuthenticationComponent;
-    //createUnitPage: CreateUnitPage;
+    createUnitPage: CreateUnitPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -32,6 +32,13 @@ export const test = base.extend<Fixtures>({
         { box: true },
     ],
 
+    homePage: [
+        async ({ page }, use) => {
+            await use(new HomePage(page));
+        },
+        { box: true },
+    ],
+
     authorizedHomePage: [
         async ({ auth, page }, use) => {
             await page.goto(endpoints.home);
@@ -40,20 +47,13 @@ export const test = base.extend<Fixtures>({
         { box: true },
     ],
 
-    homePage: [
-        async ({ page }, use) => {
-            await use(new HomePage(page));
+    createUnitPage: [
+        async ({ auth, page }, use) => {
+            await page.goto(endpoints["create unit"]);
+            await use(new CreateUnitPage(page));
         },
-        { box: true },
+        { box: false },
     ],
-
-    // createUnitPage: [
-    //     async ({ auth, page }, use) => {
-    //         await page.goto(endpoints["create unit"]);
-    //         await use(new CreateUnitPage(page));
-    //     },
-    //     { box: false },
-    // ],
 });
 
 export {

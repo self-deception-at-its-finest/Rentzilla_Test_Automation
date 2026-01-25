@@ -21,6 +21,12 @@ export class HomePage extends BasePage {
     readonly specialEquipmentTabs: Locator;
     readonly specialEquipmentItems: Locator;
 
+    readonly avatarBlock: Locator;
+    readonly dropdownAdsItem: Locator;
+    readonly sidebarAdsCategory: Locator;
+    readonly sidebarFavoriteAdsVariant: Locator;
+    readonly navAdsLink: Locator;
+
     constructor(page: Page) {
         super(page);
         this.endpoint = endpoints.home;
@@ -40,6 +46,13 @@ export class HomePage extends BasePage {
         this.specialEquipmentTitle = this.specialEquipmentSection.locator('[data-testid="title"]');
         this.specialEquipmentTabs = this.specialEquipmentSection.locator('.RentzilaProposes_service__oHepD');
         this.specialEquipmentItems = this.specialEquipmentSection.locator('.RentzilaProposes_proposes_item__sY_h2');
+
+        this.avatarBlock = page.getByTestId('avatarBlock');
+        this.dropdownAdsItem = page.getByTestId('units');
+        this.sidebarAdsCategory = page.getByTestId('leftsideCategory').filter({ hasText: 'Оголошення' });
+        this.sidebarFavoriteAdsVariant = page.getByTestId('variant').filter({ hasText: 'Обрані оголошення' });
+        this.navAdsLink = page.locator('a[href="/products/"]').first();
+        
     }
 
     async open(): Promise<void> {

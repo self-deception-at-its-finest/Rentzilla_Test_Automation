@@ -1,34 +1,29 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./base.page";
-import createUnitConstsJSON from "../constants/create-unit/create-unit.constants.json";
+import { CREATE_UNIT_CONSTS } from "../constants/create-unit/create-unit.constants";
+import { data, TabNumber } from "../types/tabs";
+import { TAB_NUMBERS } from "../constants/create-unit/create-unit.constants";
 
 type TabInfo = {
     title: string;
     number: string;
-};
+}
 
 export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
-    readonly tabNumbers: (keyof typeof createUnitConstsJSON.tabs)[];
     readonly nextButton: Locator;
+
 
     constructor(page: Page) {
         super(page);
-        this.pageTitle = page.getByText(createUnitConstsJSON["page title"]).first();
+        this.pageTitle = page.getByText(CREATE_UNIT_CONSTS.PAGE_TITLE).first();
         this.tabList = page.locator('[role="tablist"] > button');
-
-        this.tabNumbers = Object.keys(
-            createUnitConstsJSON.tabs
-        ) as (keyof typeof createUnitConstsJSON.tabs)[];
-
         this.nextButton = page.getByTestId("nextButton");
     }
 
-    async getTabMetaInfo(
-        tabNumber: keyof typeof createUnitConstsJSON.tabs
-    ): Promise<TabInfo> {
-        const index = this.tabNumbers.indexOf(tabNumber);
+    async getTabMetaInfo(tabNumber: TabNumber): Promise<TabInfo> {
+        const index = TAB_NUMBERS.indexOf(tabNumber);
         if (index === -1)
             throw new Error(`The “${tabNumber}” tab key is not found`);
 
@@ -38,7 +33,7 @@ export class CreateUnitPage extends BasePage {
             .textContent();
         const title = await tab
             .locator("span", {
-                hasText: createUnitConstsJSON["tabs"][tabNumber]["title"],
+                hasText: data.tabs[tabNumber].title,
             })
             .textContent();
 
