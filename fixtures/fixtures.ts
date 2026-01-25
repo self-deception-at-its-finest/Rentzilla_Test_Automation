@@ -2,10 +2,13 @@ import { test as base } from "@playwright/test";
 import { HomePage } from "../pages/home.page";
 import { CreateUnitPage } from "../pages/create-unit.page";
 import { AuthenticationComponent } from "../components/authentication.component";
-import { createAds } from "../flows/ads/create-ads.flow";
+import { createAdsFlow } from "../flows/ads/create-ads.flow";
 import endpoints from "../constants/endpoints.constants.json";
-import { AdminPage } from "../pages/admin.page";
+import { env } from "../config/env";
 import { buildTestAds } from "../utils/builders/ad.builder";
+import { switchToAdminFlow } from "../flows/admin/switch-to-admin.flow";
+import { approveAdsFlow } from "../flows/admin/approve-ads.flow";
+import { deleteAdsFlow } from "../flows/admin/delete-ads.flow";
 
 type Fixtures = {
     auth: void;
@@ -27,10 +30,7 @@ export const test = base.extend<Fixtures>({
     auth: [
         async ({ authComponent, page }, use) => {
             await page.goto(endpoints.home);
-            await authComponent.login({
-                email: process.env.USER_EMAIL,
-                password: process.env.USER_PASSWORD,
-            });
+            await authComponent.login(env.user);
             await use(undefined);
         },
         { box: true },
@@ -59,56 +59,26 @@ export const test = base.extend<Fixtures>({
      * 4. Deleting of created ads
      */
     ads: [
-        async ({ auth, authComponent, page }, use) => {
+        async ({ auth, page }, use) => {
             await page.goto(endpoints["create unit"]);
-            const createUnitPage = new CreateUnitPage(page);
 
             // Creating of test ads
-            const TEST_ADS_LENGTH = 5;
-            // let testAds: TestAdData[] = [];
-            // for (let i = 0; i < TEST_ADS_LENGTH; i++) {
-            //     testAds[i] = {
-            //         title: "new_test_" + generateText(15),
-            //         manufacturer: getRandomStringElement(MANUFACTURERS),
-            //         photo: "test-photo.png",
-            //         service:
-            //             SERVICES["agricultural services"].subcategories[
-            //                 "agrodrone services"
-            //             ].title,
-            //         price: "1000",
-            //     };
-            //     console.log(`Ad title #${i}` + testAds[i].title);
-            //     await createUnitPage.createTheAd(testAds[i]);
-            //     await page.goto(endpoints["create unit"]);
-            // }
-            const testAds = buildTestAds(TEST_ADS_LENGTH);
-            await createAds(page, testAds);
+            const testAds = buildTestAds(5);
+            await createAdsFlow(page, testAds);
             // Approving of ads flow
-            await authComponent.logout();
-            await page.goto(endpoints["admin"]);
-            await authComponent.loginAsAdmin({
-                email: process.env.ADMIN_EMAIL,
-                password: process.env.ADMIN_PASSWORD,
-            });
-            const adminPage = new AdminPage(page);
-            await adminPage.approveAds(testAds);
+            await switchToAdminFlow(page, env.admin);
+            await approveAdsFlow(page, testAds);
             // Testing
-            await use(createUnitPage);
+            await use(new CreateUnitPage(page));
             // Deleting of created ads
-            await adminPage.deleteAds(testAds);
+            await deleteAdsFlow(page, testAds);
         },
-        { box: false },
+        { box: false, title: "Ads managing" },
     ],
 
-    createUnitPageWithAds: async ({ auth, ads, page }, use) => {
+    createUnitPageWithAds: async ({ auth, ads }, use) => {
         await use(ads);
     },
 });
 
-export {
-    expect,
-    type Page,
-    type Download,
-    type Locator,
-    type TestInfo,
-} from "@playwright/test";
+export { expect } from "@playwright/test";

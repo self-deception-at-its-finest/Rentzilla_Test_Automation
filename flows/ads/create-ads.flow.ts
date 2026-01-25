@@ -12,19 +12,19 @@ import { Page } from "@playwright/test";
 import { CreateUnitPage } from "../../pages/create-unit.page";
 /**
  * Entire flow creating of ads
- * @param testAds Thе data object for creating new ads
+ * @param ads Thе data object for creating new ads
  */
-export async function createAds(page: Page, testAds: TestAdData[]) {
+export async function createAdsFlow(page: Page, ads: TestAdData[]) {
     const createUnitPage = new CreateUnitPage(page);
-    for (let i = 0; i < testAds.length; i++) {
+    for (let i = 0; i < ads.length; i++) {
         // First tab
 
         await new CategoryComponent(page).selectTheCategory();
 
-        await new AdComponent(page).typeAd(testAds[i].title);
+        await new AdComponent(page).typeAd(ads[i].title);
 
         await new ManufacturerComponent(page).setTheManufacturer(
-            testAds[i].manufacturer,
+            ads[i].manufacturer,
         );
 
         await new LocationComponent(page).selectLocation();
@@ -32,21 +32,19 @@ export async function createAds(page: Page, testAds: TestAdData[]) {
         await createUnitPage.clickNextButton();
 
         // Second tab
-        await new PhotosComponent(page).uploadPhoto(testAds[i].photo);
+        await new PhotosComponent(page).uploadPhoto(ads[i].photo);
 
         await createUnitPage.clickNextButton();
 
         // Third tab
         // TODO create a random choice of service
         // it’s constant service for now
-        await new ServiceComponent(page).typeAndSelectService(
-            testAds[i].service,
-        );
+        await new ServiceComponent(page).typeAndSelectService(ads[i].service);
 
         await createUnitPage.clickNextButton();
 
         // Fourth tab
-        await new PriceComponent(page).typePrice(testAds[i].price);
+        await new PriceComponent(page).typePrice(ads[i].price);
 
         await createUnitPage.clickNextButton();
 

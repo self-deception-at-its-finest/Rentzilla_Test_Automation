@@ -19,5 +19,6 @@
     "utils",
     "types",
     "flows",
+    "config"
   ]
 }
