@@ -11,20 +11,20 @@ import {
 } from "../../constants/create-unit/createUnit.constants";
 import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
-import { isDesktop } from "../../utils/viewport-guard";
-import { markStepAsSkipped } from "../../utils/skip-test";
+import { isDesktop } from "../../utils/viewportGuard";
+import { markStepAsSkipped } from "../../utils/skipTest";
 import { CategoryComponent } from "../../components/create-unit/1/Category.component";
 import { AdComponent } from "../../components/create-unit/1/Ad.component";
-import { getFieldPlaceholder } from "../../utils/form-helper";
+import { getFieldPlaceholder } from "../../utils/formHelper";
 import { firstTabFields } from "../../constants/create-unit/fields.constants";
 import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
 import {
     generateText,
     generateMediumText,
     generateShortText,
-} from "../../utils/fake-data";
-import { formatMissingManufacturerError } from "../../utils/format-manufacturer-error";
-import { getRandomStringElement } from "../../utils/get-elements";
+} from "../../utils/fakeData";
+import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
+import { getRandomStringElement } from "../../utils/getElements";
 import { ModelComponent } from "../../components/create-unit/1/Model.component";
 
 test.describe(

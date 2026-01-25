@@ -1,8 +1,8 @@
 import { SERVICES } from "../../constants/catalog.constants";
 import { MANUFACTURERS } from "../../constants/create-unit/createUnit.constants";
 import { TestAdData } from "../../types/tabs";
-import { generateText } from "../fake-data";
-import { getRandomStringElement } from "../get-elements";
+import { generateText } from "../fakeData";
+import { getRandomStringElement } from "../getElements";
 
 /**
  *
