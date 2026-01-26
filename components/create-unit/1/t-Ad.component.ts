@@ -1,19 +1,21 @@
-import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./Base.component";
+import { Page, Locator } from "@playwright/test";
+import { BaseComponent } from "./t-Base.component";
 
-export class ModelComponent extends BaseComponent {
-    readonly field: Locator;
+export class AdComponent extends BaseComponent {
     readonly errorBlock: Locator;
+    readonly field: Locator;
+
     constructor(page: Page) {
-        super(page, "model", true);
+        super(page, "ad");
         this.field = this.section.getByRole("textbox");
         this.errorBlock = this.section.getByTestId("descriptionError");
     }
-    async typeModel(str: string): Promise<void> {
+
+    async typeAd(str: string): Promise<void> {
         await super.typeIntoField(this.field, str);
     }
 
-    async clearModelField(): Promise<void> {
+    async clearAdField(): Promise<void> {
         await super.clearTheField(this.field);
     }
 }

@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./Base.component";
+import { BaseComponent } from "./t-Base.component";
 import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
 
 export class ManufacturerComponent extends BaseComponent {

@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./Base.component";
+import { BaseComponent } from "./t-Base.component";
 import {
     CREATE_UNIT_CONSTS,
     FIELDS_ERRORS,
