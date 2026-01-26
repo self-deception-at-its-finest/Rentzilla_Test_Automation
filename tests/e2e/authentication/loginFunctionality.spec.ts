@@ -3,18 +3,42 @@ import {AuthenticationComponent} from "../../../components/authentication.compon
 import {HeaderComponent} from "../../../components/header.component";
 import {faker} from "@faker-js/faker";
 import errorMessages from '../../../constants/errorMessages.constants.json';
+import colors from '../../../constants/colors.constants.json';
 
 
 test.describe('Login functionality', () => {
     test('C201: Authorization with valid email and password', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
+        const headerComponent = new HeaderComponent(page);
 
         await test.step('Open home page', async () => {
             await homePage.open();
         });
 
-        await test.step('Login with valid email and password', async () => {
-            await authComponent.verifySuccessfulLogin(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+        await test.step('Open Login form', async () => {
+            await authComponent.openLoginForm();
+        });
+
+        await test.step('Fill valid credentials', async () => {
+            await authComponent.fillCredentials(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
+        });
+
+        await test.step('Toggle password visibility', async () => {
+            await authComponent.togglePasswordVisibility();
+            await expect(authComponent.passwordInput).toHaveAttribute('type', 'text')
+
+            await authComponent.togglePasswordVisibility();
+            await expect(authComponent.passwordInput).toHaveAttribute('type', 'password')
+        });
+
+        await test.step('Press login or "Enter"', async () => {
+            await authComponent.submitRandomly();
+        });
+
+        await test.step('Verify user is logged in', async () => {
+            await headerComponent.openProfileDropdown();
+            await expect(headerComponent.profileDropdownEmail).toBeVisible()
+            await expect(headerComponent.profileDropdownEmail).toHaveText(process.env.USER_EMAIL!);
         });
     });
     test('C202: Authorization with valid phone and password', async ({homePage, page}) => {
@@ -33,7 +57,15 @@ test.describe('Login functionality', () => {
 
         for (const phone of phoneNumbers) {
             await test.step(`Login with phone number: ${phone}`, async () => {
-                await authComponent.verifySuccessfulLogin(phone, process.env.USER_PASSWORD!);
+                await authComponent.openLoginForm();
+                await authComponent.fillCredentials(phone, process.env.USER_PASSWORD!);
+                await authComponent.submitRandomly();
+            });
+
+            await test.step('Verify user is logged in', async () => {
+                await headerComponent.openProfileDropdown();
+                await expect(headerComponent.profileDropdownEmail).toBeVisible()
+                await expect(headerComponent.profileDropdownEmail).toHaveText(process.env.USER_EMAIL!);
             });
 
             await test.step('Logout user', async () => {
@@ -44,44 +76,39 @@ test.describe('Login functionality', () => {
 
     test('C203: Authorization with invalid credentials', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
-        const headerComponent = new HeaderComponent(page);
 
         await test.step('Open home page', async () => {
             await homePage.open();
         });
 
-        await test.step('Open authorization modal', async () => {
-            await headerComponent.authenticationButton.click();
-        });
-
-        await test.step('Fill valid password', async () => {
-            await authComponent.passwordInput.fill(process.env.USER_PASSWORD!);
+        await test.step('Open Login form', async () => {
+            await authComponent.openLoginForm();
         });
 
         const invalidEmails = [
             'testuserrentzilagmail.com',
             'testuserrentzila@gmailcom',
             'testuserrentzila@gmail',
+            'testuser rentzila@gmail.com',
+            'testuserrentzila@.com',
+            'testuserrentzila@@gmail.com',
+            'testuserrentzila',
+            'еуіегіуккутеяшдф'
         ];
 
         for (const email of invalidEmails) {
             await test.step(`Try login with invalid email format: ${email}`, async () => {
-                await authComponent.emailInput.fill(email);
+                await authComponent.fillCredentials(email, process.env.USER_PASSWORD!);
                 await authComponent.submitRandomly();
                 await expect(authComponent.invalidEmailFormatMsg).toBeVisible();
             });
         }
 
         await test.step('Try login with non-existing email', async () => {
-            await authComponent.emailInput.fill(faker.internet.email());
+            await authComponent.fillCredentials(faker.internet.email(), process.env.USER_PASSWORD!);
             await authComponent.submitRandomly();
             await expect(authComponent.invalidEmailOrPasswordMsg).toBeVisible();
-            await expect(authComponent.invalidEmailOrPasswordMsg)
-                .toHaveText(errorMessages.invalidEmailOrPassword);
-        });
-
-        await test.step('Fill valid email', async () => {
-            await authComponent.emailInput.fill(process.env.USER_EMAIL!);
+            await expect(authComponent.invalidEmailOrPasswordMsg).toHaveText(errorMessages.invalidEmailOrPassword);
         });
 
         const invalidPasswords = [
@@ -92,7 +119,7 @@ test.describe('Login functionality', () => {
 
         for (const password of invalidPasswords) {
             await test.step(`Try login with invalid password: "${password}"`, async () => {
-                await authComponent.passwordInput.fill(password);
+                await authComponent.fillCredentials(process.env.USER_EMAIL!, password);
                 await authComponent.submitRandomly();
                 await expect(authComponent.invalidPasswordFormatMsg).toBeVisible();
             });
@@ -100,18 +127,13 @@ test.describe('Login functionality', () => {
     });
     test('C207: Authorization with invalid phone number', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
-        const headerComponent = new HeaderComponent(page);
 
         await test.step('Open home page', async () => {
             await homePage.open();
         });
 
-        await test.step('Open authorization modal', async () => {
-            await headerComponent.authenticationButton.click();
-        });
-
-        await test.step('Fill valid password', async () => {
-            await authComponent.passwordInput.fill(process.env.USER_PASSWORD!);
+        await test.step('Open Login form', async () => {
+            await authComponent.openLoginForm();
         });
 
         const invalidPhoneNumbers = [
@@ -122,7 +144,7 @@ test.describe('Login functionality', () => {
 
         for (const number of invalidPhoneNumbers) {
             await test.step(`Try login with invalid phone number: ${number}`, async () => {
-                await authComponent.emailInput.fill(number);
+                await authComponent.fillCredentials(number, process.env.USER_PASSWORD!);
                 await authComponent.submitRandomly();
                 await expect(authComponent.invalidEmailFormatMsg).toBeVisible();
             });
@@ -131,23 +153,22 @@ test.describe('Login functionality', () => {
 
     test('C200: Authorization with empty fields', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
-        const headerComponent = new HeaderComponent(page);
 
         await test.step('Open home page', async () => {
             await homePage.open();
         });
 
-        await test.step('Open authorization modal', async () => {
-            await headerComponent.authenticationButton.click();
+        await test.step('Open Login form', async () => {
+            await authComponent.openLoginForm();
         });
 
         await test.step('Submit form with empty email and password', async () => {
             await authComponent.submitRandomly();
 
             await expect(authComponent.emailInput)
-                .toHaveCSS('border-color', 'rgb(247, 56, 89)');
+                .toHaveCSS('border-color', colors.errorBorderColor);
             await expect(authComponent.passwordInput)
-                .toHaveCSS('border-color', 'rgb(247, 56, 89)');
+                .toHaveCSS('border-color', colors.errorBorderColor);
 
             await expect(authComponent.emptyEmailFieldMsg).toBeVisible();
             await expect(authComponent.emptyPasswordFieldMsg).toBeVisible();
@@ -158,9 +179,9 @@ test.describe('Login functionality', () => {
             await authComponent.submitRandomly();
 
             await expect(authComponent.emailInput)
-                .toHaveCSS('border-color', 'rgb(229, 229, 229)');
+                .toHaveCSS('border-color', colors.defaultBorderColor);
             await expect(authComponent.passwordInput)
-                .toHaveCSS('border-color', 'rgb(247, 56, 89)');
+                .toHaveCSS('border-color', colors.errorBorderColor);
 
             await expect(authComponent.emptyPasswordFieldMsg).toBeVisible();
         });
@@ -171,9 +192,9 @@ test.describe('Login functionality', () => {
             await authComponent.submitRandomly();
 
             await expect(authComponent.emailInput)
-                .toHaveCSS('border-color', 'rgb(247, 56, 89)');
+                .toHaveCSS('border-color', colors.errorBorderColor);
             await expect(authComponent.passwordInput)
-                .toHaveCSS('border-color', 'rgb(229, 229, 229)');
+                .toHaveCSS('border-color', colors.defaultBorderColor);
 
             await expect(authComponent.emptyEmailFieldMsg).toBeVisible();
         });

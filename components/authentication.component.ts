@@ -51,24 +51,18 @@ export class AuthenticationComponent {
         await this.submitButton.click();
     }
 
-    async verifySuccessfulLogin(emailOrPhone: string, password: string) {
+    async openLoginForm() {
         const headerComponent = new HeaderComponent(this.page);
         await headerComponent.authenticationButton.click();
+    }
 
+    async fillCredentials(emailOrPhone: string, password: string) {
         await this.emailInput.fill(emailOrPhone);
         await this.passwordInput.fill(password);
+    }
 
+    async togglePasswordVisibility() {
         await this.showPasswordButton.click();
-        await expect(this.passwordInput).toHaveAttribute('type', 'text');
-        await this.showPasswordButton.click();
-        await expect(this.passwordInput).toHaveAttribute('type', 'password');
-
-        await this.submitRandomly();
-
-        await headerComponent.avatarBlock.click();
-
-        await expect(headerComponent.profileDropdownEmail).toBeVisible();
-        await expect(headerComponent.profileDropdownEmail).toHaveText(process.env.USER_EMAIL!);
     }
 
     async submitRandomly() {
