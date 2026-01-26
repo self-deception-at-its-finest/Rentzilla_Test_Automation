@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./temp-Base.component";
+import { BaseComponent } from "./Base.component";
 
 export class ModelComponent extends BaseComponent {
     readonly field: Locator;
