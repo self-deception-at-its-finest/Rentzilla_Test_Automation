@@ -4,8 +4,6 @@ import {
     MANUFACTURERS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/createUnit.constants";
-import {
     CREATE_UNIT_CONSTS,
     FIELDS_ERRORS,
 } from "../../constants/create-unit/createUnit.constants";
@@ -26,6 +24,7 @@ import {
 import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
 import { getRandomStringElement } from "../../utils/getElements";
 import { ModelComponent } from "../../components/create-unit/1/Model.component";
+import { expectFieldDefault, expectFieldError } from "../../utils/uiMatchers";
 
 test.describe(
     "“Create unit” page",
@@ -39,7 +38,7 @@ test.describe(
         test(
             "Verify body title and tab titles",
             {
-                tag: "@UI",
+                tag: ["@UI"],
                 annotation: { type: "Test case", description: "C294" },
             },
             async ({ createUnitPage, page }) => {
@@ -112,7 +111,7 @@ test.describe(
         test(
             "Verify category (Категорія) section",
             {
-                tag: "@UI",
+                tag: ["@UI"],
                 annotation: { type: "Test case", description: "C296" },
             },
             async ({ createUnitPage, page }) => {
@@ -151,11 +150,7 @@ test.describe(
 
                     await test.step("• requires filling.", async () => {
                         await createUnitPage.clickNextButton();
-
-                        await expect(categoryComponent.field).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-                        );
+                        await expectFieldError(categoryComponent.field);
 
                         await expect(
                             categoryComponent.errorBlock,
@@ -280,10 +275,7 @@ test.describe(
                     await test.step("• requires filling", async () => {
                         await createUnitPage.clickNextButton();
 
-                        await expect(adComponent.field).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-                        );
+                        await expectFieldError(adComponent.field);
 
                         await expect(adComponent.errorBlock).toBeVisible();
 
@@ -302,10 +294,7 @@ test.describe(
                         await adComponent.typeAd(less10);
                         await createUnitPage.clickNextButton();
 
-                        await expect(adComponent.field).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-                        );
+                        await expectFieldError(adComponent.field)
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
                             FIELDS_ERRORS.LESS_10_SYMBOLS,
@@ -318,10 +307,7 @@ test.describe(
                         await createUnitPage.clickNextButton();
 
                         await expect(adComponent.field).toHaveText("");
-                        await expect(adComponent.field).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-                        );
+                        await expectFieldError(adComponent.field);
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
                             FIELDS_ERRORS.MORE_100_SYMBOLS,
@@ -337,10 +323,7 @@ test.describe(
                     await test.step("• string can contain from 10 to 100 symbols", async () => {
                         await adComponent.typeAd(validText);
                         await expect(adComponent.field).toHaveValue(validText);
-                        await expect(adComponent.field).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
-                        );
+                        await expectFieldDefault(adComponent.field)
                         await expect(adComponent.errorBlock).toBeHidden();
                     });
                 });
@@ -350,7 +333,7 @@ test.describe(
         test(
             "Verify vehicle manufacturer section",
             {
-                tag: "@UI",
+                tag: ["@UI"],
                 annotation: { type: "Test case", description: "C298" },
             },
             async ({ createUnitPage, page }) => {
@@ -385,12 +368,7 @@ test.describe(
                     await test.step("• requires filling", async () => {
                         await createUnitPage.clickNextButton();
 
-                        await expect(
-                            manufacturerComponent.fieldWrapper,
-                        ).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-                        );
+                        await expectFieldError(manufacturerComponent.fieldWrapper);
 
                         await expect(
                             manufacturerComponent.errorBlock,
@@ -529,10 +507,7 @@ test.describe(
                                 FIELDS_ERRORS.MORE_15_SYMBOLS,
                             );
 
-                            await expect(modelComponent.field).toHaveCSS(
-                                "border",
-                                `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-                            );
+                            await expectFieldError(modelComponent.field);
 
                             await modelComponent.clearModelField();
                         }
@@ -546,10 +521,7 @@ test.describe(
                     await test.step("• string accept 15 or less symbols", async () => {
                         let text = generateText(15);
                         await modelComponent.typeModel(text);
-                        await expect(modelComponent.field).toHaveCSS(
-                            "border",
-                            `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
-                        );
+                        await expectFieldDefault(modelComponent.field);
                     });
                 });
             },
