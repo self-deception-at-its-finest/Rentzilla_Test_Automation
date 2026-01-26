@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { AuthenticationComponent } from "../../components/t-Authentication.component";
+import { AuthenticationComponent } from "../../components/Authentication.component";
 import endpoints from "../../constants/endpoints.constants.json";
 
 type User = {
