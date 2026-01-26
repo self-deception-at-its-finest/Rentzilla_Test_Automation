@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { BaseComponent } from "./Base.component";
+import { BaseComponent } from "./t-Base.component";
 
 export class LocationComponent extends BaseComponent {
     readonly selectPlaceButton: Locator;

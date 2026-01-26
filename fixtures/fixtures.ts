@@ -1,7 +1,7 @@
 import { test as base } from "@playwright/test";
-import { HomePage } from "../pages/Home.page";
+import { HomePage } from "../pages/t-Home.page";
 import { CreateUnitPage } from "../pages/CreateUnit.page";
-import { AuthenticationComponent } from "../components/Authentication.component";
+import { AuthenticationComponent } from "../components/t-Authentication.component";
 import { createAdsFlow } from "../flows/ads/createAds.flow";
 import endpoints from "../constants/endpoints.constants.json";
 import { env } from "../config/env";
