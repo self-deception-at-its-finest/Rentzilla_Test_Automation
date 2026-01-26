@@ -1,7 +1,7 @@
 import { test as base } from "@playwright/test";
-import { HomePage } from "../pages/home.page";
-import { CreateUnitPage } from "../pages/create-unit.page";
-import { AuthenticationComponent } from "../components/authentication.component";
+import { HomePage } from "../pages/temp-Home.page";
+import { CreateUnitPage } from "../pages/CreateUnit.page";
+import { AuthenticationComponent } from "../components/temp-Authentication.component";
 import endpoints from "../constants/endpoints.constants.json";
 
 type Fixtures = {

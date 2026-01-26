@@ -1,19 +1,18 @@
 import { Locator, Page } from "@playwright/test";
-import BasePage from "./base.page";
-import { CREATE_UNIT_CONSTS } from "../constants/create-unit/create-unit.constants";
+import BasePage from "./temp-Base.page";
+import { CREATE_UNIT_CONSTS } from "../constants/create-unit/createUnit.constants";
 import { data, TabNumber } from "../types/tabs";
-import { TAB_NUMBERS } from "../constants/create-unit/create-unit.constants";
+import { TAB_NUMBERS } from "../constants/create-unit/createUnit.constants";
 
 type TabInfo = {
     title: string;
     number: string;
-}
+};
 
 export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
     readonly nextButton: Locator;
-
 
     constructor(page: Page) {
         super(page);

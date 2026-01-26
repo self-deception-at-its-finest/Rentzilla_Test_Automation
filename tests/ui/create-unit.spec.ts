@@ -4,28 +4,28 @@ import {
     MANUFACTURERS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/create-unit.constants";
+} from "../../constants/create-unit/createUnit.constants";
 import {
     CREATE_UNIT_CONSTS,
     FIELDS_ERRORS,
-} from "../../constants/create-unit/create-unit.constants";
+} from "../../constants/create-unit/createUnit.constants";
 import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
-import { isDesktop } from "../../utils/viewport-guard";
-import { markStepAsSkipped } from "../../utils/skip-test";
-import { CategoryComponent } from "../../components/create-unit/1/category.component";
-import { AdComponent } from "../../components/create-unit/1/ad.component";
-import { getFieldPlaceholder } from "../../utils/form-helper";
+import { isDesktop } from "../../utils/viewportGuard";
+import { markStepAsSkipped } from "../../utils/skipTest";
+import { CategoryComponent } from "../../components/create-unit/1/temp-Category.component";
+import { AdComponent } from "../../components/create-unit/1/temp-Ad.component";
+import { getFieldPlaceholder } from "../../utils/formHelper";
 import { firstTabFields } from "../../constants/create-unit/fields.constants";
-import { ManufacturerComponent } from "../../components/create-unit/1/manufacturer.component";
+import { ManufacturerComponent } from "../../components/create-unit/1/temp-Manufacturer.component";
 import {
     generateText,
     generateMediumText,
     generateShortText,
-} from "../../utils/fake-data";
-import { formatMissingManufacturerError } from "../../utils/format-manufacturer-error";
-import { getRandomStringElement } from "../../utils/get-elements";
-import { ModelComponent } from "../../components/create-unit/1/model.component";
+} from "../../utils/fakeData";
+import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
+import { getRandomStringElement } from "../../utils/getElements";
+import { ModelComponent } from "../../components/create-unit/1/temp-Model.component";
 
 test.describe(
     "“Create unit” page",

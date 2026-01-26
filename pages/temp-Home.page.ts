@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
-import BasePage from "./base.page";
+import BasePage from "./temp-Base.page";
 import endpoints from "../constants/endpoints.constants.json";
 
 export class HomePage extends BasePage {
@@ -17,7 +17,7 @@ export class HomePage extends BasePage {
         this.servicesTitle = page.getByTestId("services").getByTestId("title");
         this.servicesPopularni = page.getByTestId("services__populyarni");
         this.servicesSilskogospodarski = page.getByTestId(
-            "services__silskogospodarski"
+            "services__silskogospodarski",
         );
     }
 
