@@ -1,7 +1,7 @@
 import { expect, test } from "../../fixtures/fixtures"; 
-import endpoints from "../../constants/endpoints.constants.json";
+import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { markStepAsSkipped } from "../../utils/skip-test";
-import mainPageConsts from "../../constants/home-page/home-page.constants.json";
+import { MAIN_PAGE_CONSTS } from "../../constants/home-page/home-page.constants";
 import { ProductsPage } from "../../pages/products.page";
 
 test.describe(
@@ -14,11 +14,11 @@ test.describe(
             },
             async ({ page, homePage }) => {
                 const productsPage = new ProductsPage(page);
-                await test.step("1. Open home page and scroll to Services section", async () => {
+                await test.step("1. Open home page and scroll to 'Послуги' section", async () => {
                     await homePage.open();
                     await homePage.servicesSection.scrollIntoViewIfNeeded();
                     await expect(homePage.servicesTitle).toBeVisible();
-                    await expect(homePage.servicesTitle).toHaveText(mainPageConsts.services.sectionTitle);
+                    await expect(homePage.servicesTitle).toHaveText(MAIN_PAGE_CONSTS.SERVICES.SECTION_TITLE);
                 });
 
                 const tabsCount = await homePage.serviceTabs.count();
@@ -32,24 +32,23 @@ test.describe(
                         
                         const servicesCount = await homePage.serviceItems.count();
 
-                        // use expect.soft to not stop the test on failure
-                        // Test checks that there is at least one service in the selected tab
-                        expect.soft(servicesCount, `Category «${tabName}» is empty!`).toBeGreaterThan(0);
+                        expect.soft(servicesCount, `Is category «${tabName}» empty?`).toBeGreaterThan(0);
+                        expect.soft(servicesCount, `Кількість елементів у табі «${tabName}» має бути 7, знайдено ${servicesCount}`).toBe(MAIN_PAGE_CONSTS.SERVICES.EXPECTED_COUNT);
 
                         if (servicesCount > 0) {
                             await test.step("--- Click on the first service", async () => {
                                 await homePage.serviceItems.first().click();
-                                await expect(page).toHaveURL(/.*products.*/); 
+                                await expect(page).toHaveURL(ENDPOINTS.PRODUCTS_RE); 
                             });
 
                             await test.step("--- Click on the first relevant unit", async () => {
-                                    await expect(page).toHaveURL(/.*\/products\//);
+                                    await expect(page).toHaveURL(ENDPOINTS.PRODUCTS_RE);
                                     await productsPage.unitCards.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
                                     const unitsCount = await productsPage.unitCards.count();
 
                                     if (unitsCount > 0) {
                                         await productsPage.unitCards.first().click();
-                                        await expect(page).toHaveURL(/.*\/unit\//);
+                                        await expect(page).toHaveURL(ENDPOINTS.UNIT_DETAILS_RE);
                                     } else {
                                         markStepAsSkipped("Selection of a relevant unit", "The website currently has no units in this category.");
                                     }
@@ -57,11 +56,10 @@ test.describe(
 
                             await test.step("--- Click on the logo to return home", async () => {
                                 await homePage.logo.click();
-                                await expect(page).toHaveURL(endpoints.home);
+                                await expect(page).toHaveURL(ENDPOINTS.HOME);
                                 await homePage.servicesSection.scrollIntoViewIfNeeded();
                             });
                         } else {
-                            // If there are no services, we are skipping the steps that follow
                             console.log(`Skipping steps for tab ${tabName}, because it is empty.`);
                         }
                     });
@@ -80,7 +78,7 @@ test.describe(
                     await homePage.open();
                     await homePage.specialEquipmentSection.scrollIntoViewIfNeeded();
                     await expect(homePage.specialEquipmentTitle).toBeVisible();
-                    await expect(homePage.specialEquipmentTitle).toHaveText(mainPageConsts.specialEquipment.sectionTitle);
+                    await expect(homePage.specialEquipmentTitle).toHaveText(MAIN_PAGE_CONSTS.SPECIAL_EQUIPMENT.SECTION_TITLE);
                 });
 
                 const tabsCount = await homePage.specialEquipmentTabs.count();
@@ -94,22 +92,23 @@ test.describe(
                         
                         const itemsCount = await homePage.specialEquipmentItems.count();
 
-                        expect.soft(itemsCount, `Category «${tabName}» is empty!`).toBeGreaterThan(0);
+                        expect.soft(itemsCount, `Is category «${tabName}» empty?`).toBeGreaterThan(0);
+                        expect.soft(itemsCount, `Кількість елементів у табі «${tabName}» має бути 7, знайдено ${itemsCount}`).toBe(MAIN_PAGE_CONSTS.SPECIAL_EQUIPMENT.EXPECTED_COUNT);
 
                         if (itemsCount > 0) {
                             await test.step("--- Click on the first equipment category", async () => {
                                 await homePage.specialEquipmentItems.first().click();
-                                await expect(page).toHaveURL(/.*products.*/); 
+                                await expect(page).toHaveURL(ENDPOINTS.PRODUCTS_RE); 
                             });
 
                             await test.step("--- Click on the first relevant unit", async () => {
-                                await expect(page).toHaveURL(/.*\/products\//);
+                                await expect(page).toHaveURL(ENDPOINTS.PRODUCTS_RE);
                                 await productsPage.unitCards.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
                                 const unitsCount = await productsPage.unitCards.count();
 
                                 if (unitsCount > 0) {
                                     await productsPage.unitCards.first().click();
-                                    await expect(page).toHaveURL(/.*\/unit\//);
+                                    await expect(page).toHaveURL(ENDPOINTS.UNIT_DETAILS_RE);
                                 } else {
                                     markStepAsSkipped("Selection of a relevant unit", "The website currently has no units in this category.");
                                 }
@@ -117,7 +116,7 @@ test.describe(
 
                             await test.step("--- Click on the logo to return home", async () => {
                                 await homePage.logo.click();
-                                await expect(page).toHaveURL(endpoints.home);
+                                await expect(page).toHaveURL(ENDPOINTS.HOME);
                                 await homePage.specialEquipmentSection.scrollIntoViewIfNeeded();
                             });
                         } else {

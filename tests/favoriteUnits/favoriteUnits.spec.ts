@@ -1,6 +1,8 @@
 import { expect, test } from "../../fixtures/fixtures";
 import { FavoriteUnitsPage } from "../../pages/favoriteUnits.page";
 import { ProductsPage } from "../../pages/products.page";
+import { FAVORITE_UNITS_CONSTS } from "../../constants/favorite-units/favorite-units.constants";
+import { ENDPOINTS } from "../../constants/endpoints.constants";
 
 test.describe("Favorite Units Tests", () => {
     test.describe.configure({ mode: 'serial' });
@@ -13,21 +15,18 @@ test.describe("Favorite Units Tests", () => {
         async ({ page, authorizedHomePage }) => {
         const favoritePage = new FavoriteUnitsPage(page);
 
-        await test.step("1. Navigate to Favorites through Cabinet Sidebar", async () => {
+        await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
             await authorizedHomePage.avatarBlock.click();
             await authorizedHomePage.dropdownAdsItem.click();
             await authorizedHomePage.sidebarFavoriteAdsVariant.click();
-            await expect(page).toHaveURL(/.*owner-favourite-units.*/);
+            await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
+            await expect(favoritePage.emptyTitle).toHaveText(FAVORITE_UNITS_CONSTS.EMPTY_TITLE);
         });
 
-        await test.step("2. Verify empty state", async () => {
-            await expect(favoritePage.emptyTitle).toHaveText("У Вас поки немає обраних оголошень");
+        await test.step("2. Click on the 'До списку оголошень' button.", async () => {
             await favoritePage.goToAdsButton.click();
-        });
-
-        await test.step("3. Verify redirection to Ads", async () => {
-            await expect(page).toHaveURL(/.*\/products\//);
-            await expect(authorizedHomePage.navAdsLink).toHaveClass(/.*Navbar_active.*/);
+            await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
+            await expect(authorizedHomePage.navAdsLink).toHaveClass(FAVORITE_UNITS_CONSTS.CLASSES.NAVBAR_ACTIVE);
         });
     });
 
@@ -41,36 +40,38 @@ test.describe("Favorite Units Tests", () => {
         const favoritePage = new FavoriteUnitsPage(page);
         let unitName: string;
 
-        await test.step("1. Go to Products and select a unit", async () => {
+        await test.step("1-2. 1. Click on the 'Оголошення' button in the header. Click on the add to 'Обрані оголошення' icon of the unit section.", async () => {
             await authorizedHomePage.navAdsLink.click();
-            await expect(page).toHaveURL(/.*\/products\//);
-            unitName = await productsPage.unitCards.first().getByTestId('unitName').innerText();
+            await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
+            unitName = await productsPage.unitCards.first().getByTestId(FAVORITE_UNITS_CONSTS.TESTID.UNIT_NAME).innerText();
             const heart = productsPage.getHeartIconByUnitName(unitName);
-            await heart.click();
-            await expect(heart.locator('path[fill="#F73859"]')).toBeVisible();
+            
+            await heart.click({ force: true });
+            await expect(heart.locator(`path[fill="${FAVORITE_UNITS_CONSTS.COLORS.RED_FILL}"]`)).toBeVisible();
         });
 
-        await test.step("2. Navigate to Favorite Units page", async () => {
+        await test.step("3-4. Navigate to 'Обрані оголошення' page", async () => {
             await authorizedHomePage.avatarBlock.click();
             await authorizedHomePage.dropdownAdsItem.click();
             await authorizedHomePage.sidebarFavoriteAdsVariant.click(); 
             
-            await expect(page).toHaveURL(/.*owner-favourite-units.*/);
+            await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
             await expect(favoritePage.unitCards.filter({ hasText: unitName })).toBeVisible();
         });
 
-        await test.step("3. Remove from favorites and verify empty state", async () => {
-            await favoritePage.unitCards.filter({ hasText: unitName }).getByTestId('favourite').click();
+        await test.step("5. Click on the 'Обране' icon of the unit section (Remove from 'Обрані' and verify empty state).", async () => {
+            await favoritePage.unitCards.filter({ hasText: unitName }).getByTestId(FAVORITE_UNITS_CONSTS.TESTID.FAVOURITE).click();
             await expect(favoritePage.unitCards).toHaveCount(0);
-            await expect(favoritePage.emptyTitle).toHaveText("У Вас поки немає обраних оголошень");
+            await expect(favoritePage.emptyTitle).toHaveText(FAVORITE_UNITS_CONSTS.EMPTY_TITLE);
         });
 
-        await test.step("4. Verify icon state back on Products page", async () => {
+        await test.step("6. Verify icon state back on Products page", async () => {
             await authorizedHomePage.navAdsLink.click();
-            await expect(page).toHaveURL(/.*\/products\//);
+            await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
             const heart = productsPage.getHeartIconByUnitName(unitName);
-            await expect(heart.locator('path[fill="#F73859"]')).not.toBeVisible();
-            await expect(heart.locator('path[stroke="#404B69"]')).toBeVisible();
+
+            await expect(heart.locator(`path[fill="${FAVORITE_UNITS_CONSTS.COLORS.RED_FILL}"]`)).not.toBeVisible();
+            await expect(heart.locator(`path[stroke="${FAVORITE_UNITS_CONSTS.COLORS.GREY_STROKE}"]`)).toBeVisible();
         });
     });
 });
