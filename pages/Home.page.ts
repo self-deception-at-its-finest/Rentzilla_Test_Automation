@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
-import BasePage from "./temp-Base.page";
+import BasePage from "./Base.page";
 import endpoints from "../constants/endpoints.constants.json";
 
 export class HomePage extends BasePage {

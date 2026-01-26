@@ -1,7 +1,7 @@
 import { Page, Locator } from "@playwright/test";
-import { HeaderComponent } from "./temp-header.component";
+import { HeaderComponent } from "./Header.component";
 import { expect } from "playwright/test";
-import { MobNavbarComponent } from "./temp-mob-navbar.component";
+import { MobNavbarComponent } from "./MobNavbar.component";
 import { isDesktop } from "../utils/viewportGuard";
 
 export class AuthenticationComponent {
