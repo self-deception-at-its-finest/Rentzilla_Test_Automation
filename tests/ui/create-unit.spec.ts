@@ -1,5 +1,6 @@
 import { expect, test } from "../../fixtures/fixtures";
 import {
+    BUTTONS,
     FORBIDDEN_SYMBOLS,
     MANUFACTURERS,
     TAB_NUMBERS,
@@ -26,6 +27,10 @@ import {
 import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
 import { getRandomStringElement } from "../../utils/getElements";
 import { ModelComponent } from "../../components/create-unit/1/Model.component";
+import { SpecificationsComponent } from "../../components/create-unit/1/Specifications.component";
+import { DetailsComponent } from "../../components/create-unit/1/Details.component";
+import { LocationComponent } from "../../components/create-unit/1/Location.component";
+import { PhotosComponent } from "../../components/create-unit/2/Photos.component";
 
 test.describe(
     "“Create unit” page",
@@ -150,7 +155,7 @@ test.describe(
                     });
 
                     await test.step("• requires filling.", async () => {
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expect(categoryComponent.field).toHaveCSS(
                             "border",
@@ -264,9 +269,7 @@ test.describe(
                     });
 
                     await test.step("• has an asterisk", async () => {
-                        await expect(
-                            adComponent.requiredSymbol!!,
-                        ).toBeVisible();
+                        await expect(adComponent.requiredSymbol!).toBeVisible();
                     });
                 });
 
@@ -278,7 +281,7 @@ test.describe(
                     });
 
                     await test.step("• requires filling", async () => {
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
@@ -300,7 +303,7 @@ test.describe(
 
                     await test.step("• string cannot be less than 10 symbols", async () => {
                         await adComponent.typeAd(less10);
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expect(adComponent.field).toHaveCSS(
                             "border",
@@ -315,7 +318,7 @@ test.describe(
 
                     await test.step("• string cannot be more than 100 symbols", async () => {
                         await adComponent.typeAd(more100);
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expect(adComponent.field).toHaveText("");
                         await expect(adComponent.field).toHaveCSS(
@@ -383,7 +386,7 @@ test.describe(
                     });
 
                     await test.step("• requires filling", async () => {
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expect(
                             manufacturerComponent.fieldWrapper,
@@ -467,10 +470,9 @@ test.describe(
                             getRandomStringElement(MANUFACTURERS).toLowerCase();
 
                         await manufacturerComponent.clearManufacturerField();
-                        await manufacturerComponent.typeManufacturer(
+                        await manufacturerComponent.setTheManufacturer(
                             validManufacturer,
                         );
-                        await manufacturerComponent.clickTheManufacturer();
                         await expect(
                             manufacturerComponent.chosenManufacturer,
                         ).toHaveText(validManufacturer, { ignoreCase: true });
@@ -551,6 +553,209 @@ test.describe(
                             `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
                         );
                     });
+                });
+            },
+        );
+
+        test(
+            "Verify technical specifications section",
+            {
+                tag: "@field validation",
+                annotation: { type: "Test case", description: "C317" },
+            },
+            async ({ createUnitPage, page }) => {
+                await test.step("Field validation: ⤵️", async () => {
+                    const specificationsComponent = new SpecificationsComponent(
+                        page,
+                    );
+
+                    await test.step(`• text cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await specificationsComponent.typeSpecifications(
+                            FORBIDDEN_SYMBOLS,
+                        );
+                        await expect(specificationsComponent.field).toHaveValue(
+                            "",
+                        );
+                    });
+
+                    await test.step("• text cannot have more than 9000 symbols", async () => {
+                        const largeText = generateText(9000);
+                        console.log(largeText);
+                        await specificationsComponent.field.fill(largeText);
+                        await specificationsComponent.typeSpecifications("1");
+                        await expect(specificationsComponent.field).toHaveText(
+                            largeText,
+                        );
+                    });
+                });
+            },
+        );
+
+        test(
+            "Verify description section",
+            {
+                tag: "@field validation",
+                annotation: { type: "Test case", description: "C318" },
+            },
+            async ({ createUnitPage, page }) => {
+                await test.step("Field validation: ⤵️", async () => {
+                    const detailsComponent = new DetailsComponent(page);
+
+                    await test.step(`• text cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await detailsComponent.typeDetails(FORBIDDEN_SYMBOLS);
+                        await expect(detailsComponent.field).toHaveValue("");
+                    });
+
+                    await test.step("• text cannot have more than 9000 symbols", async () => {
+                        const largeText = generateText(9000);
+                        console.log(largeText);
+                        await detailsComponent.field.fill(largeText);
+                        await detailsComponent.typeDetails("1");
+                        await expect(detailsComponent.field).toHaveText(
+                            largeText,
+                        );
+                    });
+                });
+            },
+        );
+
+        test(
+            "Verify vehicle location division",
+            {
+                tag: "@field validation",
+                annotation: { type: "Test case", description: "C319" },
+            },
+            async ({ createUnitPage, page }) => {
+                const locationComponent = new LocationComponent(page);
+
+                await test.step("The title: ⤵️", async () => {
+                    await test.step(`• has the «${firstTabFields.location.label}» text`, async () => {
+                        await expect(locationComponent.label).toContainText(
+                            firstTabFields.location.label,
+                        );
+                    });
+
+                    await test.step("• is visible", async () => {
+                        await expect(locationComponent.label).toBeVisible();
+                    });
+
+                    await test.step("• has an asterisk", async () => {
+                        await expect(
+                            locationComponent.requiredSymbol!,
+                        ).toBeVisible();
+                    });
+                });
+
+                await test.step("The field has the correct background text", async () => {
+                    await expect(locationComponent.mapLabel).toHaveText(
+                        firstTabFields.location.placeholder,
+                    );
+                });
+
+                await test.step("The field must be filled in", async () => {
+                    await createUnitPage.nextStep();
+                    await expect(locationComponent.mapLabel).toHaveCSS(
+                        "border",
+                        `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
+                    );
+                    await expect(locationComponent.errorBlock).toHaveText(
+                        FIELDS_ERRORS.MISSING_LOCATION,
+                    );
+                });
+
+                await test.step(`The «${firstTabFields.location.buttonText}» button opens the modal window`, async () => {
+                    await locationComponent.openTheMap();
+                    await expect(locationComponent.modalWindow).toBeVisible();
+                });
+
+                await test.step("The modal window: ⤵️", async () => {
+                    await test.step("• has the correct title and Close button", async () => {
+                        await expect(
+                            locationComponent.modalWindowTitle,
+                        ).toHaveText(firstTabFields.location.modal.title);
+                        await expect(
+                            locationComponent.modalWindowCloseButton,
+                        ).toBeVisible();
+                    });
+
+                    await test.step("• has “Київ, Україна, Київська область” the as default address", async () => {
+                        await expect(
+                            locationComponent.modalWindowAddressLabel,
+                        ).toHaveText("Київ, Україна, Київська область");
+                    });
+
+                    await test.step("• disappears after clicking the Close button", async () => {
+                        await locationComponent.closeTheMap();
+                        await expect(
+                            locationComponent.modalWindow,
+                        ).toBeHidden();
+                    });
+                });
+            },
+        );
+
+        test(
+            `Verify “${BUTTONS.cancel}” button`,
+            {
+                tag: ["@button validation"],
+                annotation: { type: "Test case", description: "C326" },
+            },
+            async ({ createUnitPage, page }) => {
+                await test.step("The button has the correct text", async () => {
+                    await expect(createUnitPage.cancelButton).toHaveText(
+                        BUTTONS.cancel,
+                    );
+                });
+                await test.step("Clicking on the button cancels the ad creation and redirects to the main page", async () => {
+                    await createUnitPage.cancelAdCreating();
+                    await expect(page).toHaveURL(
+                        new RegExp(`${endpoints.home}`),
+                    );
+                });
+            },
+        );
+
+        test(
+            `Verify “${BUTTONS.next}” button`,
+            {
+                tag: ["@button validation"],
+                annotation: { type: "Test case", description: "C329" },
+            },
+            async ({ createUnitPage, page }) => {
+                await test.step("The button has the correct text", async () => {
+                    await expect(createUnitPage.nextButton).toHaveText(
+                        BUTTONS.next,
+                    );
+                });
+
+                const categoryComponent = new CategoryComponent(page);
+                const adComponent = new AdComponent(page);
+                const manufacturerComponent = new ManufacturerComponent(page);
+                const locationComponent = new LocationComponent(page);
+
+                await test.step("Warnings are displayed about the need to fill in mandatory fields", async () => {
+                    await createUnitPage.nextStep();
+                    await expect(categoryComponent.errorBlock).toBeVisible();
+                    await expect(adComponent.errorBlock).toBeVisible();
+                    await expect(
+                        manufacturerComponent.errorBlock,
+                    ).toBeVisible();
+                    await expect(locationComponent.errorBlock).toBeVisible();
+                });
+
+                await test.step("Clicking on the button displays the next tab when the required fields are filled in.", async () => {
+                    await categoryComponent.selectTheCategory();
+                    await adComponent.typeAd(generateMediumText());
+                    await manufacturerComponent.setTheManufacturer(
+                        getRandomStringElement(MANUFACTURERS),
+                    );
+                    await locationComponent.selectLocation();
+
+                    await createUnitPage.nextStep();
+
+                    await expect(
+                        new PhotosComponent(page).uploadPhotoButtons,
+                    ).toBeVisible();
                 });
             },
         );

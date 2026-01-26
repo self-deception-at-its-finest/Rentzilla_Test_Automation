@@ -22,12 +22,23 @@ type CategorySection = FieldSection & {
     mobPopupTitle: string;
 };
 
+type LocationSection = FieldSection & {
+    buttonText: string;
+    modal: {
+        title: string;
+        cancel: string;
+        accept: string;
+    };
+};
+
 type FirstTabFields = {
     category: CategorySection;
     ad: FieldSection;
     manufacturer: FieldSection;
     model: FieldSection;
-    location: FieldSection;
+    location: LocationSection;
+    specifications: Pick<FieldSection, "label">;
+    details: Pick<FieldSection, "label">;
 };
 
 const firstTabFields: FirstTabFields = {
@@ -47,13 +58,24 @@ const firstTabFields: FirstTabFields = {
     },
     model: {
         label: data.tabs[first].model.label,
-        placeholder: data.tabs[first].model.placeholder
+        placeholder: data.tabs[first].model.placeholder,
     },
     location: {
         label: data.tabs[first].location.label,
-        placeholder: data.tabs[first].location.label
-    }
-
+        placeholder: data.tabs[first].location.placeholder,
+        buttonText: data.tabs[first].location["button text"],
+        modal: {
+            title: data.tabs[first].location.modal.title,
+            cancel: data.tabs[first].location.modal.cancel,
+            accept: data.tabs[first].location.modal.accept,
+        },
+    },
+    specifications: {
+        label: data.tabs[first].specifications.label,
+    },
+    details: {
+        label: data.tabs[first].details.label,
+    },
 } as const;
 
 export { KeysWithLabel, firstTabFields };

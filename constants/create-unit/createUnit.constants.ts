@@ -13,6 +13,7 @@ const FIELDS_ERRORS = {
     MORE_100_SYMBOLS: data["error messages"]["more 100 symbols"],
     MISSING_MANUFACTURER: data["error messages"]["missing manufacturer"],
     MORE_15_SYMBOLS: data["error messages"]["more 15 symbols"],
+    MISSING_LOCATION: data["error messages"]["missing location"],
 };
 
 const CREATE_UNIT_CONSTS = {
@@ -23,9 +24,17 @@ const CREATE_UNIT_CONSTS = {
 
 const MANUFACTURERS = manufacturers;
 
+const BUTTONS = {
+    cancel: data.buttons.cancel,
+    next: data.buttons.next,
+} as const;
+
+type Buttons = typeof BUTTONS;
+
 export {
     FORBIDDEN_SYMBOLS,
     TAB_NUMBERS,
+    BUTTONS,
     TAB_TITLES,
     FIELDS_ERRORS,
     CREATE_UNIT_CONSTS,
