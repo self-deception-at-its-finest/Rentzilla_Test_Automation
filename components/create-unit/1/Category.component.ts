@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { isDesktop } from "../../../utils/viewportGuard";
-import { BaseComponent } from "./base.component";
+import { BaseComponent } from "./temp-Base.component";
 import { firstTabFields } from "../../../constants/create-unit/fields.constants";
 import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
 
