@@ -1,7 +1,7 @@
 import { expect, test } from "../../fixtures/fixtures";
 import { FavoriteUnitsPage } from "../../pages/favoriteUnits.page";
 import { ProductsPage } from "../../pages/products.page";
-import { FAVORITE_UNITS_CONSTS } from "../../constants/favorite-units/favorite-units.constants";
+import { FAVORITE_UNITS_CONSTS } from "../../constants/favorite-units/favoriteUnits.constants";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 
 test.describe("Favorite Units Tests", () => {

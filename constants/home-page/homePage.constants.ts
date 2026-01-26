@@ -1,4 +1,4 @@
-import homeData from "./home-page.constants.json";
+import homeData from "./homePage.constants.json";
 
 export const MAIN_PAGE_CONSTS = {
     SERVICES: {

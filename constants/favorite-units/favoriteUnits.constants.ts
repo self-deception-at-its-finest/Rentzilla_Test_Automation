@@ -1,4 +1,4 @@
-import favoriteData from "./favorite-units.constants.json";
+import favoriteData from "./favoriteUnits.constants.json";
 
 const FAVORITE_UNITS_CONSTS = {
     URL: favoriteData.url,

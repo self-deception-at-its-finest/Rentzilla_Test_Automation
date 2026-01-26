@@ -1,6 +1,6 @@
 import { test as base } from "@playwright/test";
 import { HomePage } from "../pages/home.page";
-import { CreateUnitPage } from "../pages/create-unit.page";
+import { CreateUnitPage } from "../pages/createUnit.page.ts";
 import { AuthenticationComponent } from "../components/authentication.component";
 import endpoints from "../constants/endpoints.constants.json";
 
