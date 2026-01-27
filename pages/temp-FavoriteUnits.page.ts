@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import BasePage from "./base.page";
+import BasePage from "./temp-Base.page";
 
 export class FavoriteUnitsPage extends BasePage {
     readonly emptyTitle: Locator;

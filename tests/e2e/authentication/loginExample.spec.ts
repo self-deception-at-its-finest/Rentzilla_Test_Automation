@@ -1,5 +1,5 @@
 import { expect, test} from '../../../fixtures/fixtures';
-import {AuthenticationComponent} from "../../../components/authentication.component";
+import {AuthenticationComponent} from "../../../components/temp-Authentication.component";
 
 
 test.describe('Auth', () => {

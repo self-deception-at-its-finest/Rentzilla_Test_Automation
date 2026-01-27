@@ -1,8 +1,8 @@
 import { Page, Locator } from "@playwright/test";
-import { HeaderComponent } from "./header.component";
+import { HeaderComponent } from "./temp-Header.component";
 import { expect } from "playwright/test";
-import { MobNavbarComponent } from "./mob-navbar.component";
-import { isDesktop } from "../utils/viewport-guard";
+import { MobNavbarComponent } from "./temp-MobNavbar.component";
+import { isDesktop } from "../utils/viewportGuard";
 
 export class AuthenticationComponent {
     readonly page: Page;

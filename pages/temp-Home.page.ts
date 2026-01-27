@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import BasePage from './base.page';
+import BasePage from './temp-Base.page';
 import endpoints from '../constants/endpoints.constants.json';
-import { FooterComponent } from "../components/home-page/footer.component";
+import { FooterComponent } from "../components/home-page/temp-Footer.component";
 
 export class HomePage extends BasePage {
     public servicesTitle : Locator;
