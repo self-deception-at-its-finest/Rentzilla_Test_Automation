@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import BasePage from "./temp-Base.page";
+import BasePage from "./Base.page";
 
 export class ProductsPage extends BasePage {
     readonly unitCards: Locator;

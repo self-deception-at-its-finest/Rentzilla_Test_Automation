@@ -2,7 +2,7 @@ import { expect, test } from "../../fixtures/fixtures";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { markStepAsSkipped } from "../../utils/skipTest";
 import { MAIN_PAGE_CONSTS } from "../../constants/home-page/homePage.constants";
-import { ProductsPage } from "../../pages/temp-Products.page";
+import { ProductsPage } from "../../pages/Products.page";
 
 test.describe(
     "Home Page tests",
