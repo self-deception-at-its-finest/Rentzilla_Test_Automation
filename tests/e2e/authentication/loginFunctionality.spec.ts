@@ -1,19 +1,19 @@
 import { expect, test} from '../../../fixtures/fixtures';
-import {AuthenticationComponent} from "../../../components/authentication.component";
-import {HeaderComponent} from "../../../components/header.component";
+import {AuthenticationComponent} from "../../../components/Authentication.component";
+import {HeaderComponent} from "../../../components/Header.component";
 import {faker} from "@faker-js/faker";
 import errorMessages from '../../../constants/errorMessages.constants.json';
 import colors from '../../../constants/colors.constants.json';
 
-
 test.describe('Login functionality', () => {
-    test('C201: Authorization with valid email and password', async ({homePage, page}) => {
-        const authComponent = new AuthenticationComponent(page);
-        const headerComponent = new HeaderComponent(page);
-
+    test.beforeEach(async ({ page, homePage }) => {
         await test.step('Open home page', async () => {
             await homePage.open();
         });
+    });
+    test('C201: Authorization with valid email and password', async ({homePage, page}) => {
+        const authComponent = new AuthenticationComponent(page);
+        const headerComponent = new HeaderComponent(page);
 
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
@@ -45,10 +45,6 @@ test.describe('Login functionality', () => {
         const authComponent = new AuthenticationComponent(page);
         const headerComponent = new HeaderComponent(page);
 
-        await test.step('Open home page', async () => {
-            await homePage.open();
-        });
-
         const phoneNumbers = [
             process.env.USER_PHONE!,
             process.env.USER_PHONE!.slice(1),
@@ -76,10 +72,6 @@ test.describe('Login functionality', () => {
 
     test('C203: Authorization with invalid credentials', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
-
-        await test.step('Open home page', async () => {
-            await homePage.open();
-        });
 
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
@@ -128,10 +120,6 @@ test.describe('Login functionality', () => {
     test('C207: Authorization with invalid phone number', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
 
-        await test.step('Open home page', async () => {
-            await homePage.open();
-        });
-
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
         });
@@ -153,10 +141,6 @@ test.describe('Login functionality', () => {
 
     test('C200: Authorization with empty fields', async ({homePage, page}) => {
         const authComponent = new AuthenticationComponent(page);
-
-        await test.step('Open home page', async () => {
-            await homePage.open();
-        });
 
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
