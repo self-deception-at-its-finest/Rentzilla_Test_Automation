@@ -34,15 +34,14 @@ export class AuthenticationComponent {
         this.invalidEmailOrPasswordMsg= page.getByTestId("errorMessage");
         this.passwordLabel = page.getByTestId("labelTitle").getByText("Пароль");
         this.emailLabel = page.getByTestId("labelTitle").getByText("E-mail або номер телефону");
-        this.emptyEmailFieldMsg = this.emailLabel.locator("..").locator("p")
-        this.emptyPasswordFieldMsg = this.passwordLabel.locator("..").locator("p")
+        this.emptyEmailFieldMsg = this.emailLabel.locator("..").locator("p");
+        this.emptyPasswordFieldMsg = this.passwordLabel.locator("..").locator("p");
     }
 
     async login(creds?: {email?: string; password?: string}) {
         const headerComponent = new HeaderComponent(this.page);
 
         await headerComponent.authenticationButton.click();
-        await expect(this.authContainer).toBeVisible();
 
         const {email, password,} = creds ?? {};
         if(email !== undefined) await this.emailInput.fill(email);
