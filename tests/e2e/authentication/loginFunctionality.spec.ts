@@ -1,20 +1,15 @@
 import { expect, test} from '../../../fixtures/fixtures';
-import {AuthenticationComponent} from "../../../components/Authentication.component";
-import {HeaderComponent} from "../../../components/Header.component";
 import {faker} from "@faker-js/faker";
 import errorMessages from '../../../constants/errorMessages.constants.json';
 import colors from '../../../constants/colors.constants.json';
 
 test.describe('Login functionality', () => {
-    test.beforeEach(async ({ page, homePage }) => {
+    test.beforeEach(async ({ homePage }) => {
         await test.step('Open home page', async () => {
             await homePage.open();
         });
     });
-    test('C201: Authorization with valid email and password', async ({homePage, page}) => {
-        const authComponent = new AuthenticationComponent(page);
-        const headerComponent = new HeaderComponent(page);
-
+    test('C201: Authorization with valid email and password', async ({ authComponent, headerComponent }) => {
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
         });
@@ -41,10 +36,7 @@ test.describe('Login functionality', () => {
             await expect(headerComponent.profileDropdownEmail).toHaveText(process.env.USER_EMAIL!);
         });
     });
-    test('C202: Authorization with valid phone and password', async ({homePage, page}) => {
-        const authComponent = new AuthenticationComponent(page);
-        const headerComponent = new HeaderComponent(page);
-
+    test('C202: Authorization with valid phone and password', async ({ authComponent, headerComponent }) => {
         const phoneNumbers = [
             process.env.USER_PHONE!,
             process.env.USER_PHONE!.slice(1),
@@ -70,9 +62,7 @@ test.describe('Login functionality', () => {
         }
     });
 
-    test('C203: Authorization with invalid credentials', async ({homePage, page}) => {
-        const authComponent = new AuthenticationComponent(page);
-
+    test('C203: Authorization with invalid credentials', async ({ authComponent }) => {
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
         });
@@ -117,9 +107,7 @@ test.describe('Login functionality', () => {
             });
         }
     });
-    test('C207: Authorization with invalid phone number', async ({homePage, page}) => {
-        const authComponent = new AuthenticationComponent(page);
-
+    test('C207: Authorization with invalid phone number', async ({ authComponent }) => {
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
         });
@@ -139,9 +127,7 @@ test.describe('Login functionality', () => {
         }
     });
 
-    test('C200: Authorization with empty fields', async ({homePage, page}) => {
-        const authComponent = new AuthenticationComponent(page);
-
+    test('C200: Authorization with empty fields', async ({ authComponent }) => {
         await test.step('Open Login form', async () => {
             await authComponent.openLoginForm();
         });
@@ -149,10 +135,8 @@ test.describe('Login functionality', () => {
         await test.step('Submit form with empty email and password', async () => {
             await authComponent.submitRandomly();
 
-            await expect(authComponent.emailInput)
-                .toHaveCSS('border-color', colors.errorBorderColor);
-            await expect(authComponent.passwordInput)
-                .toHaveCSS('border-color', colors.errorBorderColor);
+            await expect(authComponent.emailInput).toHaveCSS('border-color', colors.errorBorderColor);
+            await expect(authComponent.passwordInput).toHaveCSS('border-color', colors.errorBorderColor);
 
             await expect(authComponent.emptyEmailFieldMsg).toBeVisible();
             await expect(authComponent.emptyPasswordFieldMsg).toBeVisible();
@@ -162,10 +146,8 @@ test.describe('Login functionality', () => {
             await authComponent.emailInput.fill(process.env.USER_EMAIL!);
             await authComponent.submitRandomly();
 
-            await expect(authComponent.emailInput)
-                .toHaveCSS('border-color', colors.defaultBorderColor);
-            await expect(authComponent.passwordInput)
-                .toHaveCSS('border-color', colors.errorBorderColor);
+            await expect(authComponent.emailInput).toHaveCSS('border-color', colors.defaultBorderColor);
+            await expect(authComponent.passwordInput).toHaveCSS('border-color', colors.errorBorderColor);
 
             await expect(authComponent.emptyPasswordFieldMsg).toBeVisible();
         });
@@ -175,10 +157,8 @@ test.describe('Login functionality', () => {
             await authComponent.passwordInput.fill(process.env.USER_PASSWORD!);
             await authComponent.submitRandomly();
 
-            await expect(authComponent.emailInput)
-                .toHaveCSS('border-color', colors.errorBorderColor);
-            await expect(authComponent.passwordInput)
-                .toHaveCSS('border-color', colors.defaultBorderColor);
+            await expect(authComponent.emailInput).toHaveCSS('border-color', colors.errorBorderColor);
+            await expect(authComponent.passwordInput).toHaveCSS('border-color', colors.defaultBorderColor);
 
             await expect(authComponent.emptyEmailFieldMsg).toBeVisible();
         });
