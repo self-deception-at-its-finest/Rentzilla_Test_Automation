@@ -1,4 +1,4 @@
-import { data } from "../../types/tabs";
+import { data } from "./createUnit.constants";
 
 const t = "1" as const;
 
@@ -42,9 +42,8 @@ const firstTabFields: FirstTabFields = {
     },
     model: {
         label: data.tabs[t].model.label,
-        placeholder: data.tabs[t].model.placeholder
-    }
-
+        placeholder: data.tabs[t].model.placeholder,
+    },
 } as const;
 
 export { KeysWithLabel, firstTabFields };

@@ -16,11 +16,7 @@ import { AdComponent } from "../../components/create-unit/1/Ad.component";
 import { getFieldPlaceholder } from "../../utils/formHelper";
 import { firstTabFields } from "../../constants/create-unit/fields.constants";
 import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
-import {
-    generateText,
-    generateMediumText,
-    generateShortText,
-} from "../../utils/fakeData";
+import { generateText, generateValidText } from "../../utils/fakeData";
 import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
 import { getRandomStringElement } from "../../utils/getElements";
 import { ModelComponent } from "../../components/create-unit/1/Model.component";
@@ -286,15 +282,15 @@ test.describe(
                 });
 
                 await test.step("Validate field requirements: ⤵️", async () => {
-                    const less10 = generateShortText();
-                    const validText = generateMediumText();
+                    const less10 = generateText(9);
+                    const validText = generateValidText();
                     const more100 = generateText(101);
 
                     await test.step("• string cannot be less than 10 symbols", async () => {
                         await adComponent.typeAd(less10);
                         await createUnitPage.clickNextButton();
 
-                        await expectFieldError(adComponent.field)
+                        await expectFieldError(adComponent.field);
                         await expect(adComponent.errorBlock).toBeVisible();
                         await expect(adComponent.errorBlock).toHaveText(
                             FIELDS_ERRORS.LESS_10_SYMBOLS,
@@ -323,7 +319,7 @@ test.describe(
                     await test.step("• string can contain from 10 to 100 symbols", async () => {
                         await adComponent.typeAd(validText);
                         await expect(adComponent.field).toHaveValue(validText);
-                        await expectFieldDefault(adComponent.field)
+                        await expectFieldDefault(adComponent.field);
                         await expect(adComponent.errorBlock).toBeHidden();
                     });
                 });
@@ -368,7 +364,9 @@ test.describe(
                     await test.step("• requires filling", async () => {
                         await createUnitPage.clickNextButton();
 
-                        await expectFieldError(manufacturerComponent.fieldWrapper);
+                        await expectFieldError(
+                            manufacturerComponent.fieldWrapper,
+                        );
 
                         await expect(
                             manufacturerComponent.errorBlock,
