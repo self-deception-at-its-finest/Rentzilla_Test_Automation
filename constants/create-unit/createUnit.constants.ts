@@ -1,5 +1,7 @@
-import { data } from "../../types/tabs";
+import createUnitConstsJSON from "./create-unit.constants.json";
 import { manufacturers } from "../manufacturers.constants.json";
+
+const data = { ...createUnitConstsJSON } as const;
 
 const FORBIDDEN_SYMBOLS = data["forbidden symbols"];
 
@@ -32,6 +34,7 @@ const BUTTONS = {
 type Buttons = typeof BUTTONS;
 
 export {
+    data,
     FORBIDDEN_SYMBOLS,
     TAB_NUMBERS,
     BUTTONS,

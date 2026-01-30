@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./Base.page";
-import { CREATE_UNIT_CONSTS } from "../constants/create-unit/createUnit.constants";
-import { data, TabNumber, TestAdData } from "../types/tabs";
+import { data, CREATE_UNIT_CONSTS } from "../constants/create-unit/createUnit.constants";
+import { TabNumber } from "../types/tabs";
 import { TAB_NUMBERS } from "../constants/create-unit/createUnit.constants";
 
 type TabInfo = {

@@ -1,4 +1,4 @@
-import { data } from "../../types/tabs";
+import { data } from "./createUnit.constants";
 
 const first = "1";
 const second = "2";
