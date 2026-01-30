@@ -1,6 +1,5 @@
 import { Page, Locator } from "@playwright/test";
 import {HeaderComponent} from "./Header.component";
-import errorMessages from '../constants/errorMessages.constants.json';
 
 export class AuthenticationComponent {
     readonly page: Page;
