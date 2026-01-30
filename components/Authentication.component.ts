@@ -1,6 +1,5 @@
 import { Page, Locator } from "@playwright/test";
 import {HeaderComponent} from "./Header.component";
-import {expect} from "playwright/test";
 import errorMessages from '../constants/errorMessages.constants.json';
 
 export class AuthenticationComponent {
@@ -12,13 +11,9 @@ export class AuthenticationComponent {
     readonly passwordInput: Locator;
     readonly submitButton: Locator;
     readonly showPasswordButton: Locator;
-    readonly invalidEmailFormatMsg: Locator;
+    readonly emptyOrInvalidEmailFieldMsg: Locator;
+    readonly emptyOrInvalidPasswordFieldMsg: Locator;
     readonly invalidEmailOrPasswordMsg: Locator;
-    readonly invalidPasswordFormatMsg: Locator;
-    readonly emptyEmailFieldMsg: Locator;
-    readonly emptyPasswordFieldMsg: Locator;
-    readonly passwordLabel: Locator;
-    readonly emailLabel: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -29,13 +24,9 @@ export class AuthenticationComponent {
         this.passwordInput = page.locator("input#password");
         this.submitButton = page.getByRole('button', { name: 'Увійти', exact: true });
         this.showPasswordButton = this.passwordInput.locator("..").getByTestId('reactHookButton');
-        this.invalidEmailFormatMsg = page.getByText(errorMessages.invalidEmailFormat);
-        this.invalidPasswordFormatMsg = page.getByText(errorMessages.invalidPasswordFormat);
         this.invalidEmailOrPasswordMsg= page.getByTestId("errorMessage");
-        this.passwordLabel = page.getByTestId("labelTitle").getByText("Пароль");
-        this.emailLabel = page.getByTestId("labelTitle").getByText("E-mail або номер телефону");
-        this.emptyEmailFieldMsg = this.emailLabel.locator("..").locator("p");
-        this.emptyPasswordFieldMsg = this.passwordLabel.locator("..").locator("p");
+        this.emptyOrInvalidEmailFieldMsg = this.emailInput.locator("..").locator("..").locator("p");
+        this.emptyOrInvalidPasswordFieldMsg = this.passwordInput.locator("..").locator("..").locator("p");
     }
 
     async login(creds?: {email?: string; password?: string}) {

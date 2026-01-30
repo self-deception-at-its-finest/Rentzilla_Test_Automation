@@ -82,7 +82,8 @@ test.describe('Login functionality', () => {
             await test.step(`Try login with invalid email format: ${email}`, async () => {
                 await authComponent.fillCredentials(email, process.env.USER_PASSWORD!);
                 await authComponent.submitRandomly();
-                await expect(authComponent.invalidEmailFormatMsg).toBeVisible();
+                await expect(authComponent.emptyOrInvalidEmailFieldMsg).toBeVisible();
+                await expect(authComponent.emptyOrInvalidEmailFieldMsg).toHaveText(errorMessages.invalidEmailFormat);
             });
         }
 
@@ -103,7 +104,8 @@ test.describe('Login functionality', () => {
             await test.step(`Try login with invalid password: "${password}"`, async () => {
                 await authComponent.fillCredentials(process.env.USER_EMAIL!, password);
                 await authComponent.submitRandomly();
-                await expect(authComponent.invalidPasswordFormatMsg).toBeVisible();
+                await expect(authComponent.emptyOrInvalidPasswordFieldMsg).toBeVisible();
+                await expect(authComponent.emptyOrInvalidPasswordFieldMsg).toHaveText(errorMessages.invalidPasswordFormat);
             });
         }
     });
@@ -122,7 +124,8 @@ test.describe('Login functionality', () => {
             await test.step(`Try login with invalid phone number: ${number}`, async () => {
                 await authComponent.fillCredentials(number, process.env.USER_PASSWORD!);
                 await authComponent.submitRandomly();
-                await expect(authComponent.invalidEmailFormatMsg).toBeVisible();
+                await expect(authComponent.emptyOrInvalidEmailFieldMsg).toBeVisible();
+                await expect(authComponent.emptyOrInvalidEmailFieldMsg).toHaveText(errorMessages.invalidEmailFormat);
             });
         }
     });
@@ -138,8 +141,10 @@ test.describe('Login functionality', () => {
             await expect(authComponent.emailInput).toHaveCSS('border-color', colors.errorBorderColor);
             await expect(authComponent.passwordInput).toHaveCSS('border-color', colors.errorBorderColor);
 
-            await expect(authComponent.emptyEmailFieldMsg).toBeVisible();
-            await expect(authComponent.emptyPasswordFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidEmailFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidEmailFieldMsg).toHaveText(errorMessages.emptyField);
+            await expect(authComponent.emptyOrInvalidPasswordFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidPasswordFieldMsg).toHaveText(errorMessages.emptyField);
         });
 
         await test.step('Submit form with filled email and empty password', async () => {
@@ -149,7 +154,8 @@ test.describe('Login functionality', () => {
             await expect(authComponent.emailInput).toHaveCSS('border-color', colors.defaultBorderColor);
             await expect(authComponent.passwordInput).toHaveCSS('border-color', colors.errorBorderColor);
 
-            await expect(authComponent.emptyPasswordFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidPasswordFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidPasswordFieldMsg).toHaveText(errorMessages.emptyField);
         });
 
         await test.step('Submit form with empty email and filled password', async () => {
@@ -160,7 +166,8 @@ test.describe('Login functionality', () => {
             await expect(authComponent.emailInput).toHaveCSS('border-color', colors.errorBorderColor);
             await expect(authComponent.passwordInput).toHaveCSS('border-color', colors.defaultBorderColor);
 
-            await expect(authComponent.emptyEmailFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidEmailFieldMsg).toBeVisible();
+            await expect(authComponent.emptyOrInvalidEmailFieldMsg).toHaveText(errorMessages.emptyField);
         });
     });
 });
