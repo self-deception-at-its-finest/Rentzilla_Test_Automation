@@ -1,9 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BaseComponent } from "./Base.component";
-import {
-    CREATE_UNIT_CONSTS,
-    FIELDS_ERRORS,
-} from "../../../constants/create-unit/createUnit.constants";
+import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
 import { firstTabFields } from "../../../constants/create-unit/fields.constants";
 
 export class LocationComponent extends BaseComponent {

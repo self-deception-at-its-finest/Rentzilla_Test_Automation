@@ -4,6 +4,7 @@ import { BaseComponent } from "./Base.component";
 export class ModelComponent extends BaseComponent {
     readonly field: Locator;
     readonly errorBlock: Locator;
+    
     constructor(page: Page) {
         super(page, "model", true);
         this.field = this.section.getByRole("textbox");

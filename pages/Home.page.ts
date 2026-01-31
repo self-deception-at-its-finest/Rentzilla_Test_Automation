@@ -7,10 +7,6 @@ export class HomePage extends BasePage {
     readonly servicesPopularni: Locator;
     readonly servicesSilskogospodarski: Locator;
 
-    async checkTitleVisible() {
-        await expect(this.servicesTitle).toBeVisible();
-    }
-
     constructor(page: Page) {
         super(page);
         this.endpoint = endpoints.home;
