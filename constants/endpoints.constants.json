@@ -1,5 +1,6 @@
 {
     "home": "",
+    "admin": "/admin",
     "create unit": "/create-unit",
     "products": "/products/",
     "tenders": "/tenders-map/",
