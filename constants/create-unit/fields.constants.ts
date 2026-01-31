@@ -1,10 +1,6 @@
 import { data } from "./createUnit.constants";
 
 const first = "1";
-const second = "2";
-const third = "3";
-const fourth = "4";
-const fifth = "5";
 
 type Tab1 = (typeof data)["tabs"]["1"];
 
@@ -76,6 +72,11 @@ const firstTabFields: FirstTabFields = {
     details: {
         label: data.tabs[first].details.label,
     },
+    location: {
+        label: data.tabs[first].location.label,
+        placeholder: data.tabs[first].location.label
+    }
+
 } as const;
 
 export { KeysWithLabel, firstTabFields };
