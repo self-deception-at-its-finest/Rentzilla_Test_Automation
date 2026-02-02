@@ -12,8 +12,7 @@ test.describe("Favorite Units Tests", () => {
             tag: "@UI",
             annotation: { type: "Test case", description: "C300" },
         },
-        async ({ page, authorizedHomePage }) => {
-        const favoritePage = new FavoriteUnitsPage(page);
+        async ({ page, authorizedHomePage, favoritePage }) => {
 
         await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
             await authorizedHomePage.avatarBlock.click();
@@ -35,9 +34,7 @@ test.describe("Favorite Units Tests", () => {
             tag: "@UI",
             annotation: { type: "Test case", description: "C302" },
         },
-        async ({ page, authorizedHomePage }) => {
-        const productsPage = new ProductsPage(page);
-        const favoritePage = new FavoriteUnitsPage(page);
+        async ({ page, authorizedHomePage, productsPage, favoritePage }) => {
         let unitName: string;
 
         await test.step("1-2. 1. Click on the 'Оголошення' button in the header. Click on the add to 'Обрані оголошення' icon of the unit section.", async () => {
