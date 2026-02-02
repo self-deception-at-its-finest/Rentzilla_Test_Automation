@@ -9,6 +9,8 @@ import { buildTestAds } from "../utils/builders/ad.builder";
 import { switchToAdminFlow } from "../flows/admin/switchToAdmin.flow";
 import { approveAdsFlow } from "../flows/admin/approveAds.flow";
 import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
+import { FavoriteUnitsPage } from "../pages/FavoriteUnits.page";
+import { ProductsPage } from "../pages/Products.page";
 
 type Fixtures = {
     auth: void;
@@ -18,6 +20,8 @@ type Fixtures = {
     createUnitPage: CreateUnitPage;
     ads: CreateUnitPage;
     createUnitPageWithAds: CreateUnitPage;
+    productsPage: ProductsPage;
+    favoritePage: FavoriteUnitsPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -40,6 +44,19 @@ export const test = base.extend<Fixtures>({
     homePage: [
         async ({ page }, use) => {
             await use(new HomePage(page));
+        },
+        { box: true },
+    ],
+
+    productsPage: [
+        async ({ page }, use) => {
+            await use(new ProductsPage(page));
+        },
+        { box: true },
+    ],
+    favoritePage: [
+        async ({ page }, use) => {
+            await use(new FavoriteUnitsPage(page));
         },
         { box: true },
     ],
