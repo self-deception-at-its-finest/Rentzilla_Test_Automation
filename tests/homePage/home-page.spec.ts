@@ -2,7 +2,6 @@ import { expect, test } from "../../fixtures/fixtures";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { markStepAsSkipped } from "../../utils/skipTest";
 import { MAIN_PAGE_CONSTS } from "../../constants/home-page/homePage.constants";
-import { ProductsPage } from "../../pages/Products.page";
 
 test.describe(
     "Home Page tests",
@@ -12,8 +11,7 @@ test.describe(
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C212" },
             },
-            async ({ page, homePage }) => {
-                const productsPage = new ProductsPage(page);
+            async ({ page, productsPage, homePage }) => {
                 await test.step("1. Open home page and scroll to 'Послуги' section", async () => {
                     await homePage.open();
                     await homePage.servicesSection.scrollIntoViewIfNeeded();
@@ -43,7 +41,9 @@ test.describe(
 
                             await test.step("--- Click on the first relevant unit", async () => {
                                     await expect(page).toHaveURL(ENDPOINTS.PRODUCTS_RE);
-                                    await productsPage.unitCards.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+                                    await productsPage.unitCards.first()
+                                        .waitFor({ state: 'visible', timeout: 5000 })
+                                        .catch((e) => console.error(`Failed to wait for unit cards: ${e.message}`));
                                     const unitsCount = await productsPage.unitCards.count();
 
                                     if (unitsCount > 0) {
@@ -72,8 +72,7 @@ test.describe(
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C213" },
             },
-            async ({ page, homePage }) => {
-                const productsPage = new ProductsPage(page);
+            async ({ page, productsPage, homePage }) => {
                 await test.step("1. Open home page and scroll to Special Equipment section", async () => {
                     await homePage.open();
                     await homePage.specialEquipmentSection.scrollIntoViewIfNeeded();
@@ -103,7 +102,9 @@ test.describe(
 
                             await test.step("--- Click on the first relevant unit", async () => {
                                 await expect(page).toHaveURL(ENDPOINTS.PRODUCTS_RE);
-                                await productsPage.unitCards.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+                                await productsPage.unitCards.first()
+                                    .waitFor({ state: 'visible', timeout: 5000 })
+                                    .catch((e) => console.error(`Wait for unit cards failed: ${e.message}`));
                                 const unitsCount = await productsPage.unitCards.count();
 
                                 if (unitsCount > 0) {
