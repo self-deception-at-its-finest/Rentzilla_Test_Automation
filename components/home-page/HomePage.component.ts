@@ -12,8 +12,8 @@ export class ServicesComponent {
         this.page = page;
         this.section = page.locator('section[data-testid="services"]');
         this.title = this.section.locator('[data-testid="title"]');
-        this.tabs = this.section.locator('.RentzilaProposes_service__oHepD');
-        this.serviceItems = this.section.locator('.RentzilaProposes_proposes_item__sY_h2');
+        this.tabs = this.section.getByTestId(/^services__/);
+        this.serviceItems = this.section.getByTestId(/^service__/);
         this.logo = page.locator('[data-testid="logo"]');
     }
 

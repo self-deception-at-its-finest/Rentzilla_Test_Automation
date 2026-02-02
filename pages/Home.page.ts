@@ -38,14 +38,14 @@ export class HomePage extends BasePage {
         
         this.page = page;
         this.servicesSection = page.locator('section[data-testid="services"]');
-        this.serviceTabs = this.servicesSection.locator('.RentzilaProposes_service__oHepD');
-        this.serviceItems = this.servicesSection.locator('.RentzilaProposes_proposes_item__sY_h2');
+        this.serviceTabs = this.servicesSection.getByTestId(/^services__/);
+        this.serviceItems = this.servicesSection.getByTestId(/^service__/);
         this.logo = page.locator('[data-testid="logo"]').first();
 
         this.specialEquipmentSection = page.locator('section[data-testid="specialEquipment"]');
         this.specialEquipmentTitle = this.specialEquipmentSection.locator('[data-testid="title"]');
-        this.specialEquipmentTabs = this.specialEquipmentSection.locator('.RentzilaProposes_service__oHepD');
-        this.specialEquipmentItems = this.specialEquipmentSection.locator('.RentzilaProposes_proposes_item__sY_h2');
+        this.specialEquipmentTabs = this.specialEquipmentSection.getByTestId(/^specialEquipment__/);
+        this.specialEquipmentItems = this.specialEquipmentSection.getByTestId(/^category__/);
 
         this.avatarBlock = page.getByTestId('avatarBlock');
         this.dropdownAdsItem = page.getByTestId('units');
