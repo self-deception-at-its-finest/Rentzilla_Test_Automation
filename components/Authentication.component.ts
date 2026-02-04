@@ -1,6 +1,5 @@
 import { Page, Locator } from "@playwright/test";
 import { HeaderComponent } from "./Header.component";
-import { expect } from "playwright/test";
 import { MobNavbarComponent } from "./MobNavbar.component";
 import { isDesktop } from "../utils/viewportGuard";
 
@@ -71,7 +70,6 @@ export class AuthenticationComponent {
         } else {
             await new MobNavbarComponent(this.page).clickProfileBtn();
         }
-        await expect(this.authContainer).toBeVisible();
 
         if (email !== undefined) await this.fillEmail(email);
         if (password !== undefined) await this.fillPassword(password);

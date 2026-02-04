@@ -72,6 +72,11 @@ const firstTabFields: FirstTabFields = {
     details: {
         label: data.tabs[first].details.label,
     },
+    location: {
+        label: data.tabs[first].location.label,
+        placeholder: data.tabs[first].location.label
+    }
+
 } as const;
 
 const DEFAULT_LOCATION = "Київ, Україна, Київська область";
