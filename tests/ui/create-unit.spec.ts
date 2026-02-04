@@ -1,4 +1,4 @@
-import { expect, test } from "../../fixtures/fixtures";
+import { expect, test } from "../../fixtures/index";
 import {
     BUTTONS,
     FORBIDDEN_SYMBOLS,
@@ -14,28 +14,20 @@ import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
 import { isDesktop } from "../../utils/viewportGuard";
 import { markStepAsSkipped } from "../../utils/skipTest";
-import { CategoryComponent } from "../../components/create-unit/1/Category.component";
-import { AdComponent } from "../../components/create-unit/1/Ad.component";
 import { getFieldPlaceholder } from "../../utils/formHelper";
 import {
     DEFAULT_LOCATION,
     firstTabFields,
 } from "../../constants/create-unit/fields.constants";
-import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
 import { generateText, generateValidText } from "../../utils/fakeData";
 import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
 import { getRandomStringElement } from "../../utils/getElements";
-import { ModelComponent } from "../../components/create-unit/1/Model.component";
 import {
     expectFieldDefault,
     expectFieldError,
     expectTabActive,
     expectTabInactive,
 } from "../../utils/uiMatchers";
-import { LocationComponent } from "../../components/create-unit/1/Location.component";
-import { PhotosComponent } from "../../components/create-unit/2/Photos.component";
-import { DetailsComponent } from "../../components/create-unit/1/Details.component";
-import { SpecificationsComponent } from "../../components/create-unit/1/Specifications.component";
 import { clickOutside } from "../../utils/closeModal";
 
 test.describe(
@@ -53,7 +45,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C294" },
             },
-            async ({ createUnitPage, page }) => {
+            async ({ createUnitPage }) => {
                 await test.step("The page title is: ⤵️", async () => {
                     await test.step("• visible", async () => {
                         await expect(createUnitPage.pageTitle).toBeVisible();
@@ -123,9 +115,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C296" },
             },
-            async ({ createUnitPage, page }) => {
-                const categoryComponent = new CategoryComponent(page);
-
+            async ({ createUnitPage, categoryComponent, page }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.category.label}» text`, async () => {
                         await expect(categoryComponent.label).toContainText(
@@ -211,7 +201,6 @@ test.describe(
                     });
 
                     await test.step("• disappears when chosing the particular category, and the field is filled correctly", async () => {
-                        // Open the category popup if hidden
                         if (await categoryComponent.popup.isHidden())
                             await categoryComponent.clickCategorySelect();
 
@@ -253,8 +242,7 @@ test.describe(
                     description: "C297",
                 },
             },
-            async ({ createUnitPage, page }) => {
-                const adComponent = new AdComponent(page);
+            async ({ createUnitPage, adComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.ad.label}» text`, async () => {
                         await expect(adComponent.label).toContainText(
@@ -342,8 +330,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C298" },
             },
-            async ({ createUnitPage, page }) => {
-                const manufacturerComponent = new ManufacturerComponent(page);
+            async ({ createUnitPage, manufacturerComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.manufacturer.label}» text`, async () => {
                         await expect(manufacturerComponent.label).toContainText(
@@ -477,9 +464,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C299" },
             },
-            async ({ createUnitPage, page }) => {
-                const modelComponent = new ModelComponent(page);
-
+            async ({ createUnitPage, modelComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.model.label}» text`, async () => {
                         await expect(modelComponent.label).toContainText(
@@ -540,11 +525,7 @@ test.describe(
                 tag: "@field validation",
                 annotation: { type: "Test case", description: "C317" },
             },
-            async ({ createUnitPage, page }) => {
-                const specificationsComponent = new SpecificationsComponent(
-                    page,
-                );
-
+            async ({ createUnitPage, specificationsComponent }) => {
                 await test.step("The Title: ⤵️", async () => {
                     await test.step(`• has the ${firstTabFields.specifications.label} text`, async () => {
                         await expect(specificationsComponent.label).toHaveText(
@@ -607,9 +588,7 @@ test.describe(
                 tag: "@field validation",
                 annotation: { type: "Test case", description: "C318" },
             },
-            async ({ createUnitPage, page }) => {
-                const detailsComponent = new DetailsComponent(page);
-
+            async ({ createUnitPage, detailsComponent }) => {
                 await test.step("The Title: ⤵️", async () => {
                     await test.step(`• has the ${firstTabFields.details.label} text`, async () => {
                         await expect(detailsComponent.label).toHaveText(
@@ -659,9 +638,7 @@ test.describe(
                 tag: "@field validation",
                 annotation: { type: "Test case", description: "C319" },
             },
-            async ({ createUnitPage, page }) => {
-                const locationComponent = new LocationComponent(page);
-
+            async ({ createUnitPage, locationComponent, page }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.location.label}» text`, async () => {
                         await expect(locationComponent.label).toContainText(
@@ -746,6 +723,7 @@ test.describe(
                         BUTTONS.cancel,
                     );
                 });
+                
                 await test.step("Clicking on the button cancels the ad creation and redirects to the main page", async () => {
                     await createUnitPage.cancelAdCreating();
                     await expect(page).toHaveURL(
@@ -761,17 +739,19 @@ test.describe(
                 tag: ["@button validation"],
                 annotation: { type: "Test case", description: "C329" },
             },
-            async ({ createUnitPage, page }) => {
+            async ({
+                createUnitPage,
+                categoryComponent,
+                adComponent,
+                manufacturerComponent,
+                locationComponent,
+                photosComponent,
+            }) => {
                 await test.step("The button has the correct text", async () => {
                     await expect(createUnitPage.nextButton).toHaveText(
                         BUTTONS.next,
                     );
                 });
-
-                const categoryComponent = new CategoryComponent(page);
-                const adComponent = new AdComponent(page);
-                const manufacturerComponent = new ManufacturerComponent(page);
-                const locationComponent = new LocationComponent(page);
 
                 await test.step("Warnings are displayed about the need to fill in mandatory fields", async () => {
                     await createUnitPage.nextStep();
@@ -796,7 +776,7 @@ test.describe(
 
                         await expectTabActive(createUnitPage.tabList.nth(1));
                         await expect(
-                            new PhotosComponent(page).uploadPhotoButtons,
+                            photosComponent.uploadPhotoButtons,
                         ).toBeVisible();
                     });
 

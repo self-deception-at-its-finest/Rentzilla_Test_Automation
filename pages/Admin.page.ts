@@ -42,7 +42,6 @@ export class AdminPage {
             await adRecord.getByTestId("adminShowButton").click();
             await this.page.getByTestId("approveBtn").click();
         }
-        console.log("Successfull aprroving!");
     }
 
     async deleteAds(ads: TestAdData[]) {
@@ -64,6 +63,5 @@ export class AdminPage {
                 .getByRole("button", { name: "Так" })
                 .click();
         }
-        console.log("Successfull deleting!");
     }
 }
