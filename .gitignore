@@ -22,3 +22,5 @@ node_modules/
 
 # Environment
 .env
+eslint.config.ts
+eslint.config.mts

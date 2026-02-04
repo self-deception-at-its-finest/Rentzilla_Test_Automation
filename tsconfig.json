@@ -7,7 +7,7 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "dist",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
   },
   "include": [
     "playwright.config.ts",
@@ -15,6 +15,10 @@
     "fixtures",
     "pages",
     "tests",
-    "constants"
+    "constants",
+    "utils",
+    "types",
+    "flows",
+    "config"
   ]
 }
