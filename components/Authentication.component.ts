@@ -29,19 +29,10 @@ export class AuthenticationComponent {
     }
 
     async login(creds?: {email?: string; password?: string}) {
-        const headerComponent = new HeaderComponent(this.page);
-
-        await headerComponent.authenticationButton.click();
-
         const {email, password,} = creds ?? {};
         if(email !== undefined) await this.emailInput.fill(email);
         if(password !== undefined) await this.passwordInput.fill(password);
         await this.submitButton.click();
-    }
-
-    async openLoginForm() {
-        const headerComponent = new HeaderComponent(this.page);
-        await headerComponent.authenticationButton.click();
     }
 
     async fillCredentials(emailOrPhone: string, password: string) {

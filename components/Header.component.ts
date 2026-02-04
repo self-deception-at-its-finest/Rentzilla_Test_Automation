@@ -16,7 +16,13 @@ export class HeaderComponent {
         this.profileDropdownEmail = page.getByTestId("profileDropdown").getByTestId("email")
         this.profileDropdownLogoutButton = page.getByTestId("profileDropdown").getByTestId("logout")
     }
+
+    async openLoginForm() {
+        await this.authenticationButton.click();
+    }
+
     async openProfileDropdown() {
         await this.avatarBlock.click();
     }
+
 }

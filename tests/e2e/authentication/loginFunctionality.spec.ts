@@ -11,7 +11,7 @@ test.describe('Login functionality', () => {
     });
     test('C201: Authorization with valid email and password', async ({ authComponent, headerComponent }) => {
         await test.step('Open Login form', async () => {
-            await authComponent.openLoginForm();
+            await headerComponent.openLoginForm();
         });
 
         await test.step('Fill valid credentials', async () => {
@@ -45,7 +45,7 @@ test.describe('Login functionality', () => {
 
         for (const phone of phoneNumbers) {
             await test.step(`Login with phone number: ${phone}`, async () => {
-                await authComponent.openLoginForm();
+                await headerComponent.openLoginForm();
                 await authComponent.fillCredentials(phone, process.env.USER_PASSWORD!);
                 await authComponent.submitRandomly();
             });
@@ -62,9 +62,9 @@ test.describe('Login functionality', () => {
         }
     });
 
-    test('C203: Authorization with invalid credentials', async ({ authComponent }) => {
+    test('C203: Authorization with invalid credentials', async ({ authComponent, headerComponent }) => {
         await test.step('Open Login form', async () => {
-            await authComponent.openLoginForm();
+            await headerComponent.openLoginForm();
         });
 
         const invalidEmails = [
@@ -109,9 +109,9 @@ test.describe('Login functionality', () => {
             });
         }
     });
-    test('C207: Authorization with invalid phone number', async ({ authComponent }) => {
+    test('C207: Authorization with invalid phone number', async ({ authComponent, headerComponent }) => {
         await test.step('Open Login form', async () => {
-            await authComponent.openLoginForm();
+            await headerComponent.openLoginForm();
         });
 
         const invalidPhoneNumbers = [
@@ -130,9 +130,9 @@ test.describe('Login functionality', () => {
         }
     });
 
-    test('C200: Authorization with empty fields', async ({ authComponent }) => {
+    test('C200: Authorization with empty fields', async ({ authComponent, headerComponent }) => {
         await test.step('Open Login form', async () => {
-            await authComponent.openLoginForm();
+            await headerComponent.openLoginForm();
         });
 
         await test.step('Submit form with empty email and password', async () => {
