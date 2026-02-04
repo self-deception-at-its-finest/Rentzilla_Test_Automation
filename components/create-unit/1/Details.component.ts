@@ -15,7 +15,11 @@ export class DetailsComponent extends BaseComponent {
         await super.typeIntoField(this.field, str);
     }
 
+    async fillDetails(str: string): Promise<void> {
+        await super.fillInField(this.field, str);
+    }
+
     async clearDetailsField(): Promise<void> {
-        await super.clearTheField(this.field);
+        await super.clearField(this.field);
     }
 }

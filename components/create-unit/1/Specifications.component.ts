@@ -15,7 +15,11 @@ export class SpecificationsComponent extends BaseComponent {
         await super.typeIntoField(this.field, str);
     }
 
+    async fillSpecifications(str: string): Promise<void> {
+        await super.fillInField(this.field, str);
+    }
+
     async clearSpecificationField(): Promise<void> {
-        await super.clearTheField(this.field);
+        await super.clearField(this.field);
     }
 }

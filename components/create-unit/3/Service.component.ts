@@ -18,7 +18,7 @@ export class ServiceComponent {
         await this.page.keyboard.press("Enter");
     }
 
-    async clearTheField() {
+    async clearField() {
         await this.field.fill("");
     }
 }

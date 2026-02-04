@@ -14,3 +14,11 @@ export async function expectFieldDefault(field: Locator) {
         `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
     );
 }
+
+export async function expectTabActive(tab: Locator) {
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+}
+
+export async function expectTabInactive(tab: Locator) {
+    await expect(tab).toHaveAttribute("aria-selected", "false");
+}

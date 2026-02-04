@@ -19,11 +19,11 @@ export async function createAdsFlow(page: Page, ads: TestAdData[]) {
     for (let i = 0; i < ads.length; i++) {
         // First tab
 
-        await new CategoryComponent(page).selectTheCategory();
+        await new CategoryComponent(page).selectCategory();
 
         await new AdComponent(page).typeAd(ads[i].title);
 
-        await new ManufacturerComponent(page).setTheManufacturer(
+        await new ManufacturerComponent(page).setManufacturer(
             ads[i].manufacturer,
         );
 

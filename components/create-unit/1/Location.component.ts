@@ -1,11 +1,14 @@
 import { Locator, Page } from "@playwright/test";
 import { BaseComponent } from "./Base.component";
 import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
-import { firstTabFields } from "../../../constants/create-unit/fields.constants";
+import {
+    DEFAULT_LOCATION,
+    firstTabFields,
+} from "../../../constants/create-unit/fields.constants";
 
 export class LocationComponent extends BaseComponent {
     readonly selectPlaceButton: Locator;
-    readonly mapLabel: Locator;
+    readonly locationLabel: Locator;
     readonly addressInput: Locator;
     readonly confirmPlaceButton: Locator;
     readonly errorBlock: Locator;
@@ -23,7 +26,7 @@ export class LocationComponent extends BaseComponent {
             .getByTestId("div-mapPopup")
             .getByRole("button", { name: "Підтвердити вибір" });
         this.addressInput = this.page.getByTestId("cityInput");
-        this.mapLabel = this.section.getByTestId("mapLabel");
+        this.locationLabel = this.section.getByTestId("mapLabel");
         this.errorBlock = this.section.getByText(
             FIELDS_ERRORS.MISSING_LOCATION,
         );
@@ -41,21 +44,21 @@ export class LocationComponent extends BaseComponent {
         this.modalWindowAddressLabel = this.modalWindow.getByTestId("address");
     }
 
-    async openTheMap() {
+    async openMap() {
         await this.selectPlaceButton.click();
     }
 
-    async confirmThePlace() {
+    async confirmPlace() {
         await this.confirmPlaceButton.click();
     }
 
-    async closeTheMap() {
+    async closeMap() {
         await this.modalWindowCloseButton.click();
     }
 
-    async selectLocation(city: string = "Київ, Україна") {
-        await this.openTheMap();
-        await this.confirmThePlace();
+    async selectLocation(city: string = DEFAULT_LOCATION) {
+        await this.openMap();
+        await this.confirmPlace();
         await this.section.locator("label", { hasText: city }).waitFor({
             state: "visible",
         });

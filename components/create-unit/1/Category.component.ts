@@ -67,10 +67,6 @@ export class CategoryComponent extends BaseComponent {
         await this.popupCloseBtn.click();
     }
 
-    async clickPopupOutside() {
-        await this.page.mouse.click(1, 1);
-    }
-
     async clickCategorySelect() {
         await this.field.click();
     }
@@ -78,7 +74,7 @@ export class CategoryComponent extends BaseComponent {
     /**
      * Entire flow selecting of category
      */
-    async selectTheCategory() {
+    async selectCategory() {
         await this.clickCategorySelect();
         await this.selectFirstCategory();
         await this.selectSecondCategory();
