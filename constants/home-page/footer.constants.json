@@ -1,0 +1,36 @@
+{
+  "labels": {
+    "aboutUs": "Про нас",
+    "forUsers": "Користувачам",
+    "contacts": "Контакти",
+    "copyright": "© 2024 Rentzila. Усі права захищені."
+  },
+  "links": {
+    "privacy": "Політика конфіденційності",
+    "cookies": "Правила використання файлів cookie",
+    "terms": "Умови доступу та користування",
+    "ads": "Оголошення",
+    "tenders": "Тендери",
+    "email": "info@rentzila.com.ua",
+    "requests": "Запити на роботу"
+  },
+"urls": {
+    "ads": "/products/", 
+    "tenders": "/tenders-map/",
+    "privacy": "/privacy-policy/",
+    "cookies": "/cookie-policy/",
+    "terms": "/terms-conditions/",
+    "requests": "/requests-map/"
+  },
+  "expectedTitles": {
+    "privacyPage": "Політика конфіденційності",
+    "cookiesPage": "Правила використання файлів cookie",
+    "termsPage": "Угода користувача",
+    "mainPageHero": "Сервіс пошуку послуг спецтехніки"
+  },
+  "placeholders": {
+    "tendersSearch": "Пошук тендера за ключовими словами",
+    "adsSearch": "Пошук оголошень або послуг",
+    "requestsSearch": "Пошук запита на роботу за ключовими словами"
+  }
+}

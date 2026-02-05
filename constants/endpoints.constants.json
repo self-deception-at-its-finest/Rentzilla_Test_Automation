@@ -1,5 +1,11 @@
 {
-    "admin": "/admin",
     "home": "",
-    "create unit": "/create-unit"
+    "admin": "/admin",
+    "create unit": "/create-unit",
+    "products": "/products/",
+    "tenders": "/tenders-map/",
+    "requests": "/requests-map/",
+    "privacy": "/privacy-policy/",
+    "cookies": "/cookie-policy/",
+    "terms": "/terms-conditions/"
 }

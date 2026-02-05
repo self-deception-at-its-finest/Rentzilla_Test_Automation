@@ -1,0 +1,19 @@
+{
+    "url": "/owner-favourite-units/",
+    "empty state": {
+        "title": "У Вас поки немає обраних оголошень",
+        "text": "Ви можете додати оголошення в обране зі сторінки оголошення або зі сторінки списку оголошень, натиснувши на “сердечко”",
+        "button": "До списку оголошень"
+    },
+    "heart attributes": {
+        "active fill": "#F73859",
+        "inactive stroke": "#404B69"
+    },
+    "classes": {
+        "navbarActive": "Navbar_active"
+    },
+    "testId": {
+        "unitName": "unitName",
+        "favourite": "favourite"
+    }
+}
