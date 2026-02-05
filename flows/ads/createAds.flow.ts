@@ -19,38 +19,38 @@ export async function createAdsFlow(page: Page, ads: TestAdData[]) {
     for (let i = 0; i < ads.length; i++) {
         // First tab
 
-        await new CategoryComponent(page).selectTheCategory();
+        await new CategoryComponent(page).selectCategory();
 
         await new AdComponent(page).typeAd(ads[i].title);
 
-        await new ManufacturerComponent(page).setTheManufacturer(
+        await new ManufacturerComponent(page).setManufacturer(
             ads[i].manufacturer,
         );
 
         await new LocationComponent(page).selectLocation();
 
-        await createUnitPage.clickNextButton();
+        await createUnitPage.nextStep();
 
         // Second tab
         await new PhotosComponent(page).uploadPhoto(ads[i].photo);
 
-        await createUnitPage.clickNextButton();
+        await createUnitPage.nextStep();
 
         // Third tab
         // TODO create a random choice of service
         // it’s constant service for now
         await new ServiceComponent(page).typeAndSelectService(ads[i].service);
 
-        await createUnitPage.clickNextButton();
+        await createUnitPage.nextStep();
 
         // Fourth tab
         await new PriceComponent(page).typePrice(ads[i].price);
 
-        await createUnitPage.clickNextButton();
+        await createUnitPage.nextStep();
 
         // Fifth tab
         await new ContactsComponent(page).setAsOperator();
-        await createUnitPage.clickNextButton();
+        await createUnitPage.nextStep();
 
         await createUnitPage.successfullCreating.waitFor({ state: "visible" });
         await new HeaderComponent(page).clickCreateAdLink();
