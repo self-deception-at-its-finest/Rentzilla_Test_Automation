@@ -1,0 +1,12 @@
+{
+  "services": {
+    "sectionTitle": "Послуги",
+    "defaultTab": "Популярні",
+    "expectedServicesCount": 7
+  },
+  "specialEquipment": {
+    "sectionTitle": "Спецтехніка",
+    "defaultTab": "Популярна",
+    "expectedItemsCount": 7
+  }
+}
