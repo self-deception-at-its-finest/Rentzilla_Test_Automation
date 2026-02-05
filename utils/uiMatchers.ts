@@ -15,10 +15,14 @@ export async function expectFieldDefault(field: Locator) {
     );
 }
 
+async function expectTabAriaSelected(tab: Locator, value: "true" | "false") {
+    await expect(tab).toHaveAttribute("aria-selected", value);
+}
+
 export async function expectTabActive(tab: Locator) {
-    await expect(tab).toHaveAttribute("aria-selected", "true");
+    await expectTabAriaSelected(tab, "true");
 }
 
 export async function expectTabInactive(tab: Locator) {
-    await expect(tab).toHaveAttribute("aria-selected", "false");
+    await expectTabAriaSelected(tab, "false");
 }
