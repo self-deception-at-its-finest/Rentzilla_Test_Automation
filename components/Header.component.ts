@@ -8,6 +8,9 @@ export class HeaderComponent {
     readonly avatarBlock: Locator;
     readonly createAdLink: Locator;
     readonly logoutLink: Locator;
+    readonly profileDropdown : Locator;
+    readonly profileDropdownEmail : Locator;
+    readonly profileDropdownLogoutButton : Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -18,6 +21,9 @@ export class HeaderComponent {
         this.createAdLink = this.headerSection.getByRole("link", {
             name: "Подати оголошення",
         });
+        this.profileDropdown = page.getByTestId("profileDropdown");
+        this.profileDropdownEmail = page.getByTestId("profileDropdown").getByTestId("email")
+        this.profileDropdownLogoutButton = page.getByTestId("profileDropdown").getByTestId("logout")
     }
 
     async clickAvatarBlock() {
@@ -31,4 +37,13 @@ export class HeaderComponent {
     async clickCreateAdLink() {
         await this.createAdLink.click();
     }
+
+    async openLoginForm() {
+        await this.authenticationButton.click();
+    }
+
+    async openProfileDropdown() {
+        await this.avatarBlock.click();
+    }
+
 }

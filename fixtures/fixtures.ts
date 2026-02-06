@@ -17,6 +17,7 @@ type Fixtures = {
     homePage: HomePage;
     authorizedHomePage: HomePage;
     authComponent: AuthenticationComponent;
+    headerComponent: HeaderComponent;
     createUnitPage: CreateUnitPage;
     ads: CreateUnitPage;
     createUnitPageWithAds: CreateUnitPage;
@@ -25,6 +26,14 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
+    homePage: async ({ page }, use) => {
+        await use(new HomePage(page));
+    },
+
+    headerComponent: async ({ page }, use) => {
+        await use(new HeaderComponent(page));
+    },
+  
     authComponent: [
         async ({ page }, use) => {
             await use(new AuthenticationComponent(page));
