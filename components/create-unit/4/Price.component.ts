@@ -16,7 +16,7 @@ export class PriceComponent {
         await this.page.keyboard.type(price);
     }
 
-    async clearTheField() {
+    async clearField() {
         await this.field.fill("");
     }
 }

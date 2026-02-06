@@ -31,21 +31,21 @@ export class ManufacturerComponent extends BaseComponent {
     /**
      * Entire flow setting the manufacturer
      */
-    async setTheManufacturer(manufacturer: string): Promise<void> {
+    async setManufacturer(manufacturer: string): Promise<void> {
         await this.typeManufacturer(manufacturer);
-        await this.clickTheManufacturer();
+        await this.clickManufacturer();
     }
 
     async typeManufacturer(manufacturer: string): Promise<void> {
         await super.typeIntoField(this.field, manufacturer);
     }
 
-    async clickTheManufacturer(): Promise<void> {
+    async clickManufacturer(): Promise<void> {
         await this.firstResult.click();
     }
 
     async clearManufacturerField(): Promise<void> {
         if (await this.clearButton.isVisible()) await this.clearButton.click();
-        else await super.clearTheField(this.field);
+        else await super.clearField(this.field);
     }
 }

@@ -1,5 +1,6 @@
-import { expect, test } from "../../fixtures/fixtures";
+import { expect, test } from "../../fixtures/index";
 import {
+    BUTTONS,
     FORBIDDEN_SYMBOLS,
     MANUFACTURERS,
     TAB_NUMBERS,
@@ -13,16 +14,21 @@ import endpoints from "../../constants/endpoints.constants.json";
 import catalog from "../../constants/catalog.constants.json";
 import { isDesktop } from "../../utils/viewportGuard";
 import { markStepAsSkipped } from "../../utils/skipTest";
-import { CategoryComponent } from "../../components/create-unit/1/Category.component";
-import { AdComponent } from "../../components/create-unit/1/Ad.component";
 import { getFieldPlaceholder } from "../../utils/formHelper";
-import { firstTabFields } from "../../constants/create-unit/fields.constants";
-import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
+import {
+    DEFAULT_LOCATION,
+    firstTabFields,
+} from "../../constants/create-unit/fields.constants";
 import { generateText, generateValidText } from "../../utils/fakeData";
 import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
 import { getRandomStringElement } from "../../utils/getElements";
-import { ModelComponent } from "../../components/create-unit/1/Model.component";
-import { expectFieldDefault, expectFieldError } from "../../utils/uiMatchers";
+import {
+    expectFieldDefault,
+    expectFieldError,
+    expectTabActive,
+    expectTabInactive,
+} from "../../utils/uiMatchers";
+import { clickOutside } from "../../utils/closeModal";
 
 test.describe(
     "“Create unit” page",
@@ -39,7 +45,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C294" },
             },
-            async ({ createUnitPage, page }) => {
+            async ({ createUnitPage }) => {
                 await test.step("The page title is: ⤵️", async () => {
                     await test.step("• visible", async () => {
                         await expect(createUnitPage.pageTitle).toBeVisible();
@@ -53,10 +59,7 @@ test.describe(
 
                 await test.step(`The first tab: ⤵️`, async () => {
                     await test.step(`• is selected`, async () => {
-                        expect(createUnitPage.tabList.first()).toHaveAttribute(
-                            "aria-selected",
-                            "true",
-                        );
+                        await expectTabActive(createUnitPage.tabList.first());
                     });
 
                     await test.step(`• has the “${CREATE_UNIT_CONSTS.PAGE_TITLE}” title`, async () => {
@@ -75,9 +78,9 @@ test.describe(
                 await test.step("Other tabs: ⤵️", async () => {
                     await test.step("• are not active", async () => {
                         for (let i = 1; i < TAB_NUMBERS.length; i++) {
-                            expect(
+                            await expectTabInactive(
                                 createUnitPage.tabList.nth(i),
-                            ).toHaveAttribute("aria-selected", "false");
+                            );
                         }
                     });
 
@@ -112,9 +115,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C296" },
             },
-            async ({ createUnitPage, page }) => {
-                const categoryComponent = new CategoryComponent(page);
-
+            async ({ createUnitPage, categoryComponent, page }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.category.label}» text`, async () => {
                         await expect(categoryComponent.label).toContainText(
@@ -147,7 +148,7 @@ test.describe(
                     });
 
                     await test.step("• requires filling.", async () => {
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
                         await expectFieldError(categoryComponent.field);
 
                         await expect(
@@ -195,15 +196,13 @@ test.describe(
                             return;
                         }
                         await categoryComponent.clickCategorySelect();
-                        await categoryComponent.clickPopupOutside();
+                        await clickOutside(page);
                         await expect(categoryComponent.popup).toBeHidden();
                     });
 
                     await test.step("• disappears when chosing the particular category, and the field is filled correctly", async () => {
-                        // Open the category popup if hidden
-                        if (await categoryComponent.popup.isHidden()) {
+                        if (await categoryComponent.popup.isHidden())
                             await categoryComponent.clickCategorySelect();
-                        }
 
                         await categoryComponent.selectFirstCategory();
                         await expect(
@@ -243,8 +242,7 @@ test.describe(
                     description: "C297",
                 },
             },
-            async ({ createUnitPage, page }) => {
-                const adComponent = new AdComponent(page);
+            async ({ createUnitPage, adComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.ad.label}» text`, async () => {
                         await expect(adComponent.label).toContainText(
@@ -257,9 +255,7 @@ test.describe(
                     });
 
                     await test.step("• has an asterisk", async () => {
-                        await expect(
-                            adComponent.requiredSymbol!!,
-                        ).toBeVisible();
+                        await expect(adComponent.requiredSymbol!).toBeVisible();
                     });
                 });
 
@@ -271,7 +267,7 @@ test.describe(
                     });
 
                     await test.step("• requires filling", async () => {
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expectFieldError(adComponent.field);
 
@@ -290,7 +286,7 @@ test.describe(
 
                     await test.step("• string cannot be less than 10 symbols", async () => {
                         await adComponent.typeAd(less10);
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expectFieldError(adComponent.field);
                         await expect(adComponent.errorBlock).toBeVisible();
@@ -302,7 +298,7 @@ test.describe(
 
                     await test.step("• string cannot be more than 100 symbols", async () => {
                         await adComponent.typeAd(more100);
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expect(adComponent.field).toHaveText("");
                         await expectFieldError(adComponent.field);
@@ -334,8 +330,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C298" },
             },
-            async ({ createUnitPage, page }) => {
-                const manufacturerComponent = new ManufacturerComponent(page);
+            async ({ createUnitPage, manufacturerComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.manufacturer.label}» text`, async () => {
                         await expect(manufacturerComponent.label).toContainText(
@@ -364,7 +359,7 @@ test.describe(
                     });
 
                     await test.step("• requires filling", async () => {
-                        await createUnitPage.clickNextButton();
+                        await createUnitPage.nextStep();
 
                         await expectFieldError(
                             manufacturerComponent.fieldWrapper,
@@ -445,10 +440,9 @@ test.describe(
                             getRandomStringElement(MANUFACTURERS).toLowerCase();
 
                         await manufacturerComponent.clearManufacturerField();
-                        await manufacturerComponent.typeManufacturer(
+                        await manufacturerComponent.setManufacturer(
                             validManufacturer,
                         );
-                        await manufacturerComponent.clickTheManufacturer();
                         await expect(
                             manufacturerComponent.chosenManufacturer,
                         ).toHaveText(validManufacturer, { ignoreCase: true });
@@ -470,9 +464,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C299" },
             },
-            async ({ createUnitPage, page }) => {
-                const modelComponent = new ModelComponent(page);
-
+            async ({ createUnitPage, modelComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${firstTabFields.model.label}» text`, async () => {
                         await expect(modelComponent.label).toContainText(
@@ -522,6 +514,294 @@ test.describe(
                         let text = generateText(15);
                         await modelComponent.typeModel(text);
                         await expectFieldDefault(modelComponent.field);
+                    });
+                });
+            },
+        );
+
+        test(
+            "Verify technical specifications section",
+            {
+                tag: "@field validation",
+                annotation: { type: "Test case", description: "C317" },
+            },
+            async ({ createUnitPage, specificationsComponent }) => {
+                await test.step("The Title: ⤵️", async () => {
+                    await test.step(`• has the ${firstTabFields.specifications.label} text`, async () => {
+                        await expect(specificationsComponent.label).toHaveText(
+                            firstTabFields.specifications.label,
+                        );
+                    });
+
+                    await test.step("• is visible", async () => {
+                        await expect(
+                            specificationsComponent.label,
+                        ).toBeVisible();
+                    });
+                });
+
+                await test.step("Field is enabled and not “readonly”", async () => {
+                    await expect(specificationsComponent.field).toBeEnabled();
+                    await expect(
+                        specificationsComponent.field,
+                    ).not.toHaveAttribute("readonly", "");
+                });
+
+                await test.step("Field is clear", async () => {
+                    await expect(specificationsComponent.field).toHaveValue("");
+                });
+
+                await test.step("Field validation: ⤵️", async () => {
+                    await test.step(`• text cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await specificationsComponent.typeSpecifications(
+                            FORBIDDEN_SYMBOLS,
+                        );
+
+                        await expect(specificationsComponent.field).toHaveValue(
+                            "",
+                        );
+                        await specificationsComponent.fillSpecifications(
+                            FORBIDDEN_SYMBOLS,
+                        );
+                        await expect(specificationsComponent.field).toHaveValue(
+                            "",
+                        );
+                    });
+
+                    await test.step("• text cannot have more than 9000 symbols", async () => {
+                        const largeText = generateText(9000);
+                        await specificationsComponent.fillSpecifications(
+                            largeText,
+                        );
+                        await specificationsComponent.typeSpecifications("1");
+                        await expect(specificationsComponent.field).toHaveValue(
+                            largeText,
+                        );
+                    });
+                });
+            },
+        );
+
+        test(
+            "Verify description section",
+            {
+                tag: "@field validation",
+                annotation: { type: "Test case", description: "C318" },
+            },
+            async ({ createUnitPage, detailsComponent }) => {
+                await test.step("The Title: ⤵️", async () => {
+                    await test.step(`• has the ${firstTabFields.details.label} text`, async () => {
+                        await expect(detailsComponent.label).toHaveText(
+                            firstTabFields.details.label,
+                        );
+                    });
+
+                    await test.step("• is visible", async () => {
+                        await expect(detailsComponent.label).toBeVisible();
+                    });
+                });
+
+                await test.step("Field is enabled and not “readonly”", async () => {
+                    await expect(detailsComponent.field).toBeEnabled();
+                    await expect(detailsComponent.field).not.toHaveAttribute(
+                        "readonly",
+                        "",
+                    );
+                });
+
+                await test.step("Field is clear", async () => {
+                    await expect(detailsComponent.field).toHaveValue("");
+                });
+                await test.step("Field validation: ⤵️", async () => {
+                    await test.step(`• text cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
+                        await detailsComponent.typeDetails(FORBIDDEN_SYMBOLS);
+                        await expect(detailsComponent.field).toHaveValue("");
+                        await detailsComponent.fillDetails(FORBIDDEN_SYMBOLS);
+                        await expect(detailsComponent.field).toHaveValue("");
+                    });
+
+                    await test.step("• text cannot have more than 9000 symbols", async () => {
+                        const largeText = generateText(9000);
+                        await detailsComponent.fillDetails(largeText);
+                        await detailsComponent.typeDetails("1");
+                        await expect(detailsComponent.field).toHaveValue(
+                            largeText,
+                        );
+                    });
+                });
+            },
+        );
+
+        test(
+            "Verify vehicle location division",
+            {
+                tag: "@field validation",
+                annotation: { type: "Test case", description: "C319" },
+            },
+            async ({ createUnitPage, locationComponent, page }) => {
+                await test.step("The title: ⤵️", async () => {
+                    await test.step(`• has the «${firstTabFields.location.label}» text`, async () => {
+                        await expect(locationComponent.label).toContainText(
+                            firstTabFields.location.label,
+                        );
+                    });
+
+                    await test.step("• is visible", async () => {
+                        await expect(locationComponent.label).toBeVisible();
+                    });
+
+                    await test.step("• has an asterisk", async () => {
+                        await expect(
+                            locationComponent.requiredSymbol!,
+                        ).toBeVisible();
+                    });
+                });
+
+                await test.step("The field has the correct background text", async () => {
+                    await expect(locationComponent.locationLabel).toHaveText(
+                        firstTabFields.location.placeholder,
+                    );
+                });
+
+                await test.step("The field must be filled in", async () => {
+                    await createUnitPage.nextStep();
+                    await expectFieldError(locationComponent.locationLabel);
+                    await expect(locationComponent.errorBlock).toHaveText(
+                        FIELDS_ERRORS.MISSING_LOCATION,
+                    );
+                });
+
+                await test.step(`The «${firstTabFields.location.buttonText}» button opens the modal window`, async () => {
+                    await locationComponent.openMap();
+                    await expect(locationComponent.modalWindow).toBeVisible();
+                });
+
+                await test.step("The modal window: ⤵️", async () => {
+                    await test.step("• has the correct title and Close button", async () => {
+                        await expect(
+                            locationComponent.modalWindowTitle,
+                        ).toHaveText(firstTabFields.location.modal.title);
+                        await expect(
+                            locationComponent.modalWindowCloseButton,
+                        ).toBeVisible();
+                    });
+
+                    await test.step(`• has the “${DEFAULT_LOCATION}” as the default address`, async () => {
+                        await expect(
+                            locationComponent.modalWindowAddressLabel,
+                        ).toHaveText(`${DEFAULT_LOCATION}`);
+                    });
+
+                    await test.step("• disappears after clicking the Close button", async () => {
+                        await locationComponent.closeMap();
+                        await expect(
+                            locationComponent.modalWindow,
+                        ).toBeHidden();
+                    });
+                });
+
+                await test.step("Valid address is displayed in address field after closing the modal window", async () => {
+                    if (await locationComponent.modalWindow.isHidden())
+                        await locationComponent.openMap();
+                    await clickOutside(page);
+                    await expect(locationComponent.locationLabel).toHaveText(
+                        DEFAULT_LOCATION,
+                    );
+                });
+            },
+        );
+
+        test(
+            `Verify “${BUTTONS.cancel}” button`,
+            {
+                tag: ["@button validation"],
+                annotation: { type: "Test case", description: "C326" },
+            },
+            async ({ createUnitPage, page }) => {
+                await test.step("The button has the correct text", async () => {
+                    await expect(createUnitPage.cancelButton).toHaveText(
+                        BUTTONS.cancel,
+                    );
+                });
+                
+                await test.step("Clicking on the button cancels the ad creation and redirects to the main page", async () => {
+                    await createUnitPage.cancelAdCreating();
+                    await expect(page).toHaveURL(
+                        new RegExp(`${endpoints.home}`),
+                    );
+                });
+            },
+        );
+
+        test(
+            `Verify “${BUTTONS.next}” button`,
+            {
+                tag: ["@button validation"],
+                annotation: { type: "Test case", description: "C329" },
+            },
+            async ({
+                createUnitPage,
+                categoryComponent,
+                adComponent,
+                manufacturerComponent,
+                locationComponent,
+                photosComponent,
+            }) => {
+                await test.step("The button has the correct text", async () => {
+                    await expect(createUnitPage.nextButton).toHaveText(
+                        BUTTONS.next,
+                    );
+                });
+
+                await test.step("Warnings are displayed about the need to fill in mandatory fields", async () => {
+                    await createUnitPage.nextStep();
+                    await expect(categoryComponent.errorBlock).toBeVisible();
+                    await expect(adComponent.errorBlock).toBeVisible();
+                    await expect(
+                        manufacturerComponent.errorBlock,
+                    ).toBeVisible();
+                    await expect(locationComponent.errorBlock).toBeVisible();
+                });
+
+                await test.step("When the required fields are filled in, clicking on the button: ⤵️", async () => {
+                    await test.step("• displays the next tab", async () => {
+                        await categoryComponent.selectCategory();
+                        await adComponent.typeAd(generateValidText());
+                        await manufacturerComponent.setManufacturer(
+                            getRandomStringElement(MANUFACTURERS),
+                        );
+                        await locationComponent.selectLocation();
+
+                        await createUnitPage.nextStep();
+
+                        await expectTabActive(createUnitPage.tabList.nth(1));
+                        await expect(
+                            photosComponent.uploadPhotoButtons,
+                        ).toBeVisible();
+                    });
+
+                    await test.step("• keeps the page title visibility and text unchanged", async () => {
+                        await expect(createUnitPage.pageTitle).toBeVisible();
+                        await expect(createUnitPage.pageTitle).toHaveText(
+                            CREATE_UNIT_CONSTS.PAGE_TITLE,
+                        );
+                    });
+
+                    await test.step("• keeps inactive tabs unchanged", async () => {
+                        for (let i = 0; i < TAB_NUMBERS.length; i++) {
+                            if (i === 1) continue;
+
+                            await expectTabInactive(
+                                createUnitPage.tabList.nth(i),
+                            );
+
+                            const { title: tabTitle, number: tabNumber } =
+                                await createUnitPage.getTabMetaInfo(
+                                    TAB_NUMBERS[i],
+                                );
+                            expect(tabTitle).toEqual(TAB_TITLES[i]);
+                            expect(tabNumber).toEqual(TAB_NUMBERS[i]);
+                        }
                     });
                 });
             },

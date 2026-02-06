@@ -16,6 +16,6 @@ export class AdComponent extends BaseComponent {
     }
 
     async clearAdField(): Promise<void> {
-        await super.clearTheField(this.field);
+        await super.clearField(this.field);
     }
 }

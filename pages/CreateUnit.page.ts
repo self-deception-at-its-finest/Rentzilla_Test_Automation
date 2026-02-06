@@ -13,6 +13,7 @@ export class CreateUnitPage extends BasePage {
     readonly pageTitle: Locator;
     readonly tabList: Locator;
     readonly nextButton: Locator;
+    readonly cancelButton: Locator;
     readonly successfullCreating: Locator;
 
     constructor(page: Page) {
@@ -22,6 +23,7 @@ export class CreateUnitPage extends BasePage {
             .first();
         this.tabList = this.page.locator('[role="tablist"] > button');
         this.nextButton = this.page.getByTestId("nextButton");
+        this.cancelButton = this.page.getByTestId("prevButton");
         this.successfullCreating = this.page.getByText(
             "Ваше оголошення подане на розгляд",
         );
@@ -48,7 +50,11 @@ export class CreateUnitPage extends BasePage {
         };
     }
 
-    async clickNextButton() {
+    async nextStep() {
         await this.nextButton.click();
+    }
+
+    async cancelAdCreating() {
+        await this.cancelButton.click();
     }
 }

@@ -35,7 +35,11 @@ export abstract class BaseComponent {
         await this.page.keyboard.type(str);
     }
 
-    protected async clearTheField(field: Locator) {
+    protected async fillInField(field: Locator, str: string) {
+        await field.fill(str);
+    }
+
+    protected async clearField(field: Locator) {
         await field.fill("");
     }
 }

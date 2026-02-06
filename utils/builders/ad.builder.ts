@@ -15,7 +15,7 @@ export function buildTestAds(count: number): TestAdData[] {
         manufacturer: getRandomStringElement(MANUFACTURERS),
         photo: "test-photo.png",
         service:
-            SERVICES["agricultural services"].subcategories[
+            SERVICES.subcategories["agricultural services"].subcategories[
                 "agrodrone services"
             ].title,
         price: "1000",
