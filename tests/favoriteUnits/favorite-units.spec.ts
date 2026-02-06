@@ -1,6 +1,4 @@
 import { expect, test } from "../../fixtures/fixtures";
-import { FavoriteUnitsPage } from "../../pages/FavoriteUnits.page";
-import { ProductsPage } from "../../pages/Products.page";
 import { FAVORITE_UNITS_CONSTS } from "../../constants/favorite-units/favoriteUnits.constants";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 
@@ -37,7 +35,7 @@ test.describe("Favorite Units Tests", () => {
         async ({ page, authorizedHomePage, productsPage, favoritePage }) => {
         let unitName: string;
 
-        await test.step("1-2. 1. Click on the 'Оголошення' button in the header. Click on the add to 'Обрані оголошення' icon of the unit section.", async () => {
+        await test.step("1-2. Click on the 'Оголошення' button in the header. Click on the add to 'Обрані оголошення' icon of the unit section.", async () => {
             await authorizedHomePage.navAdsLink.click();
             await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
             unitName = await productsPage.unitCards.first().getByTestId(FAVORITE_UNITS_CONSTS.TESTID.UNIT_NAME).innerText();
@@ -70,5 +68,37 @@ test.describe("Favorite Units Tests", () => {
             await expect(heart.locator(`path[fill="${FAVORITE_UNITS_CONSTS.COLORS.RED_FILL}"]`)).not.toBeVisible();
             await expect(heart.locator(`path[stroke="${FAVORITE_UNITS_CONSTS.COLORS.GREY_STROKE}"]`)).toBeVisible();
         });
+    });
+
+    // in progress
+    test("The 'Очистити список' button functionality", 
+        {
+            tag: "@UI",
+            annotation: { type: "Test case", description: "C303" },
+        },
+        async ({ page, authorizedHomePage, favoritePage }) => {
+
+            await test.step("Navigate to 'Обрані' through Cabinet Sidebar", async () => {
+                await authorizedHomePage.avatarBlock.click();
+                await authorizedHomePage.dropdownAdsItem.click();
+                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
+        });
+    });
+
+        // in progress
+    test("The 'Пошук по назві' search field functionality", 
+        {
+            tag: "@functional",
+            annotation: { type: "Test case", description: "C305" },
+        },
+        async ({ page, authorizedHomePage, favoritePage, productsPage }) => {
+
+            await test.step("Add 3 units to favorites", async () => {
+                await authorizedHomePage.navAdsLink.click();
+                await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
+                const addedUnits = await productsPage.addUnitsToFavorites(3);
+                console.log(`Додано юніти: ${addedUnits.join(", ")}`);
+            });
     });
 });
