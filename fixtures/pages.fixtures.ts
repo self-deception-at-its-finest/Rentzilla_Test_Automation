@@ -9,12 +9,14 @@ import { switchToAdminFlow } from "../flows/admin/switchToAdmin.flow";
 import { env } from "../config/env";
 import { approveAdsFlow } from "../flows/admin/approveAds.flow";
 import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
+import { fillTheTab1Flow } from "../flows/ads/fillTab1.flow";
 
 const test = base.extend<{
     ads: void;
     authorizedHomePage: HomePage;
     createUnitPage: CreateUnitPage;
     createUnitPageWithAds: CreateUnitPage;
+    createUnitPageWithFilledTab1: CreateUnitPage;
 }>({
     ads: [
         async ({ auth, page }, use) => {
@@ -49,6 +51,15 @@ const test = base.extend<{
         async ({ auth, page }, use) => {
             await page.goto(endpoints["create unit"]);
             await use(new CreateUnitPage(page));
+        },
+        { box: false },
+    ],
+
+    createUnitPageWithFilledTab1: [
+        async ({ createUnitPage, page }, use) => {
+            await fillTheTab1Flow(page, buildTestAds(1)[0]);
+            await createUnitPage.nextStep();
+            await use(createUnitPage);
         },
         { box: false },
     ],

@@ -10,6 +10,7 @@ import { HeaderComponent } from "../../components/Header.component";
 import { TestAdData } from "../../types/tabs";
 import { Page } from "@playwright/test";
 import { CreateUnitPage } from "../../pages/CreateUnit.page";
+import { fillTheTab1Flow } from "./fillTab1.flow";
 /**
  * Entire flow creating of ads
  * @param ads Thе data object for creating new ads
@@ -18,19 +19,8 @@ export async function createAdsFlow(page: Page, ads: TestAdData[]) {
     const createUnitPage = new CreateUnitPage(page);
     for (let i = 0; i < ads.length; i++) {
         // First tab
-
-        await new CategoryComponent(page).selectCategory();
-
-        await new AdComponent(page).typeAd(ads[i].title);
-
-        await new ManufacturerComponent(page).setManufacturer(
-            ads[i].manufacturer,
-        );
-
-        await new LocationComponent(page).selectLocation();
-
+        await fillTheTab1Flow(page, ads[i]);
         await createUnitPage.nextStep();
-
         // Second tab
         await new PhotosComponent(page).uploadPhoto(ads[i].photo);
 

@@ -13,7 +13,7 @@ export function buildTestAds(count: number): TestAdData[] {
     return Array.from({ length: count }, () => ({
         title: "new_test_" + generateText(15),
         manufacturer: getRandomStringElement(MANUFACTURERS),
-        photo: "test-photo.png",
+        photo: "1",
         service:
             SERVICES.subcategories["agricultural services"].subcategories[
                 "agrodrone services"
