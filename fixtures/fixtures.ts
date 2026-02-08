@@ -54,6 +54,7 @@ export const test = base.extend<Fixtures>({
         },
         { box: true },
     ],
+    
     favoritePage: [
         async ({ page }, use) => {
             await use(new FavoriteUnitsPage(page));

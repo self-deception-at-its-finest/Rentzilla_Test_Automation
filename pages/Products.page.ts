@@ -18,8 +18,10 @@ export class ProductsPage extends BasePage {
 
     async addUnitsToFavorites(count: number): Promise<string[]> {
         const addedUnitNames: string[] = [];
+        await this.unitCards.first().waitFor({ state: 'visible', timeout: 10000 });
         // get total available cards
         const availableCount = await this.unitCards.count();
+        console.log(`Знайдено карток на сторінці: ${availableCount}`);
         // get the minimum between requested count and available cards
         const limit = Math.min(count, availableCount);
 

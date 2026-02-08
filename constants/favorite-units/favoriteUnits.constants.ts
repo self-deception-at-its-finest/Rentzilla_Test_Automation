@@ -3,6 +3,7 @@ import favoriteData from "./favoriteUnits.constants.json";
 const FAVORITE_UNITS_CONSTS = {
     URL: favoriteData.url,
     EMPTY_TITLE: favoriteData["empty state"].title,
+    EMPTY_DESCRIPTION: favoriteData["empty state"].description,
     GO_TO_ADS_BTN: favoriteData["empty state"].button,
     COLORS: {
         RED_FILL: favoriteData["heart attributes"]["active fill"],
