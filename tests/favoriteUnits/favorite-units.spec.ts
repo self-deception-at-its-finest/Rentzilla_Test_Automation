@@ -138,7 +138,6 @@ test.describe("Favorite Units Tests", () => {
             });
         });
 
-    // in progress
     test("The 'Пошук по назві' search field functionality",
         {
             tag: "@functional",
@@ -233,5 +232,70 @@ test.describe("Favorite Units Tests", () => {
                 await expect(favoritePage.unitCards).toHaveCount(1);
                 await expect(favoritePage.unitName.first()).toHaveText(titleFromUI);
             });
+        });
+
+    test("Check the pagination on the 'Обрані оголошення' page",
+        {
+            tag: "@UI",
+            annotation: { type: "Test case", description: "C311" },
+        },
+        async ({ page, authorizedHomePage, favoritePage, productsPage }) => {
+
+            await test.step("--- Add units to favorites", async () => {
+                await authorizedHomePage.navAdsLink.click();
+                await productsPage.addUnitsToFavorites(15);
+            });
+
+            await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
+                await authorizedHomePage.avatarBlock.click();
+                await authorizedHomePage.dropdownAdsItem.click();
+                await expect(page).toHaveURL(ENDPOINTS.OWNER_UNITS);
+                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
+                await expect(favoritePage.paginationList).toBeVisible();
+            });
+
+            await test.step("2. Verify Page 1 state and '<' button is disabled", async () => {
+                await expect(favoritePage.activePage).toHaveText('1');
+                await expect(favoritePage.prevPageBtn).toHaveClass(/disabled/);
+            });
+
+            await test.step("3. Click '>' and verify Page 2 is highlighted", async () => {
+                await favoritePage.nextPageBtn.scrollIntoViewIfNeeded();
+                await favoritePage.nextPageBtn.click();
+                await expect(favoritePage.activePage).toHaveText('2');
+            });
+
+            await test.step("4. Click '>' to Page 3 and verify '>' button is disabled", async () => {
+                await favoritePage.nextPageBtn.scrollIntoViewIfNeeded();
+                await favoritePage.nextPageBtn.click();
+                await expect(favoritePage.activePage).toHaveText('3');
+
+                // when we are on the last page (because we added 15 units) the '>' button should be disabled
+                await expect(favoritePage.nextPageBtn).toHaveClass(/disabled/);
+            });
+
+            await test.step("5-6. Navigate back to Page 1", async () => {
+                await favoritePage.nextPageBtn.scrollIntoViewIfNeeded();
+                await favoritePage.prevPageBtn.click(); // to 2
+                await expect(favoritePage.activePage).toHaveText('2');
+                await favoritePage.nextPageBtn.scrollIntoViewIfNeeded();
+                await favoritePage.prevPageBtn.click(); // to 1
+                await expect(favoritePage.activePage).toHaveText('1');
+            });
+
+            await test.step("7. Final check: Go to the last (3rd) page", async () => {
+                const page3 = favoritePage.getPageBtn(3);
+                await page3.scrollIntoViewIfNeeded();
+                await page3.click();
+
+                await expect(favoritePage.activePage).toHaveText('3');
+                await expect(favoritePage.nextPageBtn).toHaveClass(/disabled/);
+            });
+
+            await test.step("--- Delete all favorite units", async () => {
+                await favoritePage.clearAllFavorites();
+            });
+
         });
 });
