@@ -6,11 +6,14 @@ export class FavoriteUnitsPage extends BasePage {
     readonly emptyDescription: Locator;
     readonly goToAdsButton: Locator;
     readonly unitCards: Locator;
+    readonly unitName: Locator;
     readonly clearListButton: Locator;
     readonly confirmDeleteButton: Locator;
     readonly confirmDeleteForm: Locator;
     readonly cancelDeleteButton: Locator;
     readonly canselIcon: Locator;
+    readonly searchInput: Locator;
+    readonly resetFiltersButton: Locator;
 
     constructor(page: Page) {
         super(page);
@@ -18,12 +21,14 @@ export class FavoriteUnitsPage extends BasePage {
         this.emptyDescription = page.getByTestId('descr');
         this.goToAdsButton = page.getByTestId('emptyBlockButton');
         this.unitCards = page.getByTestId('unitCard');
+        this.unitName = this.unitCards.locator('.OwnerUnitCard_name__cAZu4'); // this element don't have test id
         this.clearListButton = page.locator('button:has-text("Очистити список")');
-        //this.confirmDeleteForm = page.getByTestId('content');
         this.confirmDeleteForm = page.getByTestId('content').filter({ hasText: 'Очистити список обраних оголошень?' });
         this.confirmDeleteButton = page.getByTestId('content').getByRole('button', { name: 'Так' });
         this.cancelDeleteButton = page.getByTestId('content').getByRole('button', { name: 'Скасувати' });
         this.canselIcon = page.getByTestId('closeIcon');
+        this.searchInput = page.getByTestId('search').getByPlaceholder('Заголовок оголошення');
+        this.resetFiltersButton = page.getByTestId('emptyBlockButton');
     }
 
     async clearAllFavorites() {

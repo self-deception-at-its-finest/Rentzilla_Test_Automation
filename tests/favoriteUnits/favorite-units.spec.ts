@@ -79,33 +79,33 @@ test.describe("Favorite Units Tests", () => {
 
             let addedUnits: string[] = [];
 
-            await test.step("Add 3 units to favorites", async () => {
+            await test.step("--- Add 3 units to favorites", async () => {
                 await authorizedHomePage.navAdsLink.click();
                 addedUnits = await productsPage.addUnitsToFavorites(3);
                 console.log("3 units added to favorites");
             });
 
-            await test.step("Navigate to 'Обрані' through Cabinet Sidebar", async () => {
+            await test.step("--- Navigate to 'Обрані' through Cabinet Sidebar", async () => {
                 await authorizedHomePage.avatarBlock.click();
                 await authorizedHomePage.dropdownAdsItem.click();
                 await authorizedHomePage.sidebarFavoriteAdsVariant.click();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
             });
 
-            await test.step("Click on the 'Очистити список' button, confirmation form is visible", async () => {
+            await test.step("1. Click on the 'Очистити список' button, confirmation form is visible", async () => {
                 await expect(favoritePage.clearListButton).toBeVisible();
                 await favoritePage.clearListButton.click();
                 await expect(favoritePage.confirmDeleteForm).toBeVisible();
             });
 
-            await test.step("Click on the 'Скасувати' button, confirmation form is closed. 'Обрані' list is displayed", async () => {
+            await test.step("2. Click on the 'Скасувати' button, confirmation form is closed. 'Обрані' list is displayed", async () => {
                 await expect(favoritePage.cancelDeleteButton).toBeVisible();
                 await favoritePage.cancelDeleteButton.click();
                 await expect(favoritePage.confirmDeleteForm).not.toBeVisible();
                 await expect(favoritePage.unitCards.first()).toBeVisible();
             });
 
-            await test.step("'X' (close button) also works", async () => {
+            await test.step("3. 'X' (close button) also works", async () => {
                 await favoritePage.clearListButton.click();
                 await expect(favoritePage.confirmDeleteForm).toBeVisible();
                 await favoritePage.canselIcon.click();
@@ -113,7 +113,7 @@ test.describe("Favorite Units Tests", () => {
                 await expect(favoritePage.unitCards.first()).toBeVisible();
             });
 
-            await test.step("The 'Так' button works and clears the list", async () => {
+            await test.step("4. The 'Так' button works and clears the list", async () => {
                 await favoritePage.clearListButton.click();
                 await expect(favoritePage.confirmDeleteForm).toBeVisible();
                 await favoritePage.confirmDeleteButton.click();
@@ -123,7 +123,7 @@ test.describe("Favorite Units Tests", () => {
                 await expect(favoritePage.confirmDeleteForm).not.toBeVisible();
             });
 
-            await test.step("The previously selected 'Обране' icon on the products list is inactive (not red)", async () => {
+            await test.step("5. The previously selected 'Обране' icon on the products list is inactive (not red)", async () => {
                 await expect(favoritePage.goToAdsButton).toBeVisible();
                 await favoritePage.goToAdsButton.click();
                 await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
@@ -144,10 +144,94 @@ test.describe("Favorite Units Tests", () => {
             tag: "@functional",
             annotation: { type: "Test case", description: "C305" },
         },
-        async ({ page, authorizedHomePage, favoriteUnitsState }) => {
+        async ({ page, authorizedHomePage, favoriteUnitsState, favoritePage }) => {
 
-            await test.step("Add 3 units to favorites", async () => {
-                console.log('It works! Favorite units added and cleared successfully.');
+            await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
+                await authorizedHomePage.avatarBlock.click();
+                await authorizedHomePage.dropdownAdsItem.click();
+                await expect(page).toHaveURL(ENDPOINTS.OWNER_UNITS);
+                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
+            });
+
+            await test.step("2-3. Click on search input and press Enter", async () => {
+                await favoritePage.searchInput.click();
+                await favoritePage.searchInput.press('Enter');
+                await expect(favoritePage.unitCards).toHaveCount(favoriteUnitsState.length);
+            });
+
+            await test.step("4. Enter only spaces in the search input", async () => {
+                const spaces = [" ", "  ", "          "];
+                for (const space of spaces) {
+                    await favoritePage.searchInput.fill(space);
+                    await favoritePage.searchInput.press('Enter');
+                    await expect(favoritePage.searchInput).toHaveValue(space);
+                }
+            });
+
+            await test.step("5. Click on the 'Скинути фільтри' button", async () => {
+                // We can enter something here, but for now spases in enough as wrong input
+                //await favoritePage.searchInput.fill("NonExistentUnit123");
+                await favoritePage.resetFiltersButton.click();
+                await expect(favoritePage.searchInput).toHaveValue("");
+                await expect(favoritePage.unitCards).toHaveCount(favoriteUnitsState.length);
+            });
+
+            await test.step("6. Enter '16' in the 'Пошук по назві' input", async () => {
+                const query = "16";
+                await favoritePage.searchInput.fill(query);
+                await favoritePage.searchInput.press('Enter');
+
+                // wait wor results to load and check if there are any cards with "16" in the title
+                const count = await favoritePage.unitCards.count();
+                if (count > 0) {
+                    // if there are results, check that at least the first one contains "16" in the title
+                    await expect(favoritePage.unitCards.first()).toContainText(query);
+                } else {
+                    // if there are no results, check that the empty state message is correct and contains "16"
+                    await expect(favoritePage.emptyTitle).toContainText(`Оголошення за назвою "${query}" не знайдені`);
+                    await expect(favoritePage.resetFiltersButton).toBeVisible();
+                    await favoritePage.resetFiltersButton.click();
+                }
+            });
+
+            await test.step("7. Enter specific symbols in the 'Пошук по назві' input", async () => {
+                const symbols = "!, @, #, $, %, <, >, ^, (, ), *";
+                await favoritePage.searchInput.fill(symbols);
+                await favoritePage.searchInput.press('Enter');
+
+                const count = await favoritePage.unitCards.count();
+                if (count > 0) {
+                    await expect(favoritePage.unitCards.first()).toBeVisible();
+                } else {
+                    await expect(favoritePage.emptyTitle).toContainText(`Оголошення за назвою "${symbols}" не знайдені`);
+                    await expect(favoritePage.resetFiltersButton).toBeVisible();
+                    await favoritePage.resetFiltersButton.click();
+                }
+            });
+
+            await test.step("8. Enter the non-existing keyword 'тест1234567890'", async () => {
+                const nonExistentKey = "тест1234567890";
+                await favoritePage.searchInput.fill(nonExistentKey);
+                await favoritePage.searchInput.press('Enter');
+
+                // have to be no results and the empty state message should contain the non-existing keyword
+                await expect(favoritePage.emptyTitle).toContainText(`Оголошення за назвою "${nonExistentKey}" не знайдені`);
+                await expect(favoritePage.resetFiltersButton).toBeVisible();
+                await favoritePage.resetFiltersButton.click();
+            });
+
+            await test.step("9. Search by existing unit title", async () => {
+                // get the title of the first unit in the list
+                const titleFromUI = await favoritePage.unitName.first().innerText();
+                console.log(`Searching for: ${titleFromUI}`);
+
+                await favoritePage.searchInput.fill(titleFromUI);
+                await favoritePage.searchInput.press('Enter');
+
+                // check that there is exactly 1 result and it contains the title we searched for
+                await expect(favoritePage.unitCards).toHaveCount(1);
+                await expect(favoritePage.unitName.first()).toHaveText(titleFromUI);
             });
         });
 });
