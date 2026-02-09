@@ -1,7 +1,3 @@
-import { AdComponent } from "../../components/create-unit/1/Ad.component";
-import { CategoryComponent } from "../../components/create-unit/1/Category.component";
-import { LocationComponent } from "../../components/create-unit/1/Location.component";
-import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
 import { PhotosComponent } from "../../components/create-unit/2/Photos.component";
 import { ServiceComponent } from "../../components/create-unit/3/Service.component";
 import { PriceComponent } from "../../components/create-unit/4/Price.component";
@@ -11,11 +7,16 @@ import { TestAdData } from "../../types/tabs";
 import { Page } from "@playwright/test";
 import { CreateUnitPage } from "../../pages/CreateUnit.page";
 import { fillTheTab1Flow } from "./fillTab1.flow";
+import endpoints from "../../constants/endpoints.constants.json";
+
 /**
  * Entire flow creating of ads
  * @param ads Thе data object for creating new ads
  */
 export async function createAdsFlow(page: Page, ads: TestAdData[]) {
+
+    await page.goto(endpoints["create unit"]);
+
     const createUnitPage = new CreateUnitPage(page);
     for (let i = 0; i < ads.length; i++) {
         // First tab
