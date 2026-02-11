@@ -15,6 +15,15 @@ const FAVORITE_UNITS_CONSTS = {
     TESTID: {
         UNIT_NAME: favoriteData.testId.unitName,
         FAVOURITE: favoriteData.testId.favourite
+    },
+    SORT_OPTIONS: {
+        DATE: favoriteData.sortOptions.date,
+        NAME: favoriteData.sortOptions.name
+    },
+    CATEGORIES: {
+        ALL: favoriteData.categories.all,
+        NOT_FOUND: (category: string): string => `Оголошення в категорії "${category}" не знайдені`,
+        NOT_ONE_OF: (actualCategoryText: string, expectedSubs: string[]): string => `Категорія "${actualCategoryText}" не є жодною з очікуваних підкатегорій: ${expectedSubs.join(', ')}`
     }
 } as const;
 

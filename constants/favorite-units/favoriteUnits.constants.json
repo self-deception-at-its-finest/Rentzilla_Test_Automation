@@ -15,5 +15,12 @@
     "testId": {
         "unitName": "unitName",
         "favourite": "favourite"
+    },
+    "sortOptions": {
+        "date": "По даті створення",
+        "name": "По назві"
+    },
+    "categories": {
+        "all": "Всі категорії"
     }
 }

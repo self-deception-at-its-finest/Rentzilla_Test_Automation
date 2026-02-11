@@ -1,6 +1,8 @@
 import { expect, test } from "../../fixtures/index";
 import { FAVORITE_UNITS_CONSTS } from "../../constants/favorite-units/favoriteUnits.constants";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
+import { SPECIAL_EQUIPMENT } from "../../constants/catalog.constants";
+import { UnitPage } from "../../pages/Unit.page";
 
 test.describe("Favorite Units Tests", () => {
     test.describe.configure({ mode: 'serial' });
@@ -297,5 +299,147 @@ test.describe("Favorite Units Tests", () => {
                 await favoritePage.clearAllFavorites();
             });
 
+        });
+
+    test("'Всі категорії' dropdown menu functionality",
+        {
+            tag: "@functional",
+            annotation: { type: "Test case", description: "C315" },
+        },
+        async ({ page, authorizedHomePage, favoritePage, unitPage, favoriteUnitsState }) => {
+            const categoriesToCheck = [
+                SPECIAL_EQUIPMENT.categories["building equipment"].title,   // Будівельна техніка
+                SPECIAL_EQUIPMENT.categories["municipal equipment"].title,  // Комунальна техніка
+                SPECIAL_EQUIPMENT.categories["warehouse equipment"].title,  // Складська техніка
+                // there is agricultural equipment category in the test case, but it is not exist on the site
+                //SPECIAL_EQUIPMENT.categories["agricultural equipment"].title,  // Сільськогосподарська техніка
+            ];
+            const subcategoryMap = {
+                [SPECIAL_EQUIPMENT.categories["building equipment"].title]:
+                    Object.values(SPECIAL_EQUIPMENT.categories["building equipment"].subcategories).map(s => s.title),
+                [SPECIAL_EQUIPMENT.categories["municipal equipment"].title]:
+                    Object.values(SPECIAL_EQUIPMENT.categories["municipal equipment"].subcategories).map(s => s.title),
+                [SPECIAL_EQUIPMENT.categories["warehouse equipment"].title]:
+                    Object.values(SPECIAL_EQUIPMENT.categories["warehouse equipment"].subcategories).map(s => s.title),
+            };
+            let initialCount: number;
+
+            await test.step("--- Navigate to 'Обрані' and verify initial state", async () => {
+                await authorizedHomePage.avatarBlock.click();
+                await authorizedHomePage.dropdownAdsItem.click();
+                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+
+                await expect(favoritePage.categoryValue).toHaveText(FAVORITE_UNITS_CONSTS.CATEGORIES.ALL);
+                // save the initial count of units to compare later
+                initialCount = await favoritePage.unitCards.count();
+            });
+
+            for (const category of categoriesToCheck) {
+                await test.step(`Select '${category}' and verify units`, async () => {
+                    await favoritePage.selectCategory(category);
+                    await page.waitForTimeout(500);
+
+                    const count = await favoritePage.unitCards.count();
+
+                    if (count > 0) {
+                        await expect(favoritePage.unitCategoryLabel.first()).toContainText(category);
+                        // Click on any first unit
+                        await favoritePage.unitName.first().click();
+                        await expect(page).toHaveURL(/unit/);
+                        const actualCategoryText = await unitPage.secondCategory.innerText();
+                        const expectedSubs = subcategoryMap[category];
+                        // check that the actual subcategory text contains at least one of the expected subcategories for the selected category
+                        const isMatch = expectedSubs.some(sub => actualCategoryText.includes(sub));
+                        expect(isMatch, FAVORITE_UNITS_CONSTS.CATEGORIES.NOT_ONE_OF(actualCategoryText, expectedSubs)).toBeTruthy();
+                        // return back to favorites page
+                        await page.goto(FAVORITE_UNITS_CONSTS.URL);
+                        await page.waitForURL(FAVORITE_UNITS_CONSTS.URL);
+                    } else {
+                        // if there are no units in the category, check the empty state message
+                        await expect(favoritePage.emptyTitle).toContainText(FAVORITE_UNITS_CONSTS.CATEGORIES.NOT_FOUND(category));
+                    }
+                });
+            }
+
+            await test.step(`--- Return to '${FAVORITE_UNITS_CONSTS.CATEGORIES.ALL}' and verify state`, async () => {
+                await favoritePage.selectCategory(FAVORITE_UNITS_CONSTS.CATEGORIES.ALL);
+                await expect(favoritePage.categoryValue).toHaveText(FAVORITE_UNITS_CONSTS.CATEGORIES.ALL);
+
+                // check that the count of units is the same as at the beginning
+                const finalCount = await favoritePage.unitCards.count();
+                expect(finalCount).toBe(initialCount);
+            });
+        });
+
+    // for now in favoriteUnitsState fixture we are only adding 3 units to favorites, so it could be not enough to check sorting functionality properly
+    // but it should be fine if the site is active and the first three units added to the favorites will change from time to time
+    test(" 'По даті створення' drop down menu functionality",
+        {
+            tag: "@functional",
+            annotation: { type: "Test case", description: "C316" },
+        },
+        async ({ page, authorizedHomePage, favoritePage, favoriteUnitsState }) => {
+
+            await test.step("--- Navigate to 'Обрані' through Cabinet Sidebar", async () => {
+                await authorizedHomePage.avatarBlock.click();
+                await authorizedHomePage.dropdownAdsItem.click();
+                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
+            });
+
+            await test.step(`1. The '${FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE}' section is displayed on the menu`, async () => {
+                // it fails without RegExp because received 'по даті створення' instead of 'По даті створення'
+                // even if on the UI it looks like 'По даті створення' at the same time
+                await expect(favoritePage.sortDropdownValue).toHaveText(new RegExp(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE, 'i'));
+                const dateStrings = await favoritePage.unitDates.allInnerTexts();
+                if (dateStrings.length > 1) {
+                    const dates = dateStrings.map(d => {
+                        const [day, month, year] = d.split('.').map(Number);
+                        return new Date(year, month - 1, day).getTime();
+                    });
+
+                    for (let i = 0; i < dates.length - 1; i++) {
+                        expect(dates[i], `Date at index ${i} should be >= date at index ${i + 1}`)
+                            .toBeGreaterThanOrEqual(dates[i + 1]);
+                    }
+                }
+            });
+
+            await test.step(`2. Select the '${FAVORITE_UNITS_CONSTS.SORT_OPTIONS.NAME}' section, the unit names are displayed in alphabetical order`, async () => {
+                await favoritePage.selectSortOption(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.NAME);
+                // wait for sorting to be applied because it fails sometimes without waiting
+                await page.waitForTimeout(500);
+                await expect(favoritePage.sortDropdownValue).toHaveText(new RegExp(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.NAME, 'i'));
+                const names = await favoritePage.unitName.allInnerTexts();
+                const sortedNames = [...names].sort((a, b) => {
+                    // check if the first character of each name is Latin or not
+                    const isLatin = (str: string) => /^[A-Z]/i.test(str);
+                    const aIsLatin = isLatin(a);
+                    const bIsLatin = isLatin(b);
+                    // if one of the names starts with a Latin character and the other doesn't, the one with Latin should come first
+                    if (aIsLatin && !bIsLatin) return -1;
+                    if (!aIsLatin && bIsLatin) return 1;
+                    // if both names are Latin or both are non-Latin, sort them in alphabetical order
+                    return a.localeCompare(b, 'uk', { sensitivity: 'base' });
+                });
+
+                expect(names).toEqual(sortedNames);
+            });
+
+            await test.step(`3. Select the '${FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE}' section, the units are sorted by creation date in descending order`, async () => {
+                await favoritePage.selectSortOption(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE);
+                await page.waitForTimeout(500);
+                const dateStrings = await favoritePage.unitDates.allInnerTexts();
+                if (dateStrings.length > 1) {
+                    // convert date strings to timestamps for easier comparison
+                    const dates = dateStrings.map(d => {
+                        const [day, month, year] = d.split('.').map(Number);
+                        return new Date(year, month - 1, day).getTime();
+                    });
+                    for (let i = 0; i < dates.length - 1; i++) {
+                        expect(dates[i]).toBeGreaterThanOrEqual(dates[i + 1]);
+                    }
+                }
+            });
         });
 });

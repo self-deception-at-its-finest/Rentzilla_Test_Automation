@@ -11,6 +11,7 @@ import { approveAdsFlow } from "../flows/admin/approveAds.flow";
 import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
 import { ProductsPage } from "../pages/Products.page";
 import { FavoriteUnitsPage } from "../pages/FavoriteUnits.page";
+import { UnitPage } from "../pages/Unit.page";
 
 const test = base.extend<{
     ads: void;
@@ -21,6 +22,7 @@ const test = base.extend<{
     productsPage: ProductsPage;
     favoritePage: FavoriteUnitsPage;
     favoriteUnitsState: string[];
+    unitPage: UnitPage;
 }>({
     ads: [
         async ({ auth, page }, use) => {
@@ -96,6 +98,13 @@ const test = base.extend<{
         },
         { box: false, title: "Manage Favorite Units State" }
     ],
+
+    unitPage: [
+        async ({ page }, use) => {
+            await use(new UnitPage(page));
+        },
+        { box: true },
+    ]
 
 });
 
