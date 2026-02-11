@@ -32,7 +32,10 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C367" },
             },
-            async ({ createUnitPageWithFilledTab1, photosComponent }) => {
+            async ({
+                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
+                photosComponent,
+            }) => {
                 await test.step("The form title: ⤵️", async () => {
                     await test.step("• is visible", async () => {
                         await expect(
@@ -166,7 +169,10 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C384" },
             },
-            async ({ createUnitPageWithFilledTab1, photosComponent }) => {
+            async ({
+                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
+                photosComponent,
+            }) => {
                 await test.step("The error modal appears when uploading the same image twice", async () => {
                     await photosComponent.uploadPhoto("1");
                     await photosComponent.uploadPhoto("1");
@@ -215,7 +221,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C401" },
             },
-            async ({ createUnitPageWithFilledTab1, photosComponent }) => {
+            async ({ createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1, photosComponent }) => {
                 await test.step("The error modal appears when uploading an invalid file type", async () => {
                     await photosComponent.uploadPhoto("invalid_image");
                     await expect(photosComponent.errorModalText).toBeVisible();
@@ -263,7 +269,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C405" },
             },
-            async ({ createUnitPageWithFilledTab1, photosComponent }) => {
+            async ({ createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1, photosComponent }) => {
                 await test.step("The error modal appears when uploading an excessively large file", async () => {
                     await photosComponent.uploadPhoto("large_image");
                     await expect(photosComponent.errorModalText).toBeVisible();

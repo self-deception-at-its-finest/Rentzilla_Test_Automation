@@ -36,10 +36,7 @@ export class AdminPage {
             let adRecord = this.page.locator("tr", {
                 has: this.page.locator("td", { hasText: ads[i].title }),
             });
-            let a = this.page
-                .locator("tr")
-                .filter({ hasText: ads[i].title })
-                .filter();
+
             // Click on the "Show" green button
             await adRecord
                 .getByTestId("adminShowButton")

@@ -93,28 +93,4 @@ export class PhotosComponent {
 
         return result;
     }
-
-    async getImageRows(): Promise<number[]> {
-        const count = await this.uploadPhotoButtons.count();
-        const rows: number[] = [];
-
-        for (let i = 0; i < count; i++) {
-            const element = this.uploadPhotoButtons.nth(i);
-
-            // Проверяем, является ли элемент изображением
-            const draggable = await element.getAttribute("draggable");
-            console.log("draggable:", draggable);
-            if (draggable !== "true") {
-                continue; // пропускаем плейсхолдеры
-            }
-
-            const box = await element.boundingBox();
-            console.log("box:", box);
-            if (!box) continue;
-
-            rows.push(Math.round(box.y));
-        }
-
-        return rows;
-    }
 }
