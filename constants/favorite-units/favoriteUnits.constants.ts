@@ -3,6 +3,7 @@ import favoriteData from "./favoriteUnits.constants.json";
 const FAVORITE_UNITS_CONSTS = {
     URL: favoriteData.url,
     EMPTY_TITLE: favoriteData["empty state"].title,
+    EMPTY_DESCRIPTION: favoriteData["empty state"].description,
     GO_TO_ADS_BTN: favoriteData["empty state"].button,
     COLORS: {
         RED_FILL: favoriteData["heart attributes"]["active fill"],
@@ -14,6 +15,15 @@ const FAVORITE_UNITS_CONSTS = {
     TESTID: {
         UNIT_NAME: favoriteData.testId.unitName,
         FAVOURITE: favoriteData.testId.favourite
+    },
+    SORT_OPTIONS: {
+        DATE: favoriteData.sortOptions.date,
+        NAME: favoriteData.sortOptions.name
+    },
+    CATEGORIES: {
+        ALL: favoriteData.categories.all,
+        NOT_FOUND: (category: string): string => `Оголошення в категорії "${category}" не знайдені`,
+        NOT_ONE_OF: (actualCategoryText: string, expectedSubs: string[]): string => `Категорія "${actualCategoryText}" не є жодною з очікуваних підкатегорій: ${expectedSubs.join(', ')}`
     }
 } as const;
 

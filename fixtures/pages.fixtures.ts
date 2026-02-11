@@ -9,12 +9,20 @@ import { switchToAdminFlow } from "../flows/admin/switchToAdmin.flow";
 import { env } from "../config/env";
 import { approveAdsFlow } from "../flows/admin/approveAds.flow";
 import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
+import { ProductsPage } from "../pages/Products.page";
+import { FavoriteUnitsPage } from "../pages/FavoriteUnits.page";
+import { UnitPage } from "../pages/Unit.page";
 
 const test = base.extend<{
     ads: void;
+    homePage: HomePage;
     authorizedHomePage: HomePage;
     createUnitPage: CreateUnitPage;
     createUnitPageWithAds: CreateUnitPage;
+    productsPage: ProductsPage;
+    favoritePage: FavoriteUnitsPage;
+    favoriteUnitsState: string[];
+    unitPage: UnitPage;
 }>({
     ads: [
         async ({ auth, page }, use) => {
@@ -37,6 +45,13 @@ const test = base.extend<{
         await use(new CreateUnitPage(page));
     },
 
+    homePage: [
+        async ({ page }, use) => {
+            await use(new HomePage(page));
+        },
+        { box: true },
+    ],
+
     authorizedHomePage: [
         async ({ auth, page }, use) => {
             await page.goto(endpoints.home);
@@ -52,6 +67,45 @@ const test = base.extend<{
         },
         { box: false },
     ],
+
+    productsPage: [
+        async ({ page }, use) => {
+            await use(new ProductsPage(page));
+        },
+        { box: true },
+    ],
+    
+    favoritePage: [
+        async ({ page }, use) => {
+            await use(new FavoriteUnitsPage(page));
+        },
+        { box: true },
+    ],
+
+    favoriteUnitsState: [
+        async ({ authorizedHomePage, productsPage, favoritePage }, use) => {
+            // Setup: Add 3 units to favorites and store their names
+            await authorizedHomePage.navAdsLink.click();
+            const addedUnits = await productsPage.addUnitsToFavorites(3);
+
+            await use(addedUnits);
+
+            // Cleanup: Remove added units from favorites to reset state for other tests
+            await authorizedHomePage.avatarBlock.click();
+            await authorizedHomePage.dropdownAdsItem.click();
+            await authorizedHomePage.sidebarFavoriteAdsVariant.click(); 
+            await favoritePage.clearAllFavorites();
+        },
+        { box: false, title: "Manage Favorite Units State" }
+    ],
+
+    unitPage: [
+        async ({ page }, use) => {
+            await use(new UnitPage(page));
+        },
+        { box: true },
+    ]
+
 });
 
 export { test, expect };
