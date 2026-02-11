@@ -7,6 +7,7 @@ import {
 import { clickElement } from "../../utils/clickers";
 import {
     BUTTONS,
+    CREATE_UNIT_CONSTS,
     TAB_NUMBERS,
     TAB_TITLES,
 } from "../../constants/create-unit/createUnit.constants";
@@ -14,7 +15,7 @@ import { clickOutside } from "../../utils/closeModal";
 import {
     expectTabActive,
     expectTabInactive,
-    expectTextError,
+    expectTextColorError,
 } from "../../utils/uiMatchers";
 
 test.describe(
@@ -83,9 +84,6 @@ test.describe(
 
                 await test.step(`${MAX_IMAGES} valid images loaded successfully`, async () => {
                     for (let i = 1; i <= MAX_IMAGES; i++) {
-                        await clickElement(
-                            photosComponent.uploadPhotoButtons.last(),
-                        );
                         await photosComponent.uploadPhoto(String(i));
                     }
 
@@ -127,12 +125,17 @@ test.describe(
                 });
 
                 await test.step("Delete button appears after hovering the cursor on the image", async () => {
-                    await photosComponent.uploadedPhotoButtons.first().hover();
-                    await expect(
-                        photosComponent.getRemoveButton(
-                            photosComponent.uploadedPhotoButtons.first(),
-                        ),
-                    ).toBeVisible();
+                    const count =
+                        await photosComponent.uploadedPhotoButtons.count();
+                    for (let i = 0; i < count; i++) {
+                        const photo =
+                            photosComponent.uploadedPhotoButtons.nth(i);
+
+                        await photo.hover();
+                        await expect(
+                            photosComponent.getRemoveButton(photo),
+                        ).toBeVisible();
+                    }
                 });
 
                 await test.step("Placeholder count matches images count rule", async () => {
@@ -183,7 +186,6 @@ test.describe(
                 });
 
                 await test.step("The error modal can be closed by the close icon", async () => {
-                    await photosComponent.uploadPhoto("1");
                     await photosComponent.closeModalIcon.click();
                     await expect(photosComponent.errorModalText).toBeHidden();
                     await expect(
@@ -221,7 +223,10 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C401" },
             },
-            async ({ createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1, photosComponent }) => {
+            async ({
+                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
+                photosComponent,
+            }) => {
                 await test.step("The error modal appears when uploading an invalid file type", async () => {
                     await photosComponent.uploadPhoto("invalid_image");
                     await expect(photosComponent.errorModalText).toBeVisible();
@@ -269,7 +274,10 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C405" },
             },
-            async ({ createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1, photosComponent }) => {
+            async ({
+                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
+                photosComponent,
+            }) => {
                 await test.step("The error modal appears when uploading an excessively large file", async () => {
                     await photosComponent.uploadPhoto("large_image");
                     await expect(photosComponent.errorModalText).toBeVisible();
@@ -358,7 +366,7 @@ test.describe(
             `Verify “${BUTTONS.next}” button`,
             {
                 tag: ["@UI"],
-                annotation: { type: "Test case", description: "C329" },
+                annotation: { type: "Test case", description: "C393" },
             },
             async ({ createUnitPageWithFilledTab1, photosComponent }) => {
                 await test.step("The button has the correct text", async () => {
@@ -369,7 +377,7 @@ test.describe(
 
                 await test.step("The color of the clue line is red if user didn’t upload any image", async () => {
                     await createUnitPageWithFilledTab1.nextStep();
-                    await expectTextError(
+                    await expectTextColorError(
                         photosComponent.photosFormDescription,
                     );
                 });
@@ -380,6 +388,12 @@ test.describe(
                     await expectTabActive(
                         createUnitPageWithFilledTab1.tabList.nth(2),
                     );
+                    await expect(
+                        createUnitPageWithFilledTab1.pageTitle,
+                    ).toBeVisible();
+                    await expect(
+                        createUnitPageWithFilledTab1.pageTitle,
+                    ).toHaveText(CREATE_UNIT_CONSTS.PAGE_TITLE);
                 });
 
                 await test.step("Other tabs are inactive and unchanged", async () => {
