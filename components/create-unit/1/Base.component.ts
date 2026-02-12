@@ -40,6 +40,6 @@ export abstract class BaseComponent {
     }
 
     protected async clearField(field: Locator) {
-        await field.fill("");
+        await field.clear();
     }
 }

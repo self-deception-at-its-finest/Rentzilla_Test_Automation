@@ -27,7 +27,6 @@ export class AdminPage {
     }
 
     async approveAds(ads: TestAdData[]) {
-        // Click on the «Оголошення» menu
         await this.adsLink.click();
         await this.waitingTab.click();
         for (let i = 0; i < ads.length; i++) {
@@ -37,7 +36,6 @@ export class AdminPage {
                 has: this.page.locator("td", { hasText: ads[i].title }),
             });
 
-            // Click on the "Show" green button
             await adRecord
                 .getByTestId("adminShowButton")
                 .scrollIntoViewIfNeeded();
@@ -47,7 +45,6 @@ export class AdminPage {
     }
 
     async deleteAds(ads: TestAdData[]) {
-        // Click on the «Оголошення» menu
         await this.adsLink.click();
         await this.approveTab.click();
         for (let i = 0; i < ads.length; i++) {
