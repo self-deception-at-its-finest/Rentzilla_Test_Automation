@@ -7,6 +7,7 @@ export class AdminPage {
     readonly approveTab: Locator;
     readonly waitingTab: Locator;
     readonly dataSortColumn: Locator;
+    readonly logoutButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -22,10 +23,10 @@ export class AdminPage {
         this.dataSortColumn = this.page
             .getByTestId("sortLabelContainer")
             .getByText("Дата створення");
+        this.logoutButton = this.page.getByText("Вихід");
     }
 
     async approveAds(ads: TestAdData[]) {
-        // Click on the «Оголошення» menu
         await this.adsLink.click();
         await this.waitingTab.click();
         for (let i = 0; i < ads.length; i++) {
@@ -34,8 +35,7 @@ export class AdminPage {
             let adRecord = this.page.locator("tr", {
                 has: this.page.locator("td", { hasText: ads[i].title }),
             });
-            let a = this.page.locator('tr').filter({hasText: ads[i].title}).filter()
-            // Click on the "Show" green button
+
             await adRecord
                 .getByTestId("adminShowButton")
                 .scrollIntoViewIfNeeded();
@@ -45,7 +45,6 @@ export class AdminPage {
     }
 
     async deleteAds(ads: TestAdData[]) {
-        // Click on the «Оголошення» menu
         await this.adsLink.click();
         await this.approveTab.click();
         for (let i = 0; i < ads.length; i++) {
@@ -63,5 +62,9 @@ export class AdminPage {
                 .getByRole("button", { name: "Так" })
                 .click();
         }
+    }
+
+    async logout() {
+        await this.logoutButton.click();
     }
 }

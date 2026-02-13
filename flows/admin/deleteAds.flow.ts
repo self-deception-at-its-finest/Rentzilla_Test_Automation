@@ -1,8 +1,10 @@
 import { Page } from "@playwright/test";
-import { TestAdData } from "../../types/tabs";
 import { AdminPage } from "../../pages/Admin.page";
+import { switchToAdminFlow } from "../switchLogins.flow";
+import { env } from "../../config/env";
+import { TestAdData } from "../../types/tabs";
 
 export async function deleteAdsFlow(page: Page, ads: TestAdData[]) {
-    const adminPage = new AdminPage(page);
-    await adminPage.deleteAds(ads);
+    await switchToAdminFlow(page, env.admin);
+    await new AdminPage(page).deleteAds(ads);
 }

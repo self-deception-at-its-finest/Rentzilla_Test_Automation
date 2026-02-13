@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import {
-    firstTabFields,
+    tabsFields,
     KeysWithLabel,
 } from "../../../constants/create-unit/fields.constants";
 
@@ -17,11 +17,11 @@ export abstract class BaseComponent {
     ) {
         this.page = page;
         this.section = this.page
-            .getByText(firstTabFields[fieldLabel].label)
+            .getByText(tabsFields[fieldLabel].label)
             .locator("..");
 
         this.label = this.section.getByText(
-            new RegExp(`^${firstTabFields[fieldLabel].label}.*`),
+            new RegExp(`^${tabsFields[fieldLabel].label}.*`),
         );
         if (required)
             this.requiredSymbol = this.section.locator("span", {
@@ -40,6 +40,6 @@ export abstract class BaseComponent {
     }
 
     protected async clearField(field: Locator) {
-        await field.fill("");
+        await field.clear();
     }
 }

@@ -18,9 +18,11 @@ const FIELDS_ERRORS = {
     MISSING_LOCATION: data["error messages"]["missing location"],
 };
 
+// Common constants for the “Create unit” page
 const CREATE_UNIT_CONSTS = {
     BORDER_COLOR: "rgb(229, 229, 229)",
     ERR_BORDER_COLOR: "rgb(247, 56, 89)",
+    ERR_TEXT_COLOR: "rgb(247, 56, 89)",
     PAGE_TITLE: data["page title"],
 } as const;
 
@@ -28,10 +30,9 @@ const MANUFACTURERS = manufacturers;
 
 const BUTTONS = {
     cancel: data.buttons.cancel,
+    back: data.buttons.back,
     next: data.buttons.next,
 } as const;
-
-type Buttons = typeof BUTTONS;
 
 export {
     data,
