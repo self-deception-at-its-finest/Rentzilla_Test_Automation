@@ -6,6 +6,7 @@ import { ManufacturerComponent } from "../components/create-unit/1/Manufacturer.
 import { ModelComponent } from "../components/create-unit/1/Model.component";
 import { SpecificationsComponent } from "../components/create-unit/1/Specifications.component";
 import { PhotosComponent } from "../components/create-unit/2/Photos.component";
+import { ServiceComponent } from "../components/create-unit/3/Service.component";
 import { PriceComponent } from "../components/create-unit/4/Price.component";
 import { ContactsComponent } from "../components/create-unit/5/Contacts.component";
 import { test as base } from "./base.fixtures";
@@ -25,7 +26,7 @@ type PhotosComponents = {
 };
 
 type ServiceComponents = {
-    serviceComponent: ServiceComponents;
+    serviceComponent: ServiceComponent;
 };
 
 type PriceComponents = {
@@ -88,6 +89,12 @@ export const test = base.extend<
     photosComponent: [
         async ({ page }, use) => {
             await use(new PhotosComponent(page));
+        },
+        { box: true },
+    ],
+    serviceComponent: [
+        async ({ page }, use) => {
+            await use(new ServiceComponent(page));
         },
         { box: true },
     ],

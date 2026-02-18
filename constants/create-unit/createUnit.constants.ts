@@ -16,6 +16,7 @@ const FIELDS_ERRORS = {
     MISSING_MANUFACTURER: data["error messages"]["missing manufacturer"],
     MORE_15_SYMBOLS: data["error messages"]["more 15 symbols"],
     MISSING_LOCATION: data["error messages"]["missing location"],
+    MISSING_SERVICE: data["error messages"]["missing service"],
 };
 
 // Common constants for the “Create unit” page

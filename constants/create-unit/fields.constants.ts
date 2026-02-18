@@ -1,7 +1,5 @@
 import { data } from "./createUnit.constants";
 
-const first = "1";
-
 type Tab1 = (typeof data)["tabs"]["1"];
 type KeysWithLabel = {
     [K in keyof Tab1]: Tab1[K] extends { label: string } ? K : never;
@@ -39,6 +37,15 @@ type PhotosSection = {
     };
 };
 
+type ServiceSection = {
+    title: string;
+    description: string;
+    addInfo: string;
+    placeholder: string;
+    addedServicesTitle: string;
+    addServiceButtonText: string;
+};
+
 type TabFields = {
     category: CategorySection;
     ad: FieldSection;
@@ -48,10 +55,12 @@ type TabFields = {
     specifications: Pick<FieldSection, "label">;
     details: Pick<FieldSection, "label">;
     photos: PhotosSection;
+    service: ServiceSection;
 };
 
 const tab1 = data.tabs["1"];
 const tab2 = data.tabs["2"];
+const tab3 = data.tabs["3"];
 
 const tabsFields: TabFields = {
     category: {
@@ -100,10 +109,31 @@ const tabsFields: TabFields = {
             button: tab2["error modals"]["button"],
         },
     },
+    service: {
+        title: tab3.title,
+        description: tab3.description,
+        addInfo: tab3["add info"],
+        placeholder: tab3.placeholder,
+        addedServicesTitle: tab3["added services title"],
+        addServiceButtonText: tab3["add service button text"]
+    },
 } as const;
 
 const DEFAULT_LOCATION = "Київ, Україна, Київська область";
 
 const MAX_IMAGES = 12;
 
-export { KeysWithLabel, tabsFields, DEFAULT_LOCATION, MAX_IMAGES };
+// * The value of the “d” attribute for <path>
+const SELECTED_ICON = "M1 5.54545L5.54545 10.0909L13.1212 1";
+
+// * The value of the “d” attribute for <path>
+const SELECT_ICON = "M7 7H1M7 13V7V13ZM7 7V1V7ZM7 7H13H7Z";
+
+export {
+    KeysWithLabel,
+    tabsFields,
+    DEFAULT_LOCATION,
+    MAX_IMAGES,
+    SELECTED_ICON,
+    SELECT_ICON,
+};
