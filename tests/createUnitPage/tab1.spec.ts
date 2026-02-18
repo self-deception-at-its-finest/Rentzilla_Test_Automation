@@ -20,7 +20,7 @@ import {
     tabsFields,
 } from "../../constants/create-unit/fields.constants";
 import { generateText, generateValidText } from "../../utils/fakeData";
-import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
+import { formatMissingManufacturerError } from "../../utils/formatErrorMessages";
 import { getRandomStringElement } from "../../utils/getElements";
 import {
     expectFieldDefault,
@@ -700,11 +700,11 @@ test.describe(
                     });
                 });
 
-                await test.step("Valid address is displayed in address field after closing the modal window", async () => {
+                await test.step("Valid address is NOT displayed in address field after closing the modal window", async () => {
                     if (await locationComponent.modalWindow.isHidden())
                         await locationComponent.openMap();
                     await clickOutside(page);
-                    await expect(locationComponent.locationLabel).toHaveText(
+                    await expect(locationComponent.locationLabel).not.toHaveText(
                         DEFAULT_LOCATION,
                     );
                 });

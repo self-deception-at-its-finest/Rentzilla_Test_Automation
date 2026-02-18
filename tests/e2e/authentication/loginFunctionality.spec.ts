@@ -1,4 +1,4 @@
-import { expect, test} from '../../../fixtures/fixtures';
+import { expect, test} from '../../../fixtures/index';
 import {faker} from "@faker-js/faker";
 import errorMessages from '../../../constants/errorMessages.constants.json';
 import colors from '../../../constants/colors.constants.json';

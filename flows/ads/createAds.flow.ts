@@ -6,7 +6,7 @@ import { HeaderComponent } from "../../components/Header.component";
 import { TestAdData } from "../../types/tabs";
 import { Page } from "@playwright/test";
 import { CreateUnitPage } from "../../pages/CreateUnit.page";
-import { fillTheTab1Flow } from "./fillTab1.flow";
+import { fillTab1Flow } from "./fillTab1.flow";
 import endpoints from "../../constants/endpoints.constants.json";
 
 /**
@@ -14,13 +14,12 @@ import endpoints from "../../constants/endpoints.constants.json";
  * @param ads Thе data object for creating new ads
  */
 export async function createAdsFlow(page: Page, ads: TestAdData[]) {
-
     await page.goto(endpoints["create unit"]);
 
     const createUnitPage = new CreateUnitPage(page);
     for (let i = 0; i < ads.length; i++) {
         // First tab
-        await fillTheTab1Flow(page, ads[i]);
+        await fillTab1Flow(page, ads[i]);
         await createUnitPage.nextStep();
         // Second tab
         await new PhotosComponent(page).uploadPhoto(ads[i].photo);
