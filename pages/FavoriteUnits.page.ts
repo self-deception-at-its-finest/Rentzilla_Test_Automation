@@ -32,7 +32,7 @@ export class FavoriteUnitsPage extends BasePage {
         this.emptyDescription = page.getByTestId('descr');
         this.goToAdsButton = page.getByTestId('emptyBlockButton');
         this.unitCards = page.getByTestId('unitCard');
-        this.unitName = this.unitCards.locator('.OwnerUnitCard_name__cAZu4'); // this element don't have test id
+        this.unitName = this.unitCards.locator('//*[@data-testid='manufacturer']/preceding-sibling::div[1]'); // this element don't have test id
         // Clear list elements
         this.clearListButton = page.locator('button:has-text("Очистити список")');
         this.confirmDeleteForm = page.getByTestId('content').filter({ hasText: 'Очистити список обраних оголошень?' });
