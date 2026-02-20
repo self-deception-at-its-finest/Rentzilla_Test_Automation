@@ -7,22 +7,20 @@ import { UnitPage } from "../../pages/Unit.page";
 test.describe("Favorite Units Tests", () => {
     test.describe.configure({ mode: 'serial' });
 
-    test("The 'Обрані оголошення' page without 'Обрані' units",
+    test("The '" + FAVORITE_UNITS_CONSTS.NAMES.FAVORITE_UNITS + "' page without '" + FAVORITE_UNITS_CONSTS.NAMES.FAVORITES + "' units",
         {
             tag: "@UI",
             annotation: { type: "Test case", description: "C300" },
         },
         async ({ page, authorizedHomePage, favoritePage }) => {
 
-            await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
-                await authorizedHomePage.avatarBlock.click();
-                await authorizedHomePage.dropdownAdsItem.click();
-                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+            await test.step(`1. Navigate to '${FAVORITE_UNITS_CONSTS.NAMES.FAVORITE_UNITS}' through Cabinet Sidebar`, async () => {
+                await authorizedHomePage.navigateToFavoriteAds();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
                 await expect(favoritePage.emptyTitle).toHaveText(FAVORITE_UNITS_CONSTS.EMPTY_TITLE);
             });
 
-            await test.step("2. Click on the 'До списку оголошень' button.", async () => {
+            await test.step(`2. Click on the '${FAVORITE_UNITS_CONSTS.NAMES.GO_TO_ADS}' button.`, async () => {
                 await favoritePage.goToAdsButton.click();
                 await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
                 await expect(authorizedHomePage.navAdsLink).toHaveClass(FAVORITE_UNITS_CONSTS.CLASSES.NAVBAR_ACTIVE);
@@ -88,9 +86,7 @@ test.describe("Favorite Units Tests", () => {
             });
 
             await test.step("--- Navigate to 'Обрані' through Cabinet Sidebar", async () => {
-                await authorizedHomePage.avatarBlock.click();
-                await authorizedHomePage.dropdownAdsItem.click();
-                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await authorizedHomePage.navigateToFavoriteAds();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
             });
 
@@ -148,10 +144,7 @@ test.describe("Favorite Units Tests", () => {
         async ({ page, authorizedHomePage, favoriteUnitsState, favoritePage }) => {
 
             await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
-                await authorizedHomePage.avatarBlock.click();
-                await authorizedHomePage.dropdownAdsItem.click();
-                await expect(page).toHaveURL(ENDPOINTS.OWNER_UNITS);
-                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await authorizedHomePage.navigateToFavoriteAds();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
             });
 
@@ -249,10 +242,7 @@ test.describe("Favorite Units Tests", () => {
             });
 
             await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
-                await authorizedHomePage.avatarBlock.click();
-                await authorizedHomePage.dropdownAdsItem.click();
-                await expect(page).toHaveURL(ENDPOINTS.OWNER_UNITS);
-                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await authorizedHomePage.navigateToFavoriteAds();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
                 await expect(favoritePage.paginationList).toBeVisible();
             });
@@ -325,9 +315,7 @@ test.describe("Favorite Units Tests", () => {
             let initialCount: number;
 
             await test.step("--- Navigate to 'Обрані' and verify initial state", async () => {
-                await authorizedHomePage.avatarBlock.click();
-                await authorizedHomePage.dropdownAdsItem.click();
-                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await authorizedHomePage.navigateToFavoriteAds();
 
                 await expect(favoritePage.categoryValue).toHaveText(FAVORITE_UNITS_CONSTS.CATEGORIES.ALL);
                 // save the initial count of units to compare later
@@ -381,9 +369,7 @@ test.describe("Favorite Units Tests", () => {
         async ({ page, authorizedHomePage, favoritePage, favoriteUnitsState }) => {
 
             await test.step("--- Navigate to 'Обрані' through Cabinet Sidebar", async () => {
-                await authorizedHomePage.avatarBlock.click();
-                await authorizedHomePage.dropdownAdsItem.click();
-                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await authorizedHomePage.navigateToFavoriteAds();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
             });
 

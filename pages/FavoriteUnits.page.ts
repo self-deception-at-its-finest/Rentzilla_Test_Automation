@@ -32,7 +32,7 @@ export class FavoriteUnitsPage extends BasePage {
         this.emptyDescription = page.getByTestId('descr');
         this.goToAdsButton = page.getByTestId('emptyBlockButton');
         this.unitCards = page.getByTestId('unitCard');
-        this.unitName = this.unitCards.locator('.OwnerUnitCard_name__cAZu4'); // this element don't have test id
+        this.unitName = this.unitCards.locator('//div[@data-testid="manufacturer"]/preceding-sibling::div[1]'); // this element don't have test id
         // Clear list elements
         this.clearListButton = page.locator('button:has-text("Очистити список")');
         this.confirmDeleteForm = page.getByTestId('content').filter({ hasText: 'Очистити список обраних оголошень?' });
@@ -47,28 +47,24 @@ export class FavoriteUnitsPage extends BasePage {
         this.unitCategoryLabel = this.unitCards.locator('.OwnerUnitCard_category__fp2Yi');
         this.listContainer = this.page.getByTestId('listItems-customSelect');
         // Pagination elements - don't have test ids
-        this.paginationList = page.locator('ul.Pagination_pagination__HWfj1');
+        this.paginationList = page.getByRole('navigation', { name: 'Pagination' });
         this.prevPageBtn = this.paginationList.locator('li.previous');
         this.nextPageBtn = this.paginationList.locator('li.next');
-        this.activePage = this.paginationList.locator('li.Pagination_activePage___bWML');
+        this.activePage = this.paginationList.locator('li').filter({
+            has: page.locator('[aria-current="page"]')
+        });
         // Sorting
-        this.sortDropdown = page.locator('.SearchPanel_sortContainer__E_h6k').getByTestId('div_CustomSelect');
-        this.sortDropdownValue = this.sortDropdown.locator('.CustomSelect_value__6zbLK');
-        this.unitDates = this.unitCards.locator('.OwnerUnitCard_dateWithDot__xqUyd div').last();
+        this.sortDropdown = page.locator('div[class*="SearchPanel_sortContainer"]').getByTestId('div_CustomSelect');
+        this.sortDropdownValue = this.sortDropdown.locator('span').first();
+        this.unitDates = this.unitCards.locator('xpath=.//div[text()="."]/following-sibling::div');
     }
 
     async clearAllFavorites() {
-        await this.clearListButton.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {
-            console.warn("The button 'Очистити список' is not visible after waiting.");
+        await this.clearListButton.waitFor({ state: 'visible' }).catch((e) => {
+            throw new Error(`Помилка: Кнопка 'Очистити список' не з'явилася. Деталі: ${e.message}`);
         });
-
-        if (await this.clearListButton.isVisible()) {
-            await this.clearListButton.click();
-            await this.confirmDeleteButton.click();
-        }
-        else {
-            console.warn("The button 'Очистити список' is not visible.");
-        }
+        await this.clearListButton.click();
+        await this.confirmDeleteButton.click();
     }
 
     getPageBtn(num: number | string): Locator {
@@ -80,11 +76,11 @@ export class FavoriteUnitsPage extends BasePage {
         await this.page.getByRole('listitem').filter({ hasText: optionName }).click();
     }
 
-async selectCategory(categoryName: string) {
-    await this.categoryDropdown.click();
-    const listContainer = this.listContainer;
-    await listContainer.waitFor({ state: 'visible', timeout: 5000 });
-    const option = listContainer.getByTestId('item-customSelect').filter({ hasText: categoryName });
-    await option.click();
-}
+    async selectCategory(categoryName: string) {
+        await this.categoryDropdown.click();
+        const listContainer = this.listContainer;
+        await listContainer.waitFor({ state: 'visible' });
+        const option = listContainer.getByTestId('item-customSelect').filter({ hasText: categoryName });
+        await option.click();
+    }
 }

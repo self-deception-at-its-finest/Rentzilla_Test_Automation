@@ -29,13 +29,14 @@ export class ProductsPage extends BasePage {
                 await this.page.waitForTimeout(800);
             }
             // scroll to the current card to ensure it's in view
-            await currentCard.waitFor({ state: 'attached', timeout: 5000 });
+            await currentCard.waitFor({ state: 'attached'});
             await currentCard.scrollIntoViewIfNeeded();
             // get unit name
             const name = await currentCard.getByTestId(FAVORITE_UNITS_CONSTS.TESTID.UNIT_NAME).innerText();
             // click heart icon to add to favorites
             const heart = currentCard.getByTestId(FAVORITE_UNITS_CONSTS.TESTID.FAVOURITE);
-            await heart.click({ force: true });
+            // await heart.click({ force: true }); //it is option if clicking becomes unstable, but it can hide potential issues with element visibility or overlapping elements
+            await heart.click();
             // add the name to the list of added units and log it
             addedUnitNames.push(name);
             console.log(`Step ${i + 1}: add "${name}"`);

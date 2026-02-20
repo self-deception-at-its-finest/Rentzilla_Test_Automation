@@ -22,5 +22,17 @@
     },
     "categories": {
         "all": "Всі категорії"
+    },
+    "names": {
+        "units": "Оголошення",
+        "favorite": "Обране",
+        "favorites": "Обрані",
+        "favoriteUnits": "Обрані оголошення",
+        "clear": "Очистити список",
+        "yes": "Так",
+        "no": "Ні",
+        "resetFilters": "Скинути фільтри",
+        "searchByName": "Пошук по назві",
+        "goToAds": "До списку оголошень"
     }
 }

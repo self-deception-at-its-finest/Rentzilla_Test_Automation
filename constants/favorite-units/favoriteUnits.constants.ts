@@ -24,6 +24,18 @@ const FAVORITE_UNITS_CONSTS = {
         ALL: favoriteData.categories.all,
         NOT_FOUND: (category: string): string => `Оголошення в категорії "${category}" не знайдені`,
         NOT_ONE_OF: (actualCategoryText: string, expectedSubs: string[]): string => `Категорія "${actualCategoryText}" не є жодною з очікуваних підкатегорій: ${expectedSubs.join(', ')}`
+    },
+    NAMES: {
+        UNITS: favoriteData.names.units,
+        FAVORITE: favoriteData.names.favorite,
+        FAVORITES: favoriteData.names.favorites,
+        FAVORITE_UNITS: favoriteData.names.favoriteUnits,
+        CLEAR: favoriteData.names.clear,
+        YES: favoriteData.names.yes,
+        NO: favoriteData.names.no,
+        RESET_FILTERS: favoriteData.names.resetFilters,
+        SEARCH_BY_NAME: favoriteData.names.searchByName,
+        GO_TO_ADS: favoriteData.names.goToAds
     }
 } as const;
 
