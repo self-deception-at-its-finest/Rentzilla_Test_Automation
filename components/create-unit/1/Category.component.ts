@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { isDesktop } from "../../../utils/viewportGuard";
 import { BaseComponent } from "./Base.component";
-import { firstTabFields } from "../../../constants/create-unit/fields.constants";
+import { tabsFields } from "../../../constants/create-unit/fields.constants";
 import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
 
 export class CategoryComponent extends BaseComponent {
@@ -33,8 +33,8 @@ export class CategoryComponent extends BaseComponent {
         this.popupTitle = this.popup.locator(
             `text=${
                 isDesktop(this.page)
-                    ? firstTabFields.category.popupTitle
-                    : firstTabFields.category.mobPopupTitle
+                    ? tabsFields.category.popupTitle
+                    : tabsFields.category.mobPopupTitle
             }`,
         );
         this.popupCloseBtn = this.popup.getByTestId("closeIcon");

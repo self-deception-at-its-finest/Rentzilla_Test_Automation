@@ -17,6 +17,6 @@ export class PriceComponent {
     }
 
     async clearField() {
-        await this.field.fill("");
+        await this.field.clear();
     }
 }

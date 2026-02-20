@@ -6,7 +6,7 @@ import { createAdsFlow } from "../flows/ads/createAds.flow";
 import endpoints from "../constants/endpoints.constants.json";
 import { env } from "../config/env";
 import { buildTestAds } from "../utils/builders/ad.builder";
-import { switchToAdminFlow } from "../flows/admin/switchToAdmin.flow";
+import { switchToAdminFlow } from "../flows/switchLogins.flow";
 import { approveAdsFlow } from "../flows/admin/approveAds.flow";
 import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
 import { FavoriteUnitsPage } from "../pages/FavoriteUnits.page";
@@ -17,6 +17,7 @@ type Fixtures = {
     homePage: HomePage;
     authorizedHomePage: HomePage;
     authComponent: AuthenticationComponent;
+    headerComponent: HeaderComponent;
     createUnitPage: CreateUnitPage;
     ads: CreateUnitPage;
     createUnitPageWithAds: CreateUnitPage;
@@ -25,6 +26,14 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
+    homePage: async ({ page }, use) => {
+        await use(new HomePage(page));
+    },
+
+    headerComponent: async ({ page }, use) => {
+        await use(new HeaderComponent(page));
+    },
+  
     authComponent: [
         async ({ page }, use) => {
             await use(new AuthenticationComponent(page));

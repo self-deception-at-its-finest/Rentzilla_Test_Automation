@@ -1,8 +1,10 @@
 import { Page } from "@playwright/test";
-import { TestAdData } from "../../types/tabs";
+import { env } from "../../config/env";
 import { AdminPage } from "../../pages/Admin.page";
+import { TestAdData } from "../../types/tabs";
+import { switchToAdminFlow } from "../switchLogins.flow";
 
 export async function approveAdsFlow(page: Page, ads: TestAdData[]) {
-    const adminPage = new AdminPage(page);
-    await adminPage.approveAds(ads);
+    await switchToAdminFlow(page, env.admin);
+    await new AdminPage(page).approveAds(ads);
 }

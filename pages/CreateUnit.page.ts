@@ -1,6 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import BasePage from "./Base.page";
-import { data, CREATE_UNIT_CONSTS } from "../constants/create-unit/createUnit.constants";
+import {
+    data,
+    CREATE_UNIT_CONSTS,
+} from "../constants/create-unit/createUnit.constants";
 import { TabNumber } from "../types/tabs";
 import { TAB_NUMBERS } from "../constants/create-unit/createUnit.constants";
 
@@ -48,6 +51,10 @@ export class CreateUnitPage extends BasePage {
             number: number?.trim() ?? "",
             title: title?.trim() ?? "",
         };
+    }
+
+    async previousStep() {
+        await this.cancelButton.click();
     }
 
     async nextStep() {

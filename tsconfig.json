@@ -8,6 +8,8 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "resolveJsonModule": true,
+    "noUnusedLocals": true, 
+    "noUnusedParameters": true
   },
   "include": [
     "playwright.config.ts",

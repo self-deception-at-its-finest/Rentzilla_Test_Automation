@@ -19,6 +19,6 @@ export class ServiceComponent {
     }
 
     async clearField() {
-        await this.field.fill("");
+        await this.field.clear();
     }
 }
