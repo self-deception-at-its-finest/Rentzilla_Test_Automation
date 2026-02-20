@@ -4,9 +4,9 @@ import endpoints from '../constants/endpoints.constants.json';
 import { FooterComponent } from "../components/home-page/Footer.component";
 
 export class HomePage extends BasePage {
-    public servicesTitle : Locator;
-    public servicesPopularni : Locator;
-    public servicesSilskogospodarski : Locator;
+    public servicesTitle: Locator;
+    public servicesPopularni: Locator;
+    public servicesSilskogospodarski: Locator;
 
     readonly footer: FooterComponent;
 
@@ -15,16 +15,13 @@ export class HomePage extends BasePage {
     readonly serviceTabs: Locator;
     readonly serviceItems: Locator;
     readonly logo: Locator;
-    
+
     readonly specialEquipmentSection: Locator;
     readonly specialEquipmentTitle: Locator;
     readonly specialEquipmentTabs: Locator;
     readonly specialEquipmentItems: Locator;
 
-    readonly avatarBlock: Locator;
-    readonly dropdownAdsItem: Locator;
     readonly sidebarAdsCategory: Locator;
-    readonly sidebarFavoriteAdsVariant: Locator;
     readonly navAdsLink: Locator;
 
     constructor(page: Page) {
@@ -35,7 +32,7 @@ export class HomePage extends BasePage {
         this.servicesSilskogospodarski = page.getByTestId('services__silskogospodarski');
 
         this.footer = new FooterComponent(page);
-        
+
         this.page = page;
         this.servicesSection = page.locator('section[data-testid="services"]');
         this.serviceTabs = this.servicesSection.getByTestId(/^services__/);
@@ -47,10 +44,7 @@ export class HomePage extends BasePage {
         this.specialEquipmentTabs = this.specialEquipmentSection.getByTestId(/^specialEquipment__/);
         this.specialEquipmentItems = this.specialEquipmentSection.getByTestId(/^category__/);
 
-        this.avatarBlock = page.getByTestId('avatarBlock');
-        this.dropdownAdsItem = page.getByTestId('units');
         this.sidebarAdsCategory = page.getByTestId('leftsideCategory').filter({ hasText: 'Оголошення' });
-        this.sidebarFavoriteAdsVariant = page.getByTestId('variant').filter({ hasText: 'Обрані оголошення' });
         this.navAdsLink = page.locator('a[href="/products/"]').first();
         
     }
