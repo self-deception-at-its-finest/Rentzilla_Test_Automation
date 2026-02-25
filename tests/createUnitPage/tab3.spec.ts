@@ -234,12 +234,9 @@ test.describe(
                         expect(serviceComponent.addServiceIcon).toBeVisible();
                     });
                 });
-
-                await test.step("* Click the button *", async () => {
-                    await clickElement(serviceComponent.addServiceButton);
-                });
-
+                
                 await test.step("After clicking the button: ⤵️", async () => {
+                    await clickElement(serviceComponent.addServiceButton);
                     await serviceComponent.selectedServices
                         .first()
                         .waitFor({ state: "visible" });
