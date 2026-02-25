@@ -398,7 +398,7 @@ test.describe(
                         createUnitPageWithFilledTwoTabs.cancelButton,
                     ).toHaveText(BUTTONS.back);
                 });
-                await test.step("The user is redirected to the previous tab after clicking the “Назад” button", async () => {
+                await test.step(`The user is redirected to the previous tab after clicking the “${BUTTONS.back}” button`, async () => {
                     await createUnitPageWithFilledTwoTabs.previousStep();
                     await expectTabActive(
                         createUnitPageWithFilledTwoTabs.tabList.nth(1),
