@@ -29,7 +29,7 @@ export class ProductsPage extends BasePage {
                 await this.page.waitForTimeout(800);
             }
             // scroll to the current card to ensure it's in view
-            await currentCard.waitFor({ state: 'attached'});
+            await currentCard.waitFor({ state: 'attached' });
             await currentCard.scrollIntoViewIfNeeded();
             // get unit name
             const name = await currentCard.getByTestId(FAVORITE_UNITS_CONSTS.TESTID.UNIT_NAME).innerText();
@@ -44,6 +44,10 @@ export class ProductsPage extends BasePage {
             await this.page.waitForTimeout(300);
         }
         return addedUnitNames;
+    }
+
+    async getUnitName(index: number): Promise<string> {
+        return await this.unitCards.nth(index).getByTestId(FAVORITE_UNITS_CONSTS.TESTID.UNIT_NAME).innerText()
     }
 
 }

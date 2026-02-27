@@ -2,25 +2,24 @@ import { expect, test } from "../../fixtures/index";
 import { FAVORITE_UNITS_CONSTS } from "../../constants/favorite-units/favoriteUnits.constants";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { SPECIAL_EQUIPMENT } from "../../constants/catalog.constants";
-import { UnitPage } from "../../pages/Unit.page";
 
 test.describe("Favorite Units Tests", () => {
     test.describe.configure({ mode: 'serial' });
 
-    test("The '" + FAVORITE_UNITS_CONSTS.NAMES.FAVORITE_UNITS + "' page without '" + FAVORITE_UNITS_CONSTS.NAMES.FAVORITES + "' units",
+    test("The 'Обрані оголошення' page without 'Обрані' units",
         {
             tag: "@UI",
             annotation: { type: "Test case", description: "C300" },
         },
         async ({ page, authorizedHomePage, favoritePage }) => {
 
-            await test.step(`1. Navigate to '${FAVORITE_UNITS_CONSTS.NAMES.FAVORITE_UNITS}' through Cabinet Sidebar`, async () => {
+            await test.step(`1. Navigate to 'Обрані оголошення' through Cabinet Sidebar`, async () => {
                 await authorizedHomePage.navigateToFavoriteAds();
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
                 await expect(favoritePage.emptyTitle).toHaveText(FAVORITE_UNITS_CONSTS.EMPTY_TITLE);
             });
 
-            await test.step(`2. Click on the '${FAVORITE_UNITS_CONSTS.NAMES.GO_TO_ADS}' button.`, async () => {
+            await test.step(`2. Click on the 'До списку оголошень' button.`, async () => {
                 await favoritePage.goToAdsButton.click();
                 await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
                 await expect(authorizedHomePage.navAdsLink).toHaveClass(FAVORITE_UNITS_CONSTS.CLASSES.NAVBAR_ACTIVE);
@@ -38,7 +37,7 @@ test.describe("Favorite Units Tests", () => {
             await test.step("1-2. Click on the 'Оголошення' button in the header. Click on the add to 'Обрані оголошення' icon of the unit section.", async () => {
                 await authorizedHomePage.navAdsLink.click();
                 await expect(page).toHaveURL(ENDPOINTS.PRODUCTS);
-                unitName = await productsPage.unitCards.first().getByTestId(FAVORITE_UNITS_CONSTS.TESTID.UNIT_NAME).innerText();
+                unitName = await productsPage.getUnitName(0);
                 const heart = productsPage.getHeartIconByUnitName(unitName);
 
                 await heart.click({ force: true });
@@ -349,7 +348,7 @@ test.describe("Favorite Units Tests", () => {
                 });
             }
 
-            await test.step(`--- Return to '${FAVORITE_UNITS_CONSTS.CATEGORIES.ALL}' and verify state`, async () => {
+            await test.step(`--- Return to 'Всі категорії' and verify state`, async () => {
                 await favoritePage.selectCategory(FAVORITE_UNITS_CONSTS.CATEGORIES.ALL);
                 await expect(favoritePage.categoryValue).toHaveText(FAVORITE_UNITS_CONSTS.CATEGORIES.ALL);
 
@@ -373,7 +372,7 @@ test.describe("Favorite Units Tests", () => {
                 await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
             });
 
-            await test.step(`1. The '${FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE}' section is displayed on the menu`, async () => {
+            await test.step(`1. The 'По даті створення' section is displayed on the menu`, async () => {
                 // it fails without RegExp because received 'по даті створення' instead of 'По даті створення'
                 // even if on the UI it looks like 'По даті створення' at the same time
                 await expect(favoritePage.sortDropdownValue).toHaveText(new RegExp(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE, 'i'));
@@ -391,7 +390,7 @@ test.describe("Favorite Units Tests", () => {
                 }
             });
 
-            await test.step(`2. Select the '${FAVORITE_UNITS_CONSTS.SORT_OPTIONS.NAME}' section, the unit names are displayed in alphabetical order`, async () => {
+            await test.step(`2. Select the 'По назві' section, the unit names are displayed in alphabetical order`, async () => {
                 await favoritePage.selectSortOption(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.NAME);
                 // wait for sorting to be applied because it fails sometimes without waiting
                 await page.waitForTimeout(500);
@@ -412,7 +411,7 @@ test.describe("Favorite Units Tests", () => {
                 expect(names).toEqual(sortedNames);
             });
 
-            await test.step(`3. Select the '${FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE}' section, the units are sorted by creation date in descending order`, async () => {
+            await test.step(`3. Select the 'По даті створення' section, the units are sorted by creation date in descending order`, async () => {
                 await favoritePage.selectSortOption(FAVORITE_UNITS_CONSTS.SORT_OPTIONS.DATE);
                 await page.waitForTimeout(500);
                 const dateStrings = await favoritePage.unitDates.allInnerTexts();
