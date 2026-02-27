@@ -24,6 +24,7 @@ const test = base.extend<{
     favoritePage: FavoriteUnitsPage;
     favoriteUnitsState: string[];
     unitPage: UnitPage;
+    createUnitPageWithFilledTab1: CreateUnitPage; 
 }>({
     ads: [
         async ({ auth, page }, use) => {
@@ -53,8 +54,6 @@ const test = base.extend<{
         { box: true },
     ],
 
-    createUnitPageWithFilledTab1: CreateUnitPage;
-}>({
     authorizedHomePage: [
         async ({ auth, page }, use) => {
             await page.goto(endpoints.home);
@@ -107,7 +106,7 @@ const test = base.extend<{
             await use(new UnitPage(page));
         },
         { box: true },
-    ]
+    ],
 
     createUnitPageWithFilledTab1: [
         async ({ createUnitPage, page }, use) => {
