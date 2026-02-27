@@ -20,8 +20,10 @@ export default class BasePage {
      * Opens the page with the given path.
      * @param path
      */
-    async open(path: string = ""): Promise<void> {
-        await this.page.goto("/" + path);
+    async open(path = ''): Promise<void> {
+        await this.page.goto('/' + path, {
+            waitUntil: 'domcontentloaded',
+        });
     }
 
     async navigateToFavoriteAds() {

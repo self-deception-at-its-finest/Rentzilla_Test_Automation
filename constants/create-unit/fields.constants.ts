@@ -3,7 +3,6 @@ import { data } from "./createUnit.constants";
 const first = "1";
 
 type Tab1 = (typeof data)["tabs"]["1"];
-
 type KeysWithLabel = {
     [K in keyof Tab1]: Tab1[K] extends { label: string } ? K : never;
 }[keyof Tab1];
@@ -27,7 +26,20 @@ type LocationSection = FieldSection & {
     };
 };
 
-type FirstTabFields = {
+type PhotosSection = {
+    title: string;
+    photosForm: {
+        label: string;
+        description: string;
+    };
+    errorModals: {
+        sameImage: string;
+        invalidPhoto: string;
+        button: string;
+    };
+};
+
+type TabFields = {
     category: CategorySection;
     ad: FieldSection;
     manufacturer: FieldSection;
@@ -35,45 +47,63 @@ type FirstTabFields = {
     location: LocationSection;
     specifications: Pick<FieldSection, "label">;
     details: Pick<FieldSection, "label">;
+    photos: PhotosSection;
 };
 
-const firstTabFields: FirstTabFields = {
+const tab1 = data.tabs["1"];
+const tab2 = data.tabs["2"];
+
+const tabsFields: TabFields = {
     category: {
-        label: data.tabs[first].category.label,
-        placeholder: data.tabs[first].category.placeholder,
-        popupTitle: data.tabs[first].category["popup title"],
-        mobPopupTitle: data.tabs[first].category["mobile popup title"],
+        label: tab1.category.label,
+        placeholder: tab1.category.placeholder,
+        popupTitle: tab1.category["popup title"],
+        mobPopupTitle: tab1.category["mobile popup title"],
     },
     ad: {
-        label: data.tabs[first].ad.label,
-        placeholder: data.tabs[first].ad.placeholder,
+        label: tab1.ad.label,
+        placeholder: tab1.ad.placeholder,
     },
     manufacturer: {
-        label: data.tabs[first].manufacturer.label,
-        placeholder: data.tabs[first].manufacturer.placeholder,
+        label: tab1.manufacturer.label,
+        placeholder: tab1.manufacturer.placeholder,
     },
     model: {
-        label: data.tabs[first].model.label,
-        placeholder: data.tabs[first].model.placeholder,
+        label: tab1.model.label,
+        placeholder: tab1.model.placeholder,
     },
     location: {
-        label: data.tabs[first].location.label,
-        placeholder: data.tabs[first].location.placeholder,
-        buttonText: data.tabs[first].location["button text"],
+        label: tab1.location.label,
+        placeholder: tab1.location.placeholder,
+        buttonText: tab1.location["button text"],
         modal: {
-            title: data.tabs[first].location.modal.title,
-            cancel: data.tabs[first].location.modal.cancel,
-            accept: data.tabs[first].location.modal.accept,
+            title: tab1.location.modal.title,
+            cancel: tab1.location.modal.cancel,
+            accept: tab1.location.modal.accept,
         },
     },
     specifications: {
-        label: data.tabs[first].specifications.label,
+        label: tab1.specifications.label,
     },
     details: {
-        label: data.tabs[first].details.label,
+        label: tab1.details.label,
+    },
+    photos: {
+        title: tab2.title,
+        photosForm: {
+            label: tab2["photos form"].label,
+            description: tab2["photos form"].description,
+        },
+        errorModals: {
+            sameImage: tab2["error modals"]["same image"],
+            invalidPhoto: tab2["error modals"]["invalid photo"],
+            button: tab2["error modals"]["button"],
+        },
     },
 } as const;
 
 const DEFAULT_LOCATION = "Київ, Україна, Київська область";
 
-export { KeysWithLabel, firstTabFields, DEFAULT_LOCATION };
+const MAX_IMAGES = 12;
+
+export { KeysWithLabel, tabsFields, DEFAULT_LOCATION, MAX_IMAGES };

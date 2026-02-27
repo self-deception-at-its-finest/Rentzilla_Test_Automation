@@ -11,7 +11,10 @@ export class AuthenticationComponent {
     readonly emailInput: Locator;
     readonly passwordInput: Locator;
     readonly submitButton: Locator;
-
+    readonly showPasswordButton: Locator;
+    readonly emptyOrInvalidEmailFieldMsg: Locator;
+    readonly emptyOrInvalidPasswordFieldMsg: Locator;
+    readonly invalidEmailOrPasswordMsg: Locator;
     // Admin version of fields
     // because of ugly front-end code
     readonly adminAuthContainer: Locator;
@@ -20,7 +23,6 @@ export class AuthenticationComponent {
     readonly adminEmailInput: Locator;
     readonly adminPasswordInput: Locator;
     readonly adminSubmitButton: Locator;
-
     readonly profileButton: Locator;
 
     constructor(page: Page) {
@@ -34,6 +36,10 @@ export class AuthenticationComponent {
             name: "Увійти",
             exact: true,
         });
+        this.showPasswordButton = this.passwordInput.locator("..").getByTestId('reactHookButton');
+        this.invalidEmailOrPasswordMsg= page.getByTestId("errorMessage");
+        this.emptyOrInvalidEmailFieldMsg = this.emailInput.locator("..").locator("..").locator("p");
+        this.emptyOrInvalidPasswordFieldMsg = this.passwordInput.locator("..").locator("..").locator("p");
 
         // Admin version
         // because of ugly front-end code
@@ -100,5 +106,24 @@ export class AuthenticationComponent {
         const headerComponent = new HeaderComponent(this.page);
         await headerComponent.clickAvatarBlock();
         await headerComponent.clickLogout();
+    }
+
+    async fillCredentials(emailOrPhone: string, password: string) {
+        await this.emailInput.fill(emailOrPhone);
+        await this.passwordInput.fill(password);
+    }
+
+    async togglePasswordVisibility() {
+        await this.showPasswordButton.click();
+    }
+
+    async submitRandomly() {
+        const useEnter = Math.random() < 0.5;
+
+        if (useEnter) {
+            await this.passwordInput.press('Enter');
+        } else {
+            await this.submitButton.click();
+        }
     }
 }

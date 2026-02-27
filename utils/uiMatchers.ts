@@ -8,6 +8,13 @@ export async function expectFieldError(field: Locator) {
     );
 }
 
+export async function expectTextColorError(field: Locator) {
+    await expect(field).toHaveCSS(
+        "color",
+        `${CREATE_UNIT_CONSTS.ERR_TEXT_COLOR}`,
+    );
+}
+
 export async function expectFieldDefault(field: Locator) {
     await expect(field).toHaveCSS(
         "border",

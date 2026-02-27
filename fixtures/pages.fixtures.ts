@@ -12,6 +12,7 @@ import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
 import { ProductsPage } from "../pages/Products.page";
 import { FavoriteUnitsPage } from "../pages/FavoriteUnits.page";
 import { UnitPage } from "../pages/Unit.page";
+import { fillTheTab1Flow } from "../flows/ads/fillTab1.flow";
 
 const test = base.extend<{
     ads: void;
@@ -52,6 +53,8 @@ const test = base.extend<{
         { box: true },
     ],
 
+    createUnitPageWithFilledTab1: CreateUnitPage;
+}>({
     authorizedHomePage: [
         async ({ auth, page }, use) => {
             await page.goto(endpoints.home);
@@ -106,6 +109,14 @@ const test = base.extend<{
         { box: true },
     ]
 
+    createUnitPageWithFilledTab1: [
+        async ({ createUnitPage, page }, use) => {
+            await fillTheTab1Flow(page, buildTestAds(1)[0]);
+            await createUnitPage.nextStep();
+            await use(createUnitPage);
+        },
+        { box: false },
+    ],
 });
 
 export { test, expect };
