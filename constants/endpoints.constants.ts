@@ -10,5 +10,6 @@ export const ENDPOINTS = {
     PRIVACY: endpoints.privacy,
     COOKIES: endpoints.cookies,
     TERMS: endpoints.terms,
-    UNIT_DETAILS_RE: /\/unit\//
+    UNIT_DETAILS_RE: /\/unit\//,
+    OWNER_UNITS: endpoints["owner units"],
 } as const;

@@ -1,4 +1,4 @@
-import { expect, test } from "../../fixtures/fixtures";
+import { expect, test } from "../../fixtures/index";
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { FOOTER_CONSTS } from "../../constants/home-page/footer.constants";
 
