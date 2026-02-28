@@ -73,6 +73,10 @@ export class ServiceComponent {
         return locator.getByTestId("remove-servicesUnitFlow");
     }
 
+    getPathElement(element: Locator) {
+        return element.locator("svg > path");
+    }
+
     async typeService(str: string) {
         await this.field.click();
         await this.page.keyboard.type(str);

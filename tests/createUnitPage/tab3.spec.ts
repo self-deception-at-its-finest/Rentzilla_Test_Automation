@@ -1,6 +1,10 @@
 import { test, expect } from "../../fixtures/index";
 import endpoints from "../../constants/endpoints.constants.json";
-import { tabsFields } from "../../constants/create-unit/fields.constants";
+import {
+    SELECT_ICON,
+    SELECTED_ICON,
+    tabsFields,
+} from "../../constants/create-unit/fields.constants";
 import { getFieldPlaceholder } from "../../utils/formHelper";
 import {
     BUTTONS,
@@ -14,8 +18,6 @@ import { SERVICES } from "../../constants/catalog.constants";
 import { formatMissingServiceError } from "../../utils/formatErrorMessages";
 import { clickElement } from "../../utils/clickers";
 import {
-    expectServiceNonSelected,
-    expectServiceSelected,
     expectTabActive,
     expectTabInactive,
     expectTextColorError,
@@ -38,8 +40,7 @@ test.describe(
                 annotation: { type: "Test case", description: "C409" },
             },
             async ({
-                createUnitPageWithFilledTwoTabs:
-                    _createUnitPageWithFilledTwoTabs,
+                createUnitPageWithFilledTwoTabs: _,
                 serviceComponent,
             }) => {
                 const service =
@@ -116,7 +117,7 @@ test.describe(
                 await test.step("Dropdown is appeared after typing of one symbol", async () => {
                     await serviceComponent.clearField();
                     await serviceComponent.typeService("Б");
-                    expect(
+                    await expect(
                         serviceComponent.searchResultsContainer,
                     ).toBeVisible();
                 });
@@ -146,39 +147,41 @@ test.describe(
 
                 await test.step("After clicking on variant from dropdown “selected” mark appears in dropdown", async () => {
                     const firstResult = serviceComponent.searchResults.first();
-
-                    expectServiceNonSelected(firstResult);
+                    await expect(
+                        serviceComponent.getPathElement(firstResult),
+                    ).toHaveAttribute("d", SELECT_ICON);
 
                     await serviceComponent.selectService();
-
-                    expectServiceSelected(firstResult);
+                    await expect(
+                        serviceComponent.getPathElement(firstResult),
+                    ).toHaveAttribute("d", SELECTED_ICON);
                 });
 
                 await test.step("The “Selected services” section: ⤵️", async () => {
                     await test.step("• has the correct title", async () => {
-                        expect(
+                        await expect(
                             serviceComponent.selectedServicesSectionTitle,
                         ).toContainText(tabsFields.service.addedServicesTitle);
                     });
 
                     await test.step("• is visible", async () => {
-                        expect(
+                        await expect(
                             serviceComponent.selectedServicesSectionTitle,
                         ).toBeVisible();
-                        expect(
+                        await expect(
                             serviceComponent.selectedServicesSection,
                         ).toBeVisible();
                     });
 
                     await test.step("• has the selected service", async () => {
-                        expect(
+                        await expect(
                             serviceComponent.selectedServices.first(),
                         ).toHaveText(service);
                     });
                 });
 
                 await test.step("The attached service has a remove icon", async () => {
-                    expect(
+                    await expect(
                         serviceComponent.getRemoveIcon(
                             serviceComponent.selectedServices.first(),
                         ),
@@ -197,27 +200,31 @@ test.describe(
                 createUnitPageWithFilledTwoTabsAndNewService,
                 serviceComponent,
             }) => {
-                const { createUnitPage: _createUniPage, service: newService } =
+                const { createUnitPage: _, service: newService } =
                     createUnitPageWithFilledTwoTabsAndNewService;
 
                 await test.step("Filling a field with a non-existent service", async () => {
                     await serviceComponent.fillField(newService);
-                    expect(serviceComponent.field).toHaveValue(newService);
+                    await expect(serviceComponent.field).toHaveValue(
+                        newService,
+                    );
                 });
 
                 await test.step("The dropdown: ⤵️", async () => {
                     await test.step("• shows valid reaction with notification text", async () => {
-                        expect(
+                        await expect(
                             serviceComponent.notFoundServiceText,
                         ).toBeVisible();
                     });
 
                     await test.step("• shows the “Створити послугу” button", async () => {
-                        expect(serviceComponent.addServiceButton).toBeVisible();
+                        await expect(
+                            serviceComponent.addServiceButton,
+                        ).toBeVisible();
                     });
 
                     await test.step("• has the valid warning text", async () => {
-                        expect(
+                        await expect(
                             serviceComponent.notFoundServiceText,
                         ).toContainText(formatMissingServiceError(newService));
                     });
@@ -225,16 +232,20 @@ test.describe(
 
                 await test.step("Creating service button has: ⤵️", async () => {
                     await test.step("• the correct name", async () => {
-                        expect(serviceComponent.addServiceButton).toContainText(
+                        await expect(
+                            serviceComponent.addServiceButton,
+                        ).toContainText(
                             tabsFields.service.addServiceButtonText,
                         );
                     });
 
                     await test.step("• the icon", async () => {
-                        expect(serviceComponent.addServiceIcon).toBeVisible();
+                        await expect(
+                            serviceComponent.addServiceIcon,
+                        ).toBeVisible();
                     });
                 });
-                
+
                 await test.step("After clicking the button: ⤵️", async () => {
                     await clickElement(serviceComponent.addServiceButton);
                     await serviceComponent.selectedServices
@@ -242,15 +253,17 @@ test.describe(
                         .waitFor({ state: "visible" });
 
                     await test.step("• the service is selected", async () => {
-                        expect(
+                        await expect(
                             serviceComponent.selectedServices.first(),
                         ).toHaveText(newService);
                     });
 
                     await test.step("• the category is appeared as existing", async () => {
-                        expectServiceSelected(
-                            serviceComponent.searchResults.first(),
-                        );
+                        await expect(
+                            serviceComponent.getPathElement(
+                                serviceComponent.searchResults.first(),
+                            ),
+                        ).toHaveAttribute("d", SELECTED_ICON);
                     });
                 });
             },
@@ -263,8 +276,7 @@ test.describe(
                 annotation: { type: "Test case", description: "C411" },
             },
             async ({
-                createUnitPageWithFilledTwoTabs:
-                    _createUnitPageWithFilledTwoTabs,
+                createUnitPageWithFilledTwoTabs: _,
                 serviceComponent,
             }) => {
                 const letter = "Г";
@@ -292,11 +304,13 @@ test.describe(
 
                     await test.step("• it becomes marked as selected", async () => {
                         await serviceComponent.selectService(firstRandomIndex);
-                        expectServiceSelected(
-                            serviceComponent.searchResults.nth(
-                                firstRandomIndex,
+                        await expect(
+                            serviceComponent.getPathElement(
+                                serviceComponent.searchResults.nth(
+                                    firstRandomIndex,
+                                ),
                             ),
-                        );
+                        ).toHaveAttribute("d", SELECTED_ICON);
 
                         choosedResults.push(
                             (await serviceComponent.searchResults
@@ -308,11 +322,13 @@ test.describe(
                             await serviceComponent.selectService(
                                 secondRandomIndex,
                             );
-                            expectServiceSelected(
-                                serviceComponent.searchResults.nth(
-                                    secondRandomIndex,
+                            await expect(
+                                serviceComponent.getPathElement(
+                                    serviceComponent.searchResults.nth(
+                                        secondRandomIndex,
+                                    ),
                                 ),
-                            );
+                            ).toHaveAttribute("d", SELECTED_ICON);
                             choosedResults.push(
                                 (await serviceComponent.searchResults
                                     .nth(secondRandomIndex)
@@ -342,8 +358,7 @@ test.describe(
                 annotation: { type: "Test case", description: "C412" },
             },
             async ({
-                createUnitPageWithFilledTwoTabs:
-                    _createUnitPageWithFilledTwoTabs,
+                createUnitPageWithFilledTwoTabs: _,
                 serviceComponent,
             }) => {
                 // Select two services
@@ -376,7 +391,7 @@ test.describe(
                 });
 
                 await test.step(`After deleting the last service, the “${tabsFields.service.addedServicesTitle}” panel disappears.`, async () => {
-                    expect(
+                    await expect(
                         serviceComponent.selectedServicesSection,
                     ).toBeHidden();
                 });
@@ -384,7 +399,7 @@ test.describe(
         );
 
         test(
-            `Verify “${BUTTONS.back}” button`,
+            `Verify “Назад” button`,
             {
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C413" },
@@ -395,7 +410,7 @@ test.describe(
                         createUnitPageWithFilledTwoTabs.cancelButton,
                     ).toHaveText(BUTTONS.back);
                 });
-                await test.step(`The user is redirected to the previous tab after clicking the “${BUTTONS.back}” button`, async () => {
+                await test.step(`The user is redirected to the previous tab after clicking the “Назад” button`, async () => {
                     await createUnitPageWithFilledTwoTabs.previousStep();
                     await expectTabActive(
                         createUnitPageWithFilledTwoTabs.tabList.nth(1),
@@ -417,7 +432,7 @@ test.describe(
         );
 
         test(
-            `Verify “${BUTTONS.next}” button`,
+            `Verify “Далі” button`,
             {
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C414" },
@@ -429,11 +444,9 @@ test.describe(
                     ).toHaveText(BUTTONS.next);
                 });
 
-                await test.step("The color of the clue line is red if user didn’t set any service", async () => {
+                await test.step("After clicking the «Далі» button the color of the clue line is red if user didn’t set any service", async () => {
                     await createUnitPageWithFilledTwoTabs.nextStep();
-                    await expectTextColorError(
-                        serviceComponent.addInfo,
-                    );
+                    await expectTextColorError(serviceComponent.addInfo);
                 });
 
                 await test.step("The user can proceed to the next tab after setting at least one service", async () => {
