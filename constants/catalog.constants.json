@@ -583,7 +583,8 @@
                     },
                     "construction waste removal": {
                         "title": "Вивезення будівельного сміття"
-                    }
+                    },
+                    "drilling": { "title": "Буріння" }
                 }
             },
             "other services": {

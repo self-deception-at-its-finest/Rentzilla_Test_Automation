@@ -4,6 +4,7 @@ import { TestAdData } from "../types/tabs";
 export class AdminPage {
     readonly page: Page;
     readonly adsLink: Locator;
+    readonly servicesLink: Locator;
     readonly approveTab: Locator;
     readonly waitingTab: Locator;
     readonly dataSortColumn: Locator;
@@ -24,6 +25,14 @@ export class AdminPage {
             .getByTestId("sortLabelContainer")
             .getByText("Дата створення");
         this.logoutButton = this.page.getByText("Вихід");
+
+        this.servicesLink = this.page
+            .getByTestId("linksContainer")
+            .filter({ hasText: "Сервіси" });
+    }
+
+    async logout() {
+        await this.logoutButton.click();
     }
 
     async approveAds(ads: TestAdData[]) {
@@ -31,7 +40,7 @@ export class AdminPage {
         await this.waitingTab.click();
         for (let i = 0; i < ads.length; i++) {
             await this.page.getByTestId("input").fill(ads[i].title);
-            // Find the locator
+
             let adRecord = this.page.locator("tr", {
                 has: this.page.locator("td", { hasText: ads[i].title }),
             });
@@ -57,14 +66,35 @@ export class AdminPage {
                 })
                 .getByTestId("bucketBtn");
             await deleteBtn.click();
-            await this.page
-                .getByTestId("content")
-                .getByRole("button", { name: "Так" })
-                .click();
+            await this.confirmDeleting();
         }
     }
 
-    async logout() {
-        await this.logoutButton.click();
+    async removeService(service: string) {
+        await this.openServicesList();
+        await this.page.getByTestId("input").fill(service);
+        const row = this.page
+            .locator("tr")
+            .filter({ hasText: service })
+            .filter({ hasText: "Користувацькі" });
+
+        await row.getByTestId("bucketBtn").click();
+        await this.confirmDeleting();
+        console.log("Successful removing!");
+    }
+
+    private async confirmDeleting() {
+        await this.page
+            .getByTestId("content")
+            .getByRole("button", { name: "Так" })
+            .click();
+    }
+
+    private async openServicesList() {
+        await this.servicesLink.click();
+        await this.page
+            .getByText("Список сервісів")
+            .waitFor({ state: "visible" });
+        await this.page.getByText("Список сервісів").click();
     }
 }

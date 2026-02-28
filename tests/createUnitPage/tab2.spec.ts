@@ -320,7 +320,7 @@ test.describe(
         );
 
         test(
-            `Verify “${BUTTONS.back}” button`,
+            `Verify “Назад” button`,
             {
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C390" },
@@ -363,7 +363,7 @@ test.describe(
         );
 
         test(
-            `Verify “${BUTTONS.next}” button`,
+            `Verify “Далі” button`,
             {
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C393" },

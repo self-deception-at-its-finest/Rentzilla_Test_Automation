@@ -20,7 +20,7 @@ import {
     tabsFields,
 } from "../../constants/create-unit/fields.constants";
 import { generateText, generateValidText } from "../../utils/fakeData";
-import { formatMissingManufacturerError } from "../../utils/formatManufacturerError";
+import { formatMissingManufacturerError } from "../../utils/formatErrorMessages";
 import { getRandomStringElement } from "../../utils/getElements";
 import {
     expectFieldDefault,
@@ -464,7 +464,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C299" },
             },
-            async ({ createUnitPage, modelComponent }) => {
+            async ({ createUnitPage: _, modelComponent }) => {
                 await test.step("The title: ⤵️", async () => {
                     await test.step(`• has the «${tabsFields.model.label}» text`, async () => {
                         await expect(modelComponent.label).toContainText(
@@ -525,7 +525,7 @@ test.describe(
                 tag: "@field validation",
                 annotation: { type: "Test case", description: "C317" },
             },
-            async ({ createUnitPage, specificationsComponent }) => {
+            async ({ createUnitPage: _, specificationsComponent }) => {
                 await test.step("The Title: ⤵️", async () => {
                     await test.step(`• has the ${tabsFields.specifications.label} text`, async () => {
                         await expect(specificationsComponent.label).toHaveText(
@@ -588,7 +588,7 @@ test.describe(
                 tag: "@field validation",
                 annotation: { type: "Test case", description: "C318" },
             },
-            async ({ createUnitPage, detailsComponent }) => {
+            async ({ createUnitPage: _, detailsComponent }) => {
                 await test.step("The Title: ⤵️", async () => {
                     await test.step(`• has the ${tabsFields.details.label} text`, async () => {
                         await expect(detailsComponent.label).toHaveText(
@@ -700,13 +700,13 @@ test.describe(
                     });
                 });
 
-                await test.step("Valid address is displayed in address field after closing the modal window", async () => {
+                await test.step("Valid address is NOT displayed in address field after closing the modal window", async () => {
                     if (await locationComponent.modalWindow.isHidden())
                         await locationComponent.openMap();
                     await clickOutside(page);
-                    await expect(locationComponent.locationLabel).toHaveText(
-                        DEFAULT_LOCATION,
-                    );
+                    await expect(
+                        locationComponent.locationLabel,
+                    ).not.toHaveText(DEFAULT_LOCATION);
                 });
             },
         );
@@ -734,7 +734,7 @@ test.describe(
         );
 
         test(
-            `Verify “${BUTTONS.next}” button`,
+            `Verify “Далі” button`,
             {
                 tag: ["@button validation"],
                 annotation: { type: "Test case", description: "C329" },
