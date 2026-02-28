@@ -1,9 +1,6 @@
-import { expect, test } from "../../fixtures/index";
+import { expect, test } from "../../fixtures/indexV2";
 import endpoints from "../../constants/endpoints.constants.json";
-import {
-    MAX_IMAGES,
-    tabsFields,
-} from "../../constants/create-unit/fields.constants";
+import { MAX_IMAGES, tabs } from "../../constants/create-unit/fields.constants";
 import { clickElement } from "../../utils/clickers";
 import {
     BUTTONS,
@@ -33,10 +30,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C367" },
             },
-            async ({
-                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
-                photosComponent,
-            }) => {
+            async ({ createUnitPageWithFilledTab1: _, photosComponent }) => {
                 await test.step("The form title: ⤵️", async () => {
                     await test.step("• is visible", async () => {
                         await expect(
@@ -44,10 +38,10 @@ test.describe(
                         ).toBeVisible();
                     });
 
-                    await test.step(`• has the “${tabsFields.photos.photosForm.label}” text`, async () => {
+                    await test.step(`• has the “${tabs.photos.photosForm.label}” text`, async () => {
                         await expect(
                             photosComponent.photosFormTitle,
-                        ).toContainText(tabsFields.photos.photosForm.label);
+                        ).toContainText(tabs.photos.photosForm.label);
                     });
 
                     await test.step("• has an asterisk", async () => {
@@ -69,7 +63,7 @@ test.describe(
                     for (let i = 0; i < count; i++) {
                         const [fileChooser] = await Promise.all([
                             photosComponent.page.waitForEvent("filechooser"),
-                            await clickElement(
+                            clickElement(
                                 photosComponent.uploadPhotoButtons.nth(i),
                             ),
                         ]);
@@ -82,7 +76,7 @@ test.describe(
                     }
                 });
 
-                await test.step(`${MAX_IMAGES} valid images loaded successfully`, async () => {
+                await test.step(`12 valid images loaded successfully`, async () => {
                     for (let i = 1; i <= MAX_IMAGES; i++) {
                         await photosComponent.uploadPhoto(String(i));
                     }
@@ -172,16 +166,13 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C384" },
             },
-            async ({
-                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
-                photosComponent,
-            }) => {
+            async ({ createUnitPageWithFilledTab1: _, photosComponent }) => {
                 await test.step("The error modal appears when uploading the same image twice", async () => {
                     await photosComponent.uploadPhoto("1");
                     await photosComponent.uploadPhoto("1");
                     await expect(photosComponent.errorModalText).toBeVisible();
                     await expect(photosComponent.errorModalText).toContainText(
-                        tabsFields.photos.errorModals.sameImage,
+                        tabs.photos.errorModals.sameImage,
                     );
                 });
 
@@ -193,10 +184,10 @@ test.describe(
                     ).toHaveCount(1);
                 });
 
-                await test.step(`The error modal can be closed by the “${tabsFields.photos.errorModals.button}” button`, async () => {
+                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.button}” button`, async () => {
                     await photosComponent.uploadPhoto("1");
                     await expect(photosComponent.errorModalOKButton).toHaveText(
-                        tabsFields.photos.errorModals.button,
+                        tabs.photos.errorModals.button,
                     );
                     await photosComponent.errorModalOKButton.click();
                     await expect(photosComponent.errorModalText).toBeHidden();
@@ -223,15 +214,12 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C401" },
             },
-            async ({
-                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
-                photosComponent,
-            }) => {
+            async ({ createUnitPageWithFilledTab1: _, photosComponent }) => {
                 await test.step("The error modal appears when uploading an invalid file type", async () => {
                     await photosComponent.uploadPhoto("invalid_image");
                     await expect(photosComponent.errorModalText).toBeVisible();
                     await expect(photosComponent.errorModalText).toContainText(
-                        tabsFields.photos.errorModals.invalidPhoto,
+                        tabs.photos.errorModals.invalidPhoto,
                     );
                 });
 
@@ -244,10 +232,10 @@ test.describe(
                     ).toHaveCount(0);
                 });
 
-                await test.step(`The error modal can be closed by the “${tabsFields.photos.errorModals.button}” button`, async () => {
+                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.button}” button`, async () => {
                     await photosComponent.uploadPhoto("invalid_image");
                     await expect(photosComponent.errorModalOKButton).toHaveText(
-                        tabsFields.photos.errorModals.button,
+                        tabs.photos.errorModals.button,
                     );
                     await photosComponent.errorModalOKButton.click();
                     await expect(photosComponent.errorModalText).toBeHidden();
@@ -274,15 +262,12 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C405" },
             },
-            async ({
-                createUnitPageWithFilledTab1: _createUnitPageWithFilledTab1,
-                photosComponent,
-            }) => {
+            async ({ createUnitPageWithFilledTab1: _, photosComponent }) => {
                 await test.step("The error modal appears when uploading an excessively large file", async () => {
                     await photosComponent.uploadPhoto("large_image");
                     await expect(photosComponent.errorModalText).toBeVisible();
                     await expect(photosComponent.errorModalText).toContainText(
-                        tabsFields.photos.errorModals.invalidPhoto,
+                        tabs.photos.errorModals.invalidPhoto,
                     );
                 });
 
@@ -295,10 +280,10 @@ test.describe(
                     ).toHaveCount(0);
                 });
 
-                await test.step(`The error modal can be closed by the “${tabsFields.photos.errorModals.button}” button`, async () => {
+                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.button}” button`, async () => {
                     await photosComponent.uploadPhoto("large_image");
                     await expect(photosComponent.errorModalOKButton).toHaveText(
-                        tabsFields.photos.errorModals.button,
+                        tabs.photos.errorModals.button,
                     );
                     await photosComponent.errorModalOKButton.click();
                     await expect(photosComponent.errorModalText).toBeHidden();

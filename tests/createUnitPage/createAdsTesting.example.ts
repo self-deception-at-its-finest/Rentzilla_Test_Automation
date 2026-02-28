@@ -1,10 +1,10 @@
 import { env } from "../../config/env";
 import { AuthenticationComponent } from "../../components/Authentication.component";
-import { test } from "../../fixtures/index";
+import { test } from "../../fixtures/pagesV2.fixtures";
 import { CreateUnitPage } from "../../pages/CreateUnit.page";
 import { TestAdData } from "../../types/tabs";
 import endpoints from "../../constants/endpoints.constants.json";
-import { BrowserContext, Page } from "@playwright/test";
+import { type BrowserContext, type Page } from "@playwright/test";
 import { deleteAdsFlow } from "../../flows/admin/deleteAds.flow";
 import { switchToUserFlow } from "../../flows/switchLogins.flow";
 import { buildTestAds } from "../../utils/builders/ad.builder";

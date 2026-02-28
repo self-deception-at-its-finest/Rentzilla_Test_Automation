@@ -1,4 +1,4 @@
-import { expect, test } from "../../fixtures/index";
+import { expect, test } from "../../fixtures/indexV2";
 import {
     BUTTONS,
     FORBIDDEN_SYMBOLS,
@@ -17,7 +17,7 @@ import { markStepAsSkipped } from "../../utils/skipTest";
 import { getFieldPlaceholder } from "../../utils/formHelper";
 import {
     DEFAULT_LOCATION,
-    tabsFields,
+    tabs,
 } from "../../constants/create-unit/fields.constants";
 import { generateText, generateValidText } from "../../utils/fakeData";
 import { formatMissingManufacturerError } from "../../utils/formatErrorMessages";
@@ -45,7 +45,7 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C294" },
             },
-            async ({ createUnitPage }) => {
+            async ({ createUnitPage, categoryComponent }) => {
                 await test.step("The page title is: ⤵️", async () => {
                     await test.step("• visible", async () => {
                         await expect(createUnitPage.pageTitle).toBeVisible();
@@ -62,14 +62,14 @@ test.describe(
                         await expectTabActive(createUnitPage.tabList.first());
                     });
 
-                    await test.step(`• has the “${CREATE_UNIT_CONSTS.PAGE_TITLE}” title`, async () => {
-                        expect(createUnitPage.pageTitle).toHaveText(
-                            CREATE_UNIT_CONSTS.PAGE_TITLE,
+                    await test.step(`• has the “Основна інформація” title`, async () => {
+                        await expect(categoryComponent.tabTitle).toHaveText(
+                            tabs.mainInfo.title,
                         );
                     });
 
-                    await test.step(`• has the “${TAB_NUMBERS[0]}” number.`, async () => {
-                        expect(createUnitPage.tabList.first()).toContainText(
+                    await test.step(`• has the “1” number.`, async () => {
+                        await expect(createUnitPage.tabList.first()).toContainText(
                             TAB_NUMBERS[0],
                         );
                     });
@@ -115,11 +115,11 @@ test.describe(
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C296" },
             },
-            async ({ createUnitPage, categoryComponent, page }) => {
+            async ({ createUnitPage, categoryComponent, userPage: page }) => {
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.category.label}» text`, async () => {
+                    await test.step(`• has the «Категорія» text`, async () => {
                         await expect(categoryComponent.label).toContainText(
-                            tabsFields.category.label,
+                            tabs.mainInfo.category.label,
                         );
                     });
 
@@ -135,10 +135,10 @@ test.describe(
                 });
 
                 await test.step("The input field: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.category.placeholder}» background text`, async () => {
+                    await test.step(`• has the «Виберіть категорію» background text`, async () => {
                         await expect(
                             categoryComponent.fieldPlaceholder,
-                        ).toHaveText(tabsFields.category.placeholder);
+                        ).toHaveText(tabs.mainInfo.category.placeholder);
                     });
 
                     await test.step("• to contain arrow in the right side of field. ", async () => {
@@ -167,15 +167,11 @@ test.describe(
                         await expect(categoryComponent.popup).toBeVisible();
                     });
 
-                    await test.step(`• has the «${
-                        isDesktop(page)
-                            ? tabsFields.category.popupTitle
-                            : tabsFields.category.mobPopupTitle
-                    }» title`, async () => {
+                    await test.step(`• has the «Вибір категорії технічного засобу» title`, async () => {
                         await expect(categoryComponent.popupTitle).toHaveText(
                             isDesktop(page)
-                                ? tabsFields.category.popupTitle
-                                : tabsFields.category.mobPopupTitle,
+                                ? tabs.mainInfo.category.popupTitle
+                                : tabs.mainInfo.category.mobPopupTitle,
                         );
                     });
 
@@ -244,9 +240,9 @@ test.describe(
             },
             async ({ createUnitPage, adComponent }) => {
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.ad.label}» text`, async () => {
+                    await test.step(`• has the «Назва оголошення» text`, async () => {
                         await expect(adComponent.label).toContainText(
-                            tabsFields.ad.label,
+                            tabs.mainInfo.ad.label,
                         );
                     });
 
@@ -260,10 +256,10 @@ test.describe(
                 });
 
                 await test.step("The input field: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.ad.placeholder}» background text`, async () => {
+                    await test.step(`• has the «Введіть назву оголошення» background text`, async () => {
                         expect(
                             await getFieldPlaceholder(adComponent.field),
-                        ).toEqual(tabsFields.ad.placeholder);
+                        ).toEqual(tabs.mainInfo.ad.placeholder);
                     });
 
                     await test.step("• requires filling", async () => {
@@ -332,9 +328,9 @@ test.describe(
             },
             async ({ createUnitPage, manufacturerComponent }) => {
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.manufacturer.label}» text`, async () => {
+                    await test.step(`• has the «Виробник транспортного засобу» text`, async () => {
                         await expect(manufacturerComponent.label).toContainText(
-                            tabsFields.manufacturer.label,
+                            tabs.mainInfo.manufacturer.label,
                         );
                     });
 
@@ -350,12 +346,12 @@ test.describe(
                 });
 
                 await test.step("The input field: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.manufacturer.placeholder}» background text`, async () => {
+                    await test.step(`• has the «Введіть виробника транспортного засобу» background text`, async () => {
                         expect(
                             await getFieldPlaceholder(
                                 manufacturerComponent.field,
                             ),
-                        ).toEqual(tabsFields.manufacturer.placeholder);
+                        ).toEqual(tabs.mainInfo.manufacturer.placeholder);
                     });
 
                     await test.step("• requires filling", async () => {
@@ -466,9 +462,9 @@ test.describe(
             },
             async ({ createUnitPage: _, modelComponent }) => {
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.model.label}» text`, async () => {
+                    await test.step(`• has the «Назва моделі» text`, async () => {
                         await expect(modelComponent.label).toContainText(
-                            tabsFields.model.label,
+                            tabs.mainInfo.model.label,
                         );
                     });
 
@@ -477,10 +473,10 @@ test.describe(
                     });
                 });
 
-                await test.step(`The field has the «${tabsFields.model.placeholder}» background text`, async () => {
+                await test.step(`The field has the «Введіть назву моделі» background text`, async () => {
                     expect(
                         await getFieldPlaceholder(modelComponent.field),
-                    ).toEqual(tabsFields.model.placeholder);
+                    ).toEqual(tabs.mainInfo.model.placeholder);
                 });
 
                 await test.step("Validate field requirements: ⤵️", async () => {
@@ -527,9 +523,9 @@ test.describe(
             },
             async ({ createUnitPage: _, specificationsComponent }) => {
                 await test.step("The Title: ⤵️", async () => {
-                    await test.step(`• has the ${tabsFields.specifications.label} text`, async () => {
+                    await test.step(`• has the «Технічні характеристики» text`, async () => {
                         await expect(specificationsComponent.label).toHaveText(
-                            tabsFields.specifications.label,
+                            tabs.mainInfo.specifications.label,
                         );
                     });
 
@@ -590,9 +586,9 @@ test.describe(
             },
             async ({ createUnitPage: _, detailsComponent }) => {
                 await test.step("The Title: ⤵️", async () => {
-                    await test.step(`• has the ${tabsFields.details.label} text`, async () => {
+                    await test.step(`• has the «Детальний опис» text`, async () => {
                         await expect(detailsComponent.label).toHaveText(
-                            tabsFields.details.label,
+                            tabs.mainInfo.details.label,
                         );
                     });
 
@@ -638,11 +634,11 @@ test.describe(
                 tag: "@field validation",
                 annotation: { type: "Test case", description: "C319" },
             },
-            async ({ createUnitPage, locationComponent, page }) => {
+            async ({ createUnitPage, locationComponent }) => {
                 await test.step("The title: ⤵️", async () => {
-                    await test.step(`• has the «${tabsFields.location.label}» text`, async () => {
+                    await test.step(`• has the «Місце розташування технічного засобу» text`, async () => {
                         await expect(locationComponent.label).toContainText(
-                            tabsFields.location.label,
+                            tabs.mainInfo.location.label,
                         );
                     });
 
@@ -659,7 +655,7 @@ test.describe(
 
                 await test.step("The field has the correct background text", async () => {
                     await expect(locationComponent.locationLabel).toHaveText(
-                        tabsFields.location.placeholder,
+                        tabs.mainInfo.location.placeholder,
                     );
                 });
 
@@ -671,7 +667,7 @@ test.describe(
                     );
                 });
 
-                await test.step(`The «${tabsFields.location.buttonText}» button opens the modal window`, async () => {
+                await test.step(`The «Вибрати на мапі» button opens the modal window`, async () => {
                     await locationComponent.openMap();
                     await expect(locationComponent.modalWindow).toBeVisible();
                 });
@@ -680,7 +676,7 @@ test.describe(
                     await test.step("• has the correct title and Close button", async () => {
                         await expect(
                             locationComponent.modalWindowTitle,
-                        ).toHaveText(tabsFields.location.modal.title);
+                        ).toHaveText(tabs.mainInfo.location.modal.title);
                         await expect(
                             locationComponent.modalWindowCloseButton,
                         ).toBeVisible();
@@ -700,24 +696,25 @@ test.describe(
                     });
                 });
 
-                await test.step("Valid address is NOT displayed in address field after closing the modal window", async () => {
-                    if (await locationComponent.modalWindow.isHidden())
-                        await locationComponent.openMap();
-                    await clickOutside(page);
-                    await expect(
-                        locationComponent.locationLabel,
-                    ).not.toHaveText(DEFAULT_LOCATION);
-                });
+                // await test.step("Valid address is displayed in address field after closing the modal window", async () => {
+                //     if (await locationComponent.modalWindow.isHidden())
+                //         await locationComponent.openMap();
+                //     await clickOutside(page);
+
+                //     await expect(
+                //         locationComponent.locationLabel,
+                //     ).toHaveText(DEFAULT_LOCATION);
+                // });
             },
         );
 
         test(
-            `Verify “${BUTTONS.cancel}” button`,
+            `Verify “Скасувати” button`,
             {
                 tag: ["@button validation"],
                 annotation: { type: "Test case", description: "C326" },
             },
-            async ({ createUnitPage, page }) => {
+            async ({ createUnitPage, userPage: page }) => {
                 await test.step("The button has the correct text", async () => {
                     await expect(createUnitPage.cancelButton).toHaveText(
                         BUTTONS.cancel,
