@@ -1,4 +1,4 @@
-import { test as base } from "./auth.fixtures";
+import { test as apiAuth } from "./apiAuth.fixtures";
 import { expect } from "@playwright/test";
 import { HomePage } from "../pages/Home.page";
 import { CreateUnitPage } from "../pages/CreateUnit.page";
@@ -10,9 +10,9 @@ import { generateText } from "../utils/fakeData";
 import { switchToAdminFlow } from "../flows/switchLogins.flow";
 import { env } from "../config/env";
 import { AdminPage } from "../pages/Admin.page";
+import { ENDPOINTS } from "../constants/endpoints.constants";
 
-const test = base.extend<{
-    ads: void;
+const test = apiAuth.extend<{
     authorizedHomePage: HomePage;
     createUnitPage: CreateUnitPage;
     createUnitPageWithFilledTab1: CreateUnitPage;
@@ -24,24 +24,24 @@ const test = base.extend<{
     homePage: HomePage;
 }>({
     authorizedHomePage: [
-        async ({ auth: _auth, page }, use) => {
-            await page.goto(endpoints.home);
-            await use(new HomePage(page));
+        async ({ userPage }, use) => {
+            await userPage.goto(endpoints.home);
+            await use(new HomePage(userPage));
         },
         { box: true },
     ],
 
     createUnitPage: [
-        async ({ auth: _auth, page }, use) => {
-            await page.goto(endpoints["create unit"]);
-            await use(new CreateUnitPage(page));
+        async ({ userPage }, use) => {
+            await userPage.goto(endpoints["create unit"]);
+            await use(new CreateUnitPage(userPage));
         },
         { box: false },
     ],
 
     createUnitPageWithFilledTab1: [
-        async ({ createUnitPage, page }, use) => {
-            await fillTab1Flow(page, buildTestAds(1)[0]);
+        async ({ createUnitPage, userPage }, use) => {
+            await fillTab1Flow(userPage, buildTestAds(1)[0]);
             await createUnitPage.nextStep();
             await use(createUnitPage);
         },
@@ -49,38 +49,39 @@ const test = base.extend<{
     ],
 
     createUnitPageWithFilledTwoTabs: [
-        async ({ createUnitPage, page }, use) => {
+        async ({ createUnitPage, userPage }, use) => {
             const ad = buildTestAds(1)[0];
-            await fillTab1Flow(page, ad);
+            await fillTab1Flow(userPage, ad);
             await createUnitPage.nextStep();
-            await fillTab2Flow(page, ad.photo);
+            await fillTab2Flow(userPage, ad.photo);
             await createUnitPage.nextStep();
             await use(createUnitPage);
         },
-        { box: true },
+        { box: false },
     ],
 
     createUnitPageWithFilledTwoTabsAndNewService: [
-        async ({ createUnitPage, page }, use) => {
+        async ({ createUnitPage, userPage, adminPage }, use) => {
             const ad = buildTestAds(1)[0];
             const service = ad.service + generateText(10);
             console.log("new service: " + service);
 
-            await fillTab1Flow(page, ad);
+            await fillTab1Flow(userPage, ad);
             await createUnitPage.nextStep();
-            await fillTab2Flow(page, ad.photo);
+            await fillTab2Flow(userPage, ad.photo);
             await createUnitPage.nextStep();
-            
+
             await use({ createUnitPage, service });
-            
-            await switchToAdminFlow(page, env.admin);
-            await new AdminPage(page).removeService(service);
-        }, { box: true }
+            await adminPage.goto(ENDPOINTS.HOME);
+            await switchToAdminFlow(adminPage, env.admin);
+            await new AdminPage(adminPage).removeService(service);
+        },
+        { box: false },
     ],
 
     homePage: [
-        async ({ page }, use) => {
-            await use(new HomePage(page));
+        async ({ userPage }, use) => {
+            await use(new HomePage(userPage));
         },
         { box: false },
     ],

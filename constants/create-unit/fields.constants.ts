@@ -24,7 +24,18 @@ type LocationSection = FieldSection & {
     };
 };
 
-type PhotosSection = {
+type MainInfoTab = {
+    title: string;
+    category: CategorySection;
+    ad: FieldSection;
+    manufacturer: FieldSection;
+    model: FieldSection;
+    location: LocationSection;
+    specifications: Pick<FieldSection, "label">;
+    details: Pick<FieldSection, "label">;
+};
+
+type PhotosTab = {
     title: string;
     photosForm: {
         label: string;
@@ -37,7 +48,7 @@ type PhotosSection = {
     };
 };
 
-type ServiceSection = {
+type ServiceTab = {
     title: string;
     description: string;
     addInfo: string;
@@ -46,56 +57,53 @@ type ServiceSection = {
     addServiceButtonText: string;
 };
 
-type TabFields = {
-    category: CategorySection;
-    ad: FieldSection;
-    manufacturer: FieldSection;
-    model: FieldSection;
-    location: LocationSection;
-    specifications: Pick<FieldSection, "label">;
-    details: Pick<FieldSection, "label">;
-    photos: PhotosSection;
-    service: ServiceSection;
+type Tabs = {
+    mainInfo: MainInfoTab;
+    photos: PhotosTab;
+    service: ServiceTab;
 };
 
 const tab1 = data.tabs["1"];
 const tab2 = data.tabs["2"];
 const tab3 = data.tabs["3"];
 
-const tabsFields: TabFields = {
-    category: {
-        label: tab1.category.label,
-        placeholder: tab1.category.placeholder,
-        popupTitle: tab1.category["popup title"],
-        mobPopupTitle: tab1.category["mobile popup title"],
-    },
-    ad: {
-        label: tab1.ad.label,
-        placeholder: tab1.ad.placeholder,
-    },
-    manufacturer: {
-        label: tab1.manufacturer.label,
-        placeholder: tab1.manufacturer.placeholder,
-    },
-    model: {
-        label: tab1.model.label,
-        placeholder: tab1.model.placeholder,
-    },
-    location: {
-        label: tab1.location.label,
-        placeholder: tab1.location.placeholder,
-        buttonText: tab1.location["button text"],
-        modal: {
-            title: tab1.location.modal.title,
-            cancel: tab1.location.modal.cancel,
-            accept: tab1.location.modal.accept,
+const tabs: Tabs = {
+    mainInfo: {
+        title: tab1.title,
+        category: {
+            label: tab1.category.label,
+            placeholder: tab1.category.placeholder,
+            popupTitle: tab1.category["popup title"],
+            mobPopupTitle: tab1.category["mobile popup title"],
         },
-    },
-    specifications: {
-        label: tab1.specifications.label,
-    },
-    details: {
-        label: tab1.details.label,
+        ad: {
+            label: tab1.ad.label,
+            placeholder: tab1.ad.placeholder,
+        },
+        manufacturer: {
+            label: tab1.manufacturer.label,
+            placeholder: tab1.manufacturer.placeholder,
+        },
+        model: {
+            label: tab1.model.label,
+            placeholder: tab1.model.placeholder,
+        },
+        location: {
+            label: tab1.location.label,
+            placeholder: tab1.location.placeholder,
+            buttonText: tab1.location["button text"],
+            modal: {
+                title: tab1.location.modal.title,
+                cancel: tab1.location.modal.cancel,
+                accept: tab1.location.modal.accept,
+            },
+        },
+        specifications: {
+            label: tab1.specifications.label,
+        },
+        details: {
+            label: tab1.details.label,
+        },
     },
     photos: {
         title: tab2.title,
@@ -115,7 +123,7 @@ const tabsFields: TabFields = {
         addInfo: tab3["add info"],
         placeholder: tab3.placeholder,
         addedServicesTitle: tab3["added services title"],
-        addServiceButtonText: tab3["add service button text"]
+        addServiceButtonText: tab3["add service button text"],
     },
 } as const;
 
@@ -131,7 +139,7 @@ const SELECT_ICON = "M7 7H1M7 13V7V13ZM7 7V1V7ZM7 7H13H7Z";
 
 export {
     KeysWithLabel,
-    tabsFields,
+    tabs,
     DEFAULT_LOCATION,
     MAX_IMAGES,
     SELECTED_ICON,

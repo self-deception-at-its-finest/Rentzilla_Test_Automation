@@ -3,7 +3,7 @@ import { BaseComponent } from "./Base.component";
 import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
 import {
     DEFAULT_LOCATION,
-    tabsFields,
+    tabs,
 } from "../../../constants/create-unit/fields.constants";
 
 export class LocationComponent extends BaseComponent {
@@ -32,14 +32,14 @@ export class LocationComponent extends BaseComponent {
         );
         this.modalWindow = this.page.getByTestId("mapPopup");
         this.modalWindowTitle = this.modalWindow.getByText(
-            tabsFields.location.modal.title,
+            tabs.mainInfo.location.modal.title,
         );
         this.modalWindowCloseButton = this.modalWindowTitle.locator("+ span");
         this.modalWindowCancelButton = this.modalWindow.getByRole("button", {
-            name: tabsFields.location.modal.cancel,
+            name: tabs.mainInfo.location.modal.cancel,
         });
         this.modalWindowAcceptButton = this.modalWindow.getByRole("button", {
-            name: tabsFields.location.modal.accept,
+            name: tabs.mainInfo.location.modal.accept,
         });
         this.modalWindowAddressLabel = this.modalWindow.getByTestId("address");
     }

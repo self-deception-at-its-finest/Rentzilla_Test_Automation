@@ -1,4 +1,7 @@
 {
+    "api": {
+        "create or login": "api/auth/jwt/create/"
+    },
     "home": "",
     "admin": "/admin",
     "create unit": "/create-unit",

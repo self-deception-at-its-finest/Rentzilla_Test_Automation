@@ -1,9 +1,9 @@
-import { test, expect } from "../../fixtures/index";
+import { test, expect } from "../../fixtures/indexV2";
 import endpoints from "../../constants/endpoints.constants.json";
 import {
     SELECT_ICON,
     SELECTED_ICON,
-    tabsFields,
+    tabs,
 } from "../../constants/create-unit/fields.constants";
 import { getFieldPlaceholder } from "../../utils/formHelper";
 import {
@@ -54,10 +54,10 @@ test.describe(
                         ).toBeVisible();
                     });
 
-                    await test.step(`• has the “${tabsFields.service.description}” text`, async () => {
+                    await test.step(`• has the “${tabs.service.description}” text`, async () => {
                         await expect(
                             serviceComponent.description,
-                        ).toContainText(tabsFields.service.description);
+                        ).toContainText(tabs.service.description);
                     });
 
                     await test.step("• has an asterisk", async () => {
@@ -69,7 +69,7 @@ test.describe(
 
                 await test.step("Clue line has the correct text", async () => {
                     await expect(serviceComponent.addInfo).toContainText(
-                        tabsFields.service.addInfo,
+                        tabs.service.addInfo,
                     );
                 });
 
@@ -90,7 +90,7 @@ test.describe(
                 await test.step("Input field background has the valid text", async () => {
                     expect(
                         await getFieldPlaceholder(serviceComponent.field),
-                    ).toContain(tabsFields.service.placeholder);
+                    ).toContain(tabs.service.placeholder);
                 });
 
                 await test.step(`Input field cannot have these symbols: ${FORBIDDEN_SYMBOLS}`, async () => {
@@ -161,7 +161,7 @@ test.describe(
                     await test.step("• has the correct title", async () => {
                         await expect(
                             serviceComponent.selectedServicesSectionTitle,
-                        ).toContainText(tabsFields.service.addedServicesTitle);
+                        ).toContainText(tabs.service.addedServicesTitle);
                     });
 
                     await test.step("• is visible", async () => {
@@ -234,9 +234,7 @@ test.describe(
                     await test.step("• the correct name", async () => {
                         await expect(
                             serviceComponent.addServiceButton,
-                        ).toContainText(
-                            tabsFields.service.addServiceButtonText,
-                        );
+                        ).toContainText(tabs.service.addServiceButtonText);
                     });
 
                     await test.step("• the icon", async () => {
@@ -390,7 +388,7 @@ test.describe(
                     }
                 });
 
-                await test.step(`After deleting the last service, the “${tabsFields.service.addedServicesTitle}” panel disappears.`, async () => {
+                await test.step(`After deleting the last service, the “${tabs.service.addedServicesTitle}” panel disappears.`, async () => {
                     await expect(
                         serviceComponent.selectedServicesSection,
                     ).toBeHidden();

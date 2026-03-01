@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { tabsFields } from "../../../constants/create-unit/fields.constants";
+import { tabs } from "../../../constants/create-unit/fields.constants";
 
 type BoundingBox = {
     x: number;
@@ -32,8 +32,8 @@ export class ServiceComponent {
         this.page = page;
         this.searchResultSection = this.page.getByTestId("searchResult");
         this.field = this.searchResultSection.getByRole("textbox");
-        this.title = this.page.getByText(tabsFields.service.title);
-        this.description = this.page.getByText(tabsFields.service.description);
+        this.title = this.page.getByText(tabs.service.title);
+        this.description = this.page.getByText(tabs.service.description);
         this.addInfo = this.page.getByTestId("add-info");
         this.requiredSymbol = this.description.locator("span");
         this.loupeIcon = this.searchResultSection.locator("svg");
@@ -47,7 +47,7 @@ export class ServiceComponent {
             .getByTestId("item-servicesUnitFlow")
             .locator("..");
         this.selectedServicesSectionTitle = this.page.getByText(
-            tabsFields.service.addedServicesTitle,
+            tabs.service.addedServicesTitle,
         );
         this.selectedServices = this.page.getByTestId("item-servicesUnitFlow");
 

@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { Locator, Page } from "@playwright/test";
-import { tabsFields } from "../../../constants/create-unit/fields.constants";
+import { tabs } from "../../../constants/create-unit/fields.constants";
 
 export class PhotosComponent {
     readonly page: Page;
@@ -22,7 +22,7 @@ export class PhotosComponent {
         this.page = page;
         this.photosFormTitle = this.page
             .getByTestId("ImagesUnitFlow")
-            .getByText(new RegExp(`^${tabsFields.photos.photosForm.label}.*`));
+            .getByText(new RegExp(`^${tabs.photos.photosForm.label}.*`));
         this.photosFormDescription = this.page
             .getByTestId("ImagesUnitFlow")
             .getByTestId("description");
@@ -50,7 +50,7 @@ export class PhotosComponent {
     async uploadPhoto(baseName: string) {
         const extensions = ["jpg", "jpeg", "png", "gif"];
         // Images directory
-        const basePath = path.resolve(__dirname, "../../../test-data/images");
+        const basePath = path.resolve("test-data/images");
         // Looking for the first existing file
         for (const ext of extensions) {
             const filePath = path.join(basePath, `${baseName}.${ext}`);

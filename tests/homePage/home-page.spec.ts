@@ -1,4 +1,4 @@
-import { expect, test } from "../../fixtures/fixtures"; 
+import { expect, test } from "../../fixtures/index"; 
 import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { markStepAsSkipped } from "../../utils/skipTest";
 import { MAIN_PAGE_CONSTS } from "../../constants/home-page/homePage.constants";

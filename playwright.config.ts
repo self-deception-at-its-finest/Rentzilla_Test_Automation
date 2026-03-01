@@ -22,6 +22,18 @@ export default defineConfig({
 
     projects: [
         {
+            name: "auth",
+            testMatch: /auth\.setup\.ts/,
+        },
+        {
+            name: "api-authed-tests",
+            use: {
+                ...devices["Desktop Chrome"],
+                viewport: { width: 1920, height: 1080 },
+            },
+            dependencies: ["auth"],
+        },
+        {
             name: "chromium",
             use: {
                 ...devices["Desktop Chrome"],
