@@ -45,56 +45,56 @@ export const test = base.extend<
         ContactsComponents
 >({
     categoryComponent: [
-        async ({ page }, use) => {
-            await use(new CategoryComponent(page));
+        async ({ userPage }, use) => {
+            await use(new CategoryComponent(userPage));
         },
         { box: true },
     ],
     adComponent: [
-        async ({ page }, use) => {
-            await use(new AdComponent(page));
+        async ({ userPage }, use) => {
+            await use(new AdComponent(userPage));
         },
         { box: true },
     ],
     detailsComponent: [
-        async ({ page }, use) => {
-            await use(new DetailsComponent(page));
+        async ({ userPage }, use) => {
+            await use(new DetailsComponent(userPage));
         },
         { box: true },
     ],
     locationComponent: [
-        async ({ page }, use) => {
-            await use(new LocationComponent(page));
+        async ({ userPage }, use) => {
+            await use(new LocationComponent(userPage));
         },
         { box: true },
     ],
     manufacturerComponent: [
-        async ({ page }, use) => {
-            await use(new ManufacturerComponent(page));
+        async ({ userPage }, use) => {
+            await use(new ManufacturerComponent(userPage));
         },
         { box: true },
     ],
     modelComponent: [
-        async ({ page }, use) => {
-            await use(new ModelComponent(page));
+        async ({ userPage }, use) => {
+            await use(new ModelComponent(userPage));
         },
         { box: true },
     ],
     specificationsComponent: [
-        async ({ page }, use) => {
-            await use(new SpecificationsComponent(page));
+        async ({ userPage }, use) => {
+            await use(new SpecificationsComponent(userPage));
         },
         { box: true },
     ],
     photosComponent: [
-        async ({ page }, use) => {
-            await use(new PhotosComponent(page));
+        async ({ userPage }, use) => {
+            await use(new PhotosComponent(userPage));
         },
         { box: true },
     ],
     serviceComponent: [
-        async ({ page }, use) => {
-            await use(new ServiceComponent(page));
+        async ({ userPage }, use) => {
+            await use(new ServiceComponent(userPage));
         },
         { box: true },
     ],

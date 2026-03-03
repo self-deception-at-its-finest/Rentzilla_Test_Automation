@@ -5,7 +5,6 @@ import { CreateUnitPage } from "../pages/CreateUnit.page";
 import endpoints from "../constants/endpoints.constants.json";
 import { buildTestAds } from "../utils/builders/ad.builder";
 import { createAdsFlow } from "../flows/ads/createAds.flow";
-import { switchToAdminFlow } from "../flows/admin/switchToAdmin.flow";
 import { env } from "../config/env";
 import { approveAdsFlow } from "../flows/admin/approveAds.flow";
 import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
@@ -13,6 +12,11 @@ import { ProductsPage } from "../pages/Products.page";
 import { FavoriteUnitsPage } from "../pages/FavoriteUnits.page";
 import { UnitPage } from "../pages/Unit.page";
 import { fillTheTab1Flow } from "../flows/ads/fillTab1.flow";
+import { fillTab1Flow } from "../flows/ads/fillTab1.flow";
+import { fillTab2Flow } from "../flows/ads/fillTab2.flow";
+import { generateText } from "../utils/fakeData";
+import { switchToAdminFlow } from "../flows/switchLogins.flow";
+import { AdminPage } from "../pages/Admin.page";
 
 const test = base.extend<{
     ads: void;
@@ -25,6 +29,11 @@ const test = base.extend<{
     favoriteUnitsState: string[];
     unitPage: UnitPage;
     createUnitPageWithFilledTab1: CreateUnitPage; 
+    createUnitPageWithFilledTwoTabs: CreateUnitPage;
+    createUnitPageWithFilledTwoTabsAndNewService: {
+        createUnitPage: CreateUnitPage;
+        service: string;
+    };
 }>({
     ads: [
         async ({ auth, page }, use) => {
@@ -55,7 +64,7 @@ const test = base.extend<{
     ],
 
     authorizedHomePage: [
-        async ({ auth, page }, use) => {
+        async ({ auth: _auth, page }, use) => {
             await page.goto(endpoints.home);
             await use(new HomePage(page));
         },
@@ -63,7 +72,7 @@ const test = base.extend<{
     ],
 
     createUnitPage: [
-        async ({ auth, page }, use) => {
+        async ({ auth: _auth, page }, use) => {
             await page.goto(endpoints["create unit"]);
             await use(new CreateUnitPage(page));
         },
@@ -110,9 +119,46 @@ const test = base.extend<{
 
     createUnitPageWithFilledTab1: [
         async ({ createUnitPage, page }, use) => {
-            await fillTheTab1Flow(page, buildTestAds(1)[0]);
+            await fillTab1Flow(page, buildTestAds(1)[0]);
             await createUnitPage.nextStep();
             await use(createUnitPage);
+        },
+        { box: true },
+    ],
+
+    createUnitPageWithFilledTwoTabs: [
+        async ({ createUnitPage, page }, use) => {
+            const ad = buildTestAds(1)[0];
+            await fillTab1Flow(page, ad);
+            await createUnitPage.nextStep();
+            await fillTab2Flow(page, ad.photo);
+            await createUnitPage.nextStep();
+            await use(createUnitPage);
+        },
+        { box: true },
+    ],
+
+    createUnitPageWithFilledTwoTabsAndNewService: [
+        async ({ createUnitPage, page }, use) => {
+            const ad = buildTestAds(1)[0];
+            const service = ad.service + generateText(10);
+            console.log("new service: " + service);
+
+            await fillTab1Flow(page, ad);
+            await createUnitPage.nextStep();
+            await fillTab2Flow(page, ad.photo);
+            await createUnitPage.nextStep();
+            
+            await use({ createUnitPage, service });
+            
+            await switchToAdminFlow(page, env.admin);
+            await new AdminPage(page).removeService(service);
+        }, { box: true }
+    ],
+
+    homePage: [
+        async ({ page }, use) => {
+            await use(new HomePage(page));
         },
         { box: false },
     ],

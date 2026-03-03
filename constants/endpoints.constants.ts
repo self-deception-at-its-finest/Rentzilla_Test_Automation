@@ -1,6 +1,9 @@
 import endpoints from "./endpoints.constants.json";
 
 export const ENDPOINTS = {
+    API: {
+        CREATE_OR_LOGIN: endpoints.api["create or login"],
+    },
     HOME: endpoints.home,
     CREATE_UNIT: endpoints["create unit"],
     PRODUCTS: endpoints.products,

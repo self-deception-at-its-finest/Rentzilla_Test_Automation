@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import {
-    tabsFields,
+    tabs,
     KeysWithLabel,
 } from "../../../constants/create-unit/fields.constants";
 
@@ -9,6 +9,7 @@ export abstract class BaseComponent {
     readonly section: Locator;
     readonly label: Locator;
     readonly requiredSymbol?: Locator;
+    readonly tabTitle: Locator;
 
     constructor(
         page: Page,
@@ -16,12 +17,15 @@ export abstract class BaseComponent {
         required: boolean = true,
     ) {
         this.page = page;
+        this.tabTitle = this.page
+            .getByTestId("wrapper-characteristics")
+            .getByText("Основна інформація");
         this.section = this.page
-            .getByText(tabsFields[fieldLabel].label)
+            .getByText(tabs.mainInfo[fieldLabel].label)
             .locator("..");
 
         this.label = this.section.getByText(
-            new RegExp(`^${tabsFields[fieldLabel].label}.*`),
+            new RegExp(`^${tabs.mainInfo[fieldLabel].label}.*`),
         );
         if (required)
             this.requiredSymbol = this.section.locator("span", {

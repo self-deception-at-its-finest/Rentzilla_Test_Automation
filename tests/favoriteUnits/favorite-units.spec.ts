@@ -12,6 +12,15 @@ test.describe("Favorite Units Tests", () => {
             annotation: { type: "Test case", description: "C300" },
         },
         async ({ page, authorizedHomePage, favoritePage }) => {
+            await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
+                await authorizedHomePage.avatarBlock.click();
+                await authorizedHomePage.dropdownAdsItem.click();
+                await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+                await expect(page).toHaveURL(FAVORITE_UNITS_CONSTS.URL);
+                await expect(favoritePage.emptyTitle).toHaveText(
+                    FAVORITE_UNITS_CONSTS.EMPTY_TITLE,
+                );
+            });
 
             await test.step(`1. Navigate to 'Обрані оголошення' through Cabinet Sidebar`, async () => {
                 await authorizedHomePage.navigateToFavoriteAds();
