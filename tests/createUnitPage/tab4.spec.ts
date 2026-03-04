@@ -1,4 +1,3 @@
-import { Locator } from "@playwright/test";
 import {
     BUTTONS,
     CREATE_UNIT_CONSTS,
