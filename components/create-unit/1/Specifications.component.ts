@@ -12,14 +12,14 @@ export class SpecificationsComponent extends BaseComponent {
     }
 
     async typeSpecifications(str: string): Promise<void> {
-        await super.typeIntoField(this.field, str);
+        await this.typeIntoField(this.field, str);
     }
 
     async fillSpecifications(str: string): Promise<void> {
-        await super.fillInField(this.field, str);
+        await this.fillInField(this.field, str);
     }
 
     async clearSpecificationField(): Promise<void> {
-        await super.clearField(this.field);
+        await this.clearField(this.field);
     }
 }

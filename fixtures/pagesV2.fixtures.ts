@@ -4,8 +4,11 @@ import { HomePage } from "../pages/Home.page";
 import { CreateUnitPage } from "../pages/CreateUnit.page";
 import endpoints from "../constants/endpoints.constants.json";
 import { buildTestAds } from "../utils/builders/ad.builder";
-import { fillTab1Flow } from "../flows/ads/fillTab1.flow";
-import { fillTab2Flow } from "../flows/ads/fillTab2.flow";
+import {
+    fillTab1Flow,
+    fillTab2Flow,
+    fillTab3Flow,
+} from "../flows/ads/fillTabs.flow";
 import { generateText } from "../utils/fakeData";
 import { switchToAdminFlow } from "../flows/switchLogins.flow";
 import { env } from "../config/env";
@@ -21,6 +24,7 @@ const test = apiAuth.extend<{
         createUnitPage: CreateUnitPage;
         service: string;
     };
+    createUnitPageWithFilledThreeTabs: CreateUnitPage;
     homePage: HomePage;
 }>({
     authorizedHomePage: [
@@ -64,7 +68,6 @@ const test = apiAuth.extend<{
         async ({ createUnitPage, userPage, adminPage }, use) => {
             const ad = buildTestAds(1)[0];
             const service = ad.service + generateText(10);
-            console.log("new service: " + service);
 
             await fillTab1Flow(userPage, ad);
             await createUnitPage.nextStep();
@@ -75,6 +78,20 @@ const test = apiAuth.extend<{
             await adminPage.goto(ENDPOINTS.HOME);
             await switchToAdminFlow(adminPage, env.admin);
             await new AdminPage(adminPage).removeService(service);
+        },
+        { box: false },
+    ],
+
+    createUnitPageWithFilledThreeTabs: [
+        async ({ createUnitPage, userPage }, use) => {
+            const ad = buildTestAds(1)[0];
+            await fillTab1Flow(userPage, ad);
+            await createUnitPage.nextStep();
+            await fillTab2Flow(userPage, ad.photo);
+            await createUnitPage.nextStep();
+            await fillTab3Flow(userPage, ad.service);
+            await createUnitPage.nextStep();
+            await use(createUnitPage);
         },
         { box: false },
     ],

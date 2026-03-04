@@ -5,8 +5,12 @@ import { ENDPOINTS } from "../constants/endpoints.constants";
 import path from "path";
 import fs from "fs";
 
-const adminFile = path.resolve("playwright/.auth/admin.json");
-const userFile = path.resolve("playwright/.auth/user.json");
+const authDir = path.resolve("playwright/.auth");
+fs.mkdirSync(authDir, { recursive: true });
+
+const adminFile = path.join(authDir, "admin.json");
+const userFile = path.join(authDir, "user.json");
+
 [
     {
         role: "admin",

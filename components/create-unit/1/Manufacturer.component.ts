@@ -37,7 +37,7 @@ export class ManufacturerComponent extends BaseComponent {
     }
 
     async typeManufacturer(manufacturer: string): Promise<void> {
-        await super.typeIntoField(this.field, manufacturer);
+        await this.typeIntoField(this.field, manufacturer);
     }
 
     async clickManufacturer(): Promise<void> {
@@ -46,6 +46,6 @@ export class ManufacturerComponent extends BaseComponent {
 
     async clearManufacturerField(): Promise<void> {
         if (await this.clearButton.isVisible()) await this.clearButton.click();
-        else await super.clearField(this.field);
+        else await this.clearField(this.field);
     }
 }

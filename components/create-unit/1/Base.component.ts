@@ -3,6 +3,7 @@ import {
     tabs,
     KeysWithLabel,
 } from "../../../constants/create-unit/fields.constants";
+import { FieldActions } from "../FieldActions";
 
 export abstract class BaseComponent {
     readonly page: Page;
@@ -10,6 +11,8 @@ export abstract class BaseComponent {
     readonly label: Locator;
     readonly requiredSymbol?: Locator;
     readonly tabTitle: Locator;
+
+    private readonly fieldActions: FieldActions;
 
     constructor(
         page: Page,
@@ -31,19 +34,20 @@ export abstract class BaseComponent {
             this.requiredSymbol = this.section.locator("span", {
                 hasText: "*",
             });
+        
+        this.fieldActions = new FieldActions(this.page);
     }
 
     // Need to type, not paste
     protected async typeIntoField(field: Locator, str: string) {
-        await field.click();
-        await this.page.keyboard.type(str);
+        await this.fieldActions.typeIntoField(field, str);
     }
 
     protected async fillInField(field: Locator, str: string) {
-        await field.fill(str);
+        await this.fieldActions.fillInField(field, str);
     }
 
     protected async clearField(field: Locator) {
-        await field.clear();
+        await this.fieldActions.clearField(field);
     }
 }

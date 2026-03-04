@@ -9,7 +9,7 @@ import { PhotosComponent } from "../components/create-unit/2/Photos.component";
 import { ServiceComponent } from "../components/create-unit/3/Service.component";
 import { PriceComponent } from "../components/create-unit/4/Price.component";
 import { ContactsComponent } from "../components/create-unit/5/Contacts.component";
-import { test as base } from "./apiAuth.fixtures";
+import { test as base } from "./auth.fixtures";
 
 type MainInfoComponents = {
     adComponent: AdComponent;

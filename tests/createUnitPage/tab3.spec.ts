@@ -279,7 +279,7 @@ test.describe(
             }) => {
                 const letter = "Г";
                 let allResults: string[] = [];
-                let choosedResults: string[] = [];
+                let chosenResults: string[] = [];
 
                 await test.step("It should show search results with inputed letter", async () => {
                     await serviceComponent.typeService(letter);
@@ -310,7 +310,7 @@ test.describe(
                             ),
                         ).toHaveAttribute("d", SELECTED_ICON);
 
-                        choosedResults.push(
+                        chosenResults.push(
                             (await serviceComponent.searchResults
                                 .nth(firstRandomIndex)
                                 .textContent()) ?? "",
@@ -327,7 +327,7 @@ test.describe(
                                     ),
                                 ),
                             ).toHaveAttribute("d", SELECTED_ICON);
-                            choosedResults.push(
+                            chosenResults.push(
                                 (await serviceComponent.searchResults
                                     .nth(secondRandomIndex)
                                     .textContent()) ?? "",
@@ -340,7 +340,7 @@ test.describe(
                             await serviceComponent.selectedServices.allTextContents();
 
                         expect(
-                            choosedResults.every((service) =>
+                            chosenResults.every((service) =>
                                 pinnedServices.includes(service),
                             ),
                         ).toBeTruthy;
@@ -350,7 +350,7 @@ test.describe(
         );
 
         test(
-            "Verify removing variants from choosed list",
+            "Verify removing variants from chosen list",
             {
                 tag: ["@UI"],
                 annotation: { type: "Test case", description: "C412" },

@@ -1,4 +1,4 @@
-import { test as base } from "./apiAuth.fixtures";
+import { test as base } from "./base.fixtures";
 import { AuthenticationComponent } from "../components/Authentication.component";
 import { HeaderComponent } from "../components/Header.component";
 
@@ -9,14 +9,14 @@ type GeneralComponents = {
 
 export const test = base.extend<GeneralComponents>({
     authComponent: [
-        async ({ userPage }, use) => {
-            await use(new AuthenticationComponent(userPage));
+        async ({ page }, use) => {
+            await use(new AuthenticationComponent(page));
         },
         { box: true },
     ],
     headerComponent: [
-        async ({ userPage }, use) => {
-            await use(new HeaderComponent(userPage));
+        async ({ page }, use) => {
+            await use(new HeaderComponent(page));
         },
         { box: true },
     ],

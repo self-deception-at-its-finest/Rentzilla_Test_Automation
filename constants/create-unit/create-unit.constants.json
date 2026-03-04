@@ -69,7 +69,31 @@
             "add service button text": "Створити послугу"
         },
         "4": {
-            "title": "Вартість"
+            "title": "Вартість",
+            "payment method label": "Спосіб оплати",
+            "payment methods": {
+                "cash": "Готівкою / на картку",
+                "cashless without VAT": "Безготівковий розрахунок (без ПДВ)",
+                "cashless with VAT": "Безготівковий розрахунок (з ПДВ)"
+            },
+            "price field label": "Вартість мінімального замовлення",
+            "price field placeholder": "Наприклад, 1000",
+            "service price label": "Вартість Ваших послуг",
+            "service price description": "За бажанням Ви можете додати вартість конкретних послуг, які надає технічний засіб",
+            "add service price": "Додати вартість",
+            "service price types": {
+                "h": "Година",
+                "sh": "Зміна",
+                "t": "Тонна",
+                "ga": "Гектар",
+                "m2": "Метр кв.",
+                "m3": "Метр куб.",
+                "km": "Кілометр"
+            },
+            "shifts": {
+                "eight": "8 год",
+                "four": "4 год"
+            }
         },
         "5": {
             "title": "Контакти"

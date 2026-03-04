@@ -98,4 +98,10 @@ export const test = base.extend<
         },
         { box: true },
     ],
+    priceComponent: [
+        async ({ userPage }, use) => {
+            await use(new PriceComponent(userPage));
+        },
+        { box: true },
+    ],
 });
