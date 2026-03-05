@@ -78,7 +78,14 @@ test.describe(
 
                 await test.step(`12 valid images loaded successfully`, async () => {
                     for (let i = 1; i <= MAX_IMAGES; i++) {
+                        const before =
+                            await photosComponent.uploadedPhotoButtons.count();
+
                         await photosComponent.uploadPhoto(String(i));
+
+                        await expect(
+                            photosComponent.uploadedPhotoButtons,
+                        ).toHaveCount(before + 1);
                     }
 
                     await expect(
