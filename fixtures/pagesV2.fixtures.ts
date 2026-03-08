@@ -10,10 +10,9 @@ import {
     fillTab3Flow,
 } from "../flows/ads/fillTabs.flow";
 import { generateText } from "../utils/fakeData";
-import { switchToAdminFlow } from "../flows/switchLogins.flow";
-import { env } from "../config/env";
-import { AdminPage } from "../pages/Admin.page";
-import { ENDPOINTS } from "../constants/endpoints.constants";
+import { ApiHelper } from "../utils/api/ApiHelper";
+import { getAccessToken } from "../utils/api/authToken";
+import { adminFile } from "../utils/api/authPaths";
 
 const test = apiAuth.extend<{
     authorizedHomePage: HomePage;
@@ -65,7 +64,7 @@ const test = apiAuth.extend<{
     ],
 
     createUnitPageWithFilledTwoTabsAndNewService: [
-        async ({ createUnitPage, userPage, adminPage }, use) => {
+        async ({ createUnitPage, userPage, request }, use) => {
             const ad = buildTestAds(1)[0];
             const service = ad.service + generateText(10);
 
@@ -75,9 +74,10 @@ const test = apiAuth.extend<{
             await createUnitPage.nextStep();
 
             await use({ createUnitPage, service });
-            await adminPage.goto(ENDPOINTS.HOME);
-            await switchToAdminFlow(adminPage, env.admin);
-            await new AdminPage(adminPage).removeService(service);
+            await new ApiHelper(request).deleteServiceByName(
+                getAccessToken(adminFile),
+                service,
+            );
         },
         { box: false },
     ],

@@ -11,6 +11,8 @@ yarn-error.log*
 .vscode/*
 .DS_Store
 
+start_ts.ps1
+
 # Playwright
 node_modules/
 /test-results/
@@ -20,7 +22,6 @@ node_modules/
 /playwright/.auth/
 /.idea/
 
+
 # Environment
 .env
-eslint.config.ts
-eslint.config.mts

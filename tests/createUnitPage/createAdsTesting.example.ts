@@ -1,51 +1,35 @@
-import { env } from "../../config/env";
-import { AuthenticationComponent } from "../../components/Authentication.component";
-import { test } from "../../fixtures/pagesV2.fixtures";
-import { CreateUnitPage } from "../../pages/CreateUnit.page";
-import { TestAdData } from "../../types/tabs";
-import endpoints from "../../constants/endpoints.constants.json";
-import { type BrowserContext, type Page } from "@playwright/test";
-import { deleteAdsFlow } from "../../flows/admin/deleteAds.flow";
-import { switchToUserFlow } from "../../flows/switchLogins.flow";
-import { buildTestAds } from "../../utils/builders/ad.builder";
-import { createAdsFlow } from "../../flows/ads/createAds.flow";
-import { approveAdsFlow } from "../../flows/admin/approveAds.flow";
+import { test } from "@playwright/test";
+import { getAccessToken } from "../../utils/api/authToken";
+import { adminFile, userFile } from "../../utils/api/authPaths";
+import { ApiHelper } from "../../utils/api/ApiHelper";
+import { apiBuildAds } from "../../utils/builders/ad.builder";
 
-test.describe.serial("Testing of ADs setup and teardown", () => {
-    let ads: TestAdData[];
-    let createUnitPage: CreateUnitPage;
-    let context: BrowserContext;
-    let page: Page;
+test.describe("API test | Create and delete ADs", () => {
+    const adminToken = getAccessToken(adminFile);
+    const userToken = getAccessToken(userFile);
 
-    test.beforeAll(async ({ browser }) => {
-        context = await browser.newContext();
-        page = await context.newPage();
+    let createdAds: any[] = [];
 
-        await page.goto(endpoints.home);
-        await new AuthenticationComponent(page).login(env.user);
-
-        ads = buildTestAds(5);
-        await createAdsFlow(page, ads);
-        await approveAdsFlow(page, ads);
-
-        await switchToUserFlow(page, env.user);
-        createUnitPage = new CreateUnitPage(page);
+    test.beforeAll(async ({ request }) => {
+        const ads = apiBuildAds(2);
+        for (const ad of ads) {
+            createdAds.push(
+                await new ApiHelper(request).createUnit(userToken, ad),
+            );
+        }
     });
 
-    test.afterAll(async () => {
-        await deleteAdsFlow(page, ads);
-        await context.close();
+    test.afterAll(async ({ request }) => {
+        for (const ad of createdAds) {
+            await new ApiHelper(request).deleteUnitById(adminToken, ad.id);
+        }
     });
 
-    test("Test 1", async () => {
-        console.log("Test 1 completed!");
+    test("First ad", async ({}) => {
+        console.log("Created Unit:", createdAds[0]);
     });
 
-    test("Test 2", async () => {
-        console.log("Test 2 completed!");
-    });
-
-    test("Test 3", async () => {
-        console.log("Test 3 completed");
+    test("Second ad", async ({}) => {
+        console.log("Created Unit:", createdAds[1]);
     });
 });

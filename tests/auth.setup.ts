@@ -2,14 +2,11 @@ import { test as setup } from "@playwright/test";
 import { env } from "../config/env";
 import { ENDPOINTS } from "../constants/endpoints.constants";
 
-import path from "path";
 import fs from "fs";
 
-const authDir = path.resolve("playwright/.auth");
-fs.mkdirSync(authDir, { recursive: true });
+import { authDir, adminFile, userFile } from "../utils/api/authPaths";
 
-const adminFile = path.join(authDir, "admin.json");
-const userFile = path.join(authDir, "user.json");
+fs.mkdirSync(authDir, { recursive: true });
 
 [
     {
@@ -34,7 +31,6 @@ const userFile = path.join(authDir, "user.json");
             data: {
                 email: email,
                 password: password,
-                phone: "phone",
             },
         });
 

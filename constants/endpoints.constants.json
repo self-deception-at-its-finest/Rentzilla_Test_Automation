@@ -1,6 +1,14 @@
 {
     "api": {
-        "create or login": "api/auth/jwt/create/"
+        "create or login": "/api/auth/jwt/create/",
+        "categories": "/api/categories/",
+        "units": "/api/units/",
+        "moderate unit base": "/api/crm/units",
+        "manufacturer": "/api/crm/manufacturers",
+        "service categories": "/api/crm/service/categories",
+        "services": "/api/services/",
+        "orders": "/api/orders/",
+        "crm services": "/api/crm/services/"
     },
     "home": "",
     "admin": "/admin",
