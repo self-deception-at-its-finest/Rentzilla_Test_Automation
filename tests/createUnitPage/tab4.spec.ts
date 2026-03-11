@@ -70,7 +70,7 @@ test.describe(
                     await priceComponent.closePaymentMethodDropdown();
                 });
 
-                await test.step("After clicking on the variant it is displayed in the field", async () => {
+                await test.step("After clicking on the variants they are displayed in the field", async () => {
                     const methodsCount =
                         await priceComponent.allDropdownItems.count();
                     for (let i = 0; i < methodsCount; i++) {
