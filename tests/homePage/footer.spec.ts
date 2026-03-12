@@ -9,7 +9,7 @@ test.describe("Home Page Footer Tests", () => {
             tag: "@UI",
             annotation: { type: "Test case", description: "C214" },
         },
-        async ({ page, homePage }) => {
+        async ({ userPage: page, homePage }) => {
             const footer = homePage.footer;
 
             await test.step("1-11. Visibility: scroll to footer and check all static elements", async () => {

@@ -34,20 +34,20 @@ const test = apiAuth.extend<{
     homePage: HomePage;
 }>({
     unitPage: [
-        async ({ page }, use) => {
+        async ({ userPage: page }, use) => {
             await use(new UnitPage(page));
         },
         { box: true },
     ],
     productsPage: [
-        async ({ page }, use) => {
+        async ({ userPage: page }, use) => {
             await use(new ProductsPage(page));
         },
         { box: true },
     ],
 
     favoritePage: [
-        async ({ page }, use) => {
+        async ({ userPage: page }, use) => {
             await use(new FavoriteUnitsPage(page));
         },
         { box: true },
@@ -141,8 +141,8 @@ const test = apiAuth.extend<{
     ],
 
     homePage: [
-        async ({ userPage }, use) => {
-            await use(new HomePage(userPage));
+        async ({ page }, use) => {
+            await use(new HomePage(page));
         },
         { box: false },
     ],
