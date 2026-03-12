@@ -3,3 +3,5 @@
 `@field validation` — tests focused on input field (including `textarea`) validation.
 
 `@button validation` — tests that verify button behavior.
+
+`@functional` — tests that ensuring the system behaves according to requirements regardless of the visual representation

@@ -17,4 +17,5 @@ export const ENDPOINTS = {
     COOKIES: endpoints.cookies,
     TERMS: endpoints.terms,
     UNIT_DETAILS_RE: /\/unit\//,
+    OWNER_UNITS: endpoints["owner units"],
 } as const;
