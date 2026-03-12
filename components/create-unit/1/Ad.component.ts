@@ -12,10 +12,10 @@ export class AdComponent extends BaseComponent {
     }
 
     async typeAd(str: string): Promise<void> {
-        await super.typeIntoField(this.field, str);
+        await this.typeIntoField(this.field, str);
     }
 
     async clearAdField(): Promise<void> {
-        await super.clearField(this.field);
+        await this.clearField(this.field);
     }
 }

@@ -9,7 +9,18 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "noUnusedLocals": true, 
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "baseUrl": ".",
+    "paths": {
+      "@fixtures/*": ["fixtures/*"],
+      "@utils/*": ["utils/*"],
+      "@constants/*": ["constants/*"],
+      "@pages/*": ["pages/*"],
+      "@custom-types/*": ["types/*"],
+      "@config/*": ["config/*"],
+      "@flows/*": ["flows/*"],
+      "@components/*": ["components/*"]
+    }
   },
   "include": [
     "playwright.config.ts",

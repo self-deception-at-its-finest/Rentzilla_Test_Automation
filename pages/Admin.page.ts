@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { TestAdData } from "../types/tabs";
+import { TestAdData } from "@custom-types/tabs";
 
 export class AdminPage {
     readonly page: Page;

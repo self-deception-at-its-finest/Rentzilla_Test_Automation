@@ -1,16 +1,21 @@
 import { test as apiAuth } from "./apiAuth.fixtures";
 import { expect } from "@playwright/test";
-import { HomePage } from "../pages/Home.page";
-import { CreateUnitPage } from "../pages/CreateUnit.page";
-import endpoints from "../constants/endpoints.constants.json";
-import { buildTestAds } from "../utils/builders/ad.builder";
-import { fillTab1Flow } from "../flows/ads/fillTab1.flow";
-import { fillTab2Flow } from "../flows/ads/fillTab2.flow";
-import { generateText } from "../utils/fakeData";
-import { switchToAdminFlow } from "../flows/switchLogins.flow";
-import { env } from "../config/env";
-import { AdminPage } from "../pages/Admin.page";
-import { ENDPOINTS } from "../constants/endpoints.constants";
+import { HomePage } from "@pages/Home.page";
+import { CreateUnitPage } from "@pages/CreateUnit.page";
+import endpoints from "@constants/endpoints.constants.json";
+import { buildTestAds } from "@utils/builders/ad.builder";
+import {
+    fillTab1Flow,
+    fillTab2Flow,
+    fillTab3Flow,
+} from "@flows/ads/fillTabs.flow";
+import { generateText } from "@utils/fakeData";
+import { ApiHelper } from "@utils/api/ApiHelper";
+import { getAccessToken } from "@utils/api/authToken";
+import { adminFile } from "@utils/api/authPaths";
+import { UnitPage } from "@pages/Unit.page";
+import { FavoriteUnitsPage } from "@pages/FavoriteUnits.page";
+import { ProductsPage } from "@pages/Products.page";
 
 const test = apiAuth.extend<{
     authorizedHomePage: HomePage;
@@ -21,8 +26,50 @@ const test = apiAuth.extend<{
         createUnitPage: CreateUnitPage;
         service: string;
     };
+    unitPage: UnitPage;
+    favoritePage: FavoriteUnitsPage;
+    favoriteUnitsState: string[];
+    productsPage: ProductsPage;
+    createUnitPageWithFilledThreeTabs: CreateUnitPage;
     homePage: HomePage;
 }>({
+    unitPage: [
+        async ({ page }, use) => {
+            await use(new UnitPage(page));
+        },
+        { box: true },
+    ],
+    productsPage: [
+        async ({ page }, use) => {
+            await use(new ProductsPage(page));
+        },
+        { box: true },
+    ],
+
+    favoritePage: [
+        async ({ page }, use) => {
+            await use(new FavoriteUnitsPage(page));
+        },
+        { box: true },
+    ],
+
+    favoriteUnitsState: [
+        async ({ authorizedHomePage, productsPage, favoritePage }, use) => {
+            // Setup: Add 3 units to favorites and store their names
+            await authorizedHomePage.navAdsLink.click();
+            const addedUnits = await productsPage.addUnitsToFavorites(3);
+
+            await use(addedUnits);
+
+            // Cleanup: Remove added units from favorites to reset state for other tests
+            await authorizedHomePage.avatarBlock.click();
+            await authorizedHomePage.dropdownAdsItem.click();
+            await authorizedHomePage.sidebarFavoriteAdsVariant.click();
+            await favoritePage.clearAllFavorites();
+        },
+        { box: false, title: "Manage Favorite Units State" },
+    ],
+
     authorizedHomePage: [
         async ({ userPage }, use) => {
             await userPage.goto(endpoints.home);
@@ -61,10 +108,9 @@ const test = apiAuth.extend<{
     ],
 
     createUnitPageWithFilledTwoTabsAndNewService: [
-        async ({ createUnitPage, userPage, adminPage }, use) => {
+        async ({ createUnitPage, userPage, request }, use) => {
             const ad = buildTestAds(1)[0];
             const service = ad.service + generateText(10);
-            console.log("new service: " + service);
 
             await fillTab1Flow(userPage, ad);
             await createUnitPage.nextStep();
@@ -72,9 +118,24 @@ const test = apiAuth.extend<{
             await createUnitPage.nextStep();
 
             await use({ createUnitPage, service });
-            await adminPage.goto(ENDPOINTS.HOME);
-            await switchToAdminFlow(adminPage, env.admin);
-            await new AdminPage(adminPage).removeService(service);
+            await new ApiHelper(request).deleteServiceByName(
+                getAccessToken(adminFile),
+                service,
+            );
+        },
+        { box: false },
+    ],
+
+    createUnitPageWithFilledThreeTabs: [
+        async ({ createUnitPage, userPage }, use) => {
+            const ad = buildTestAds(1)[0];
+            await fillTab1Flow(userPage, ad);
+            await createUnitPage.nextStep();
+            await fillTab2Flow(userPage, ad.photo);
+            await createUnitPage.nextStep();
+            await fillTab3Flow(userPage, ad.service);
+            await createUnitPage.nextStep();
+            await use(createUnitPage);
         },
         { box: false },
     ],

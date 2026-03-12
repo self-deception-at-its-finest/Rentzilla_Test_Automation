@@ -1,7 +1,7 @@
-import path from "path";
 import { test as base } from "./base.fixtures";
 import { expect, type Page } from "@playwright/test";
 import type { Browser } from "@playwright/test";
+import { adminFile, userFile } from "@utils/api/authPaths";
 
 function createRolePage(roleFile: string) {
     return async (
@@ -20,16 +20,14 @@ function createRolePage(roleFile: string) {
     };
 }
 
-const PATH_TO_DATA = path.resolve("playwright/.auth");
-
 type MyFixtures = {
     adminPage: Page;
     userPage: Page;
 };
 
 export const test = base.extend<MyFixtures>({
-    adminPage: createRolePage(path.join(PATH_TO_DATA, "admin.json")),
-    userPage: createRolePage(path.join(PATH_TO_DATA, "user.json")),
+    adminPage: createRolePage(adminFile),
+    userPage: createRolePage(userFile),
 });
 
 export { expect };

@@ -11,10 +11,10 @@ export class ModelComponent extends BaseComponent {
         this.errorBlock = this.section.getByTestId("descriptionError");
     }
     async typeModel(str: string): Promise<void> {
-        await super.typeIntoField(this.field, str);
+        await this.typeIntoField(this.field, str);
     }
 
     async clearModelField(): Promise<void> {
-        await super.clearField(this.field);
+        await this.clearField(this.field);
     }
 }

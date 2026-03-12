@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import { AuthenticationComponent } from "../components/Authentication.component";
-import endpoints from "../constants/endpoints.constants.json";
-import { AdminPage } from "../pages/Admin.page";
+import { AuthenticationComponent } from "@components/Authentication.component";
+import endpoints from "@constants/endpoints.constants.json";
+import { AdminPage } from "@pages/Admin.page";
 
 type User = {
     email: string;

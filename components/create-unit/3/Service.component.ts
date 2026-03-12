@@ -1,5 +1,6 @@
-import { Locator, Page } from "@playwright/test";
-import { tabs } from "../../../constants/create-unit/fields.constants";
+import type { Locator, Page } from "@playwright/test";
+import { tabs } from "@constants/create-unit/fields.constants";
+import { FieldActions } from "../FieldActions";
 
 type BoundingBox = {
     x: number;
@@ -27,6 +28,8 @@ export class ServiceComponent {
     readonly notFoundServiceText: Locator;
     readonly addServiceButton: Locator;
     readonly addServiceIcon: Locator;
+
+    private readonly fieldActions: FieldActions;
 
     constructor(page: Page) {
         this.page = page;
@@ -59,6 +62,7 @@ export class ServiceComponent {
         this.addServiceIcon = this.addServiceButton.getByTestId(
             "svg-plus-addNewItem",
         );
+        this.fieldActions = new FieldActions(this.page);
     }
 
     async getLoupeCoords(): Promise<BoundingBox | null> {
@@ -78,12 +82,11 @@ export class ServiceComponent {
     }
 
     async typeService(str: string) {
-        await this.field.click();
-        await this.page.keyboard.type(str);
+        await this.fieldActions.typeIntoField(this.field, str);
     }
 
     async fillField(str: string) {
-        await this.field.fill(str);
+        await this.fieldActions.fillInField(this.field, str);
     }
 
     async selectService(num: number = 0) {
@@ -98,6 +101,6 @@ export class ServiceComponent {
     }
 
     async clearField() {
-        await this.field.clear();
+        await this.fieldActions.clearField(this.field);
     }
 }
