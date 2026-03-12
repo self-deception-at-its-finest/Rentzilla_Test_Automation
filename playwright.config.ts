@@ -19,7 +19,7 @@ export default defineConfig({
         actionTimeout: 10 * 1000,
         navigationTimeout: 10 * 1000,
     },
-
+    
     projects: [
         {
             name: "auth",
