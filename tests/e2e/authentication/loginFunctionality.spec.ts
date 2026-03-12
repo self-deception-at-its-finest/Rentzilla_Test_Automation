@@ -1,7 +1,7 @@
-import { expect, test} from '../../../fixtures/index';
+import { expect, test} from '@fixtures/indexV2';
 import {faker} from "@faker-js/faker";
-import errorMessages from '../../../constants/errorMessages.constants.json';
-import colors from '../../../constants/colors.constants.json';
+import errorMessages from '@constants/errorMessages.constants.json';
+import colors from '@constants/colors.constants.json';
 
 test.describe('Login functionality', () => {
     test.beforeEach(async ({ homePage }) => {
@@ -9,7 +9,7 @@ test.describe('Login functionality', () => {
             await homePage.open();
         });
     });
-    test('C201: Authorization with valid email and password', async ({ authComponent, headerComponent }) => {
+    test.only('C201: Authorization with valid email and password', async ({ authComponent, headerComponent }) => {
         await test.step('Open Login form', async () => {
             await headerComponent.openLoginForm();
         });

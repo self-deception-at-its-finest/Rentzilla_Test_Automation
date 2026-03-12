@@ -12,7 +12,7 @@ test.describe("Favorite Units Tests", () => {
             tag: "@UI",
             annotation: { type: "Test case", description: "C300" },
         },
-        async ({ page, authorizedHomePage, favoritePage }) => {
+        async ({ userPage: page, authorizedHomePage, favoritePage }) => {
             await test.step("1. Navigate to 'Обрані' through Cabinet Sidebar", async () => {
                 await authorizedHomePage.avatarBlock.click();
                 await authorizedHomePage.dropdownAdsItem.click();
@@ -47,7 +47,7 @@ test.describe("Favorite Units Tests", () => {
             tag: "@functional",
             annotation: { type: "Test case", description: "C302" },
         },
-        async ({ page, authorizedHomePage, productsPage, favoritePage }) => {
+        async ({ userPage: page, authorizedHomePage, productsPage, favoritePage }) => {
             let unitName: string;
 
             await test.step("1-2. Click on the 'Оголошення' button in the header. Click on the add to 'Обрані оголошення' icon of the unit section.", async () => {
@@ -111,7 +111,7 @@ test.describe("Favorite Units Tests", () => {
             tag: "@functional",
             annotation: { type: "Test case", description: "C303" },
         },
-        async ({ page, authorizedHomePage, productsPage, favoritePage }) => {
+        async ({ userPage: page, authorizedHomePage, productsPage, favoritePage }) => {
             let addedUnits: string[] = [];
 
             await test.step("--- Add 3 units to favorites", async () => {
@@ -191,7 +191,7 @@ test.describe("Favorite Units Tests", () => {
             annotation: { type: "Test case", description: "C305" },
         },
         async ({
-            page,
+            userPage: page,
             authorizedHomePage,
             favoriteUnitsState,
             favoritePage,
@@ -305,7 +305,7 @@ test.describe("Favorite Units Tests", () => {
             tag: "@UI",
             annotation: { type: "Test case", description: "C311" },
         },
-        async ({ page, authorizedHomePage, favoritePage, productsPage }) => {
+        async ({ userPage: page, authorizedHomePage, favoritePage, productsPage }) => {
             await test.step("--- Add units to favorites", async () => {
                 await authorizedHomePage.navAdsLink.click();
                 await productsPage.addUnitsToFavorites(15);
@@ -368,11 +368,11 @@ test.describe("Favorite Units Tests", () => {
             annotation: { type: "Test case", description: "C315" },
         },
         async ({
-            page,
+            userPage: page,
             authorizedHomePage,
             favoritePage,
             unitPage,
-            favoriteUnitsState,
+            favoriteUnitsState: _,
         }) => {
             const categoriesToCheck = [
                 SPECIAL_EQUIPMENT.categories["building equipment"].title, // Будівельна техніка
@@ -476,10 +476,10 @@ test.describe("Favorite Units Tests", () => {
             annotation: { type: "Test case", description: "C316" },
         },
         async ({
-            page,
+            userPage: page,
             authorizedHomePage,
             favoritePage,
-            favoriteUnitsState,
+            favoriteUnitsState: _,
         }) => {
             await test.step("--- Navigate to 'Обрані' through Cabinet Sidebar", async () => {
                 await authorizedHomePage.navigateToFavoriteAds();

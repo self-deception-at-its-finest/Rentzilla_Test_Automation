@@ -11,7 +11,7 @@ test.describe(
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C212" },
             },
-            async ({ page, productsPage, homePage }) => {
+            async ({ userPage: page, productsPage, homePage }) => {
                 await test.step("1. Open home page and scroll to 'Послуги' section", async () => {
                     await homePage.open();
                     await homePage.servicesSection.scrollIntoViewIfNeeded();
@@ -72,7 +72,7 @@ test.describe(
                 tag: "@UI",
                 annotation: { type: "Test case", description: "C213" },
             },
-            async ({ page, productsPage, homePage }) => {
+            async ({ userPage: page, productsPage, homePage }) => {
                 await test.step("1. Open home page and scroll to Special Equipment section", async () => {
                     await homePage.open();
                     await homePage.specialEquipmentSection.scrollIntoViewIfNeeded();
