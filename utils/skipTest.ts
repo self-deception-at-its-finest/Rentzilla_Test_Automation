@@ -1,4 +1,4 @@
-import { test } from "../fixtures/index";
+import { test } from "@fixtures/indexV2";
 
 export function markStepAsSkipped(
     step: string,

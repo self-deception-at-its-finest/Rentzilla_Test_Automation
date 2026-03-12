@@ -1,6 +1,6 @@
-import { expect, test } from "../../fixtures/index";
-import { ENDPOINTS } from "../../constants/endpoints.constants";
-import { FOOTER_CONSTS } from "../../constants/home-page/footer.constants";
+import { expect, test } from "@fixtures/indexV2";
+import { ENDPOINTS } from "@constants/endpoints.constants";
+import { FOOTER_CONSTS } from "@constants/home-page/footer.constants";
 
 test.describe("Home Page Footer Tests", () => {
     test(

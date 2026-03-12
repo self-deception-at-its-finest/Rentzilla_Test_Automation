@@ -1,4 +1,4 @@
-import { FIELDS_ERRORS } from "../constants/create-unit/createUnit.constants";
+import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
 
 function formatErrorMessage(message: string, missingObject: string): string {
     return message.replace("““", `“${missingObject}“`);

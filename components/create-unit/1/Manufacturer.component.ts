@@ -1,6 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import { BaseComponent } from "./Base.component";
-import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
+import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
 
 export class ManufacturerComponent extends BaseComponent {
     readonly errorBlock: Locator;

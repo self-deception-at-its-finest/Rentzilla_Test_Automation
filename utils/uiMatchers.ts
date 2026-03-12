@@ -1,11 +1,13 @@
 import { expect, Locator } from "@playwright/test";
-import { CREATE_UNIT_CONSTS } from "../constants/create-unit/createUnit.constants";
+import { CREATE_UNIT_CONSTS } from "@constants/create-unit/createUnit.constants";
 
 export async function expectFieldError(field: Locator) {
-    await expect.soft(field).toHaveCSS(
-        "border",
-        `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-    );
+    await expect
+        .soft(field)
+        .toHaveCSS(
+            "border",
+            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
+        );
 }
 
 export async function expectTextColorError(field: Locator) {

@@ -1,11 +1,11 @@
-import { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import BasePage from "./Base.page";
 import {
     data,
     CREATE_UNIT_CONSTS,
-} from "../constants/create-unit/createUnit.constants";
-import { TabNumber } from "../types/tabs";
-import { TAB_NUMBERS } from "../constants/create-unit/createUnit.constants";
+} from "@constants/create-unit/createUnit.constants";
+import { TabNumber } from "@custom-types/tabs";
+import { TAB_NUMBERS } from "@constants/create-unit/createUnit.constants";
 
 type TabInfo = {
     title: string;

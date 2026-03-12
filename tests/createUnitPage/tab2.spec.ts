@@ -1,19 +1,19 @@
-import { expect, test } from "../../fixtures/indexV2";
-import endpoints from "../../constants/endpoints.constants.json";
-import { MAX_IMAGES, tabs } from "../../constants/create-unit/fields.constants";
-import { clickElement } from "../../utils/clickers";
+import { expect, test } from "@fixtures/indexV2";
+import endpoints from "@constants/endpoints.constants.json";
+import { MAX_IMAGES, tabs } from "@constants/create-unit/fields.constants";
+import { clickElement } from "@utils/clickers";
 import {
     BUTTONS,
     CREATE_UNIT_CONSTS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/createUnit.constants";
-import { clickOutside } from "../../utils/closeModal";
+} from "@constants/create-unit/createUnit.constants";
+import { clickOutside } from "@utils/closeModal";
 import {
     expectTabActive,
     expectTabInactive,
     expectTextColorError,
-} from "../../utils/uiMatchers";
+} from "@utils/uiMatchers";
 
 test.describe(
     "“Create unit” page | The “Photos” tab",

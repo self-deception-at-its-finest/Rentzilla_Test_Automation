@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import type { Locator, Page } from "@playwright/test";
-import { tabs } from "../../../constants/create-unit/fields.constants";
+import { tabs } from "@constants/create-unit/fields.constants";
 
 export class PhotosComponent {
     readonly page: Page;

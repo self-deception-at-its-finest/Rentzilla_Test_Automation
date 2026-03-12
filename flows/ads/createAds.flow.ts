@@ -1,13 +1,13 @@
-import { PhotosComponent } from "../../components/create-unit/2/Photos.component";
-import { ServiceComponent } from "../../components/create-unit/3/Service.component";
-import { PriceComponent } from "../../components/create-unit/4/Price.component";
-import { ContactsComponent } from "../../components/create-unit/5/Contacts.component";
-import { HeaderComponent } from "../../components/Header.component";
-import { TestAdData } from "../../types/tabs";
+import { PhotosComponent } from "@components/create-unit/2/Photos.component";
+import { ServiceComponent } from "@components/create-unit/3/Service.component";
+import { PriceComponent } from "@components/create-unit/4/Price.component";
+import { ContactsComponent } from "@components/create-unit/5/Contacts.component";
+import { HeaderComponent } from "@components/Header.component";
+import { TestAdData } from "@custom-types/tabs";
 import { Page } from "@playwright/test";
-import { CreateUnitPage } from "../../pages/CreateUnit.page";
+import { CreateUnitPage } from "@pages/CreateUnit.page";
 import { fillTab1Flow } from "./fillTab1.flow";
-import endpoints from "../../constants/endpoints.constants.json";
+import endpoints from "@constants/endpoints.constants.json";
 
 /**
  * Entire flow creating of ads

@@ -1,28 +1,28 @@
-import { test, expect } from "../../fixtures/indexV2";
-import endpoints from "../../constants/endpoints.constants.json";
+import { test, expect } from "@fixtures/indexV2";
+import endpoints from "@constants/endpoints.constants.json";
 import {
     SELECT_ICON,
     SELECTED_ICON,
     tabs,
-} from "../../constants/create-unit/fields.constants";
-import { getFieldPlaceholder } from "../../utils/formHelper";
+} from "@constants/create-unit/fields.constants";
+import { getFieldPlaceholder } from "@utils/formHelper";
 import {
     BUTTONS,
     CREATE_UNIT_CONSTS,
     FORBIDDEN_SYMBOLS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/createUnit.constants";
-import { generateText } from "../../utils/fakeData";
-import { SERVICES } from "../../constants/catalog.constants";
-import { formatMissingServiceError } from "../../utils/formatErrorMessages";
-import { clickElement } from "../../utils/clickers";
+} from "@constants/create-unit/createUnit.constants";
+import { generateText } from "@utils/fakeData";
+import { SERVICES } from "@constants/catalog.constants";
+import { formatMissingServiceError } from "@utils/formatErrorMessages";
+import { clickElement } from "@utils/clickers";
 import {
     expectTabActive,
     expectTabInactive,
     expectTextColorError,
-} from "../../utils/uiMatchers";
-import { getTwoRandomIndices } from "../../utils/getRandomIndices";
+} from "@utils/uiMatchers";
+import { getTwoRandomIndices } from "@utils/getRandomIndices";
 
 test.describe(
     "“Create unit” page | The “Service” tab",

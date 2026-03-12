@@ -1,10 +1,10 @@
 import { test as setup } from "@playwright/test";
-import { env } from "../config/env";
-import { ENDPOINTS } from "../constants/endpoints.constants";
+import { env } from "@config/env";
+import { ENDPOINTS } from "@constants/endpoints.constants";
 
 import fs from "fs";
 
-import { authDir, adminFile, userFile } from "../utils/api/authPaths";
+import { authDir, adminFile, userFile } from "@utils/api/authPaths";
 
 fs.mkdirSync(authDir, { recursive: true });
 

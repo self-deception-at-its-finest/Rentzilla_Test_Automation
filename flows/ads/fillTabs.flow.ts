@@ -1,11 +1,11 @@
 import { Page } from "@playwright/test";
-import { TestAdData } from "../../types/tabs";
-import { AdComponent } from "../../components/create-unit/1/Ad.component";
-import { CategoryComponent } from "../../components/create-unit/1/Category.component";
-import { LocationComponent } from "../../components/create-unit/1/Location.component";
-import { ManufacturerComponent } from "../../components/create-unit/1/Manufacturer.component";
-import { PhotosComponent } from "../../components/create-unit/2/Photos.component";
-import { ServiceComponent } from "../../components/create-unit/3/Service.component";
+import { TestAdData } from "@custom-types/tabs";
+import { AdComponent } from "@components/create-unit/1/Ad.component";
+import { CategoryComponent } from "@components/create-unit/1/Category.component";
+import { LocationComponent } from "@components/create-unit/1/Location.component";
+import { ManufacturerComponent } from "@components/create-unit/1/Manufacturer.component";
+import { PhotosComponent } from "@components/create-unit/2/Photos.component";
+import { ServiceComponent } from "@components/create-unit/3/Service.component";
 
 export async function fillTab1Flow(page: Page, ad: TestAdData) {
     await new CategoryComponent(page).selectCategory();

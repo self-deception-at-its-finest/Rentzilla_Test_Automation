@@ -1,7 +1,7 @@
 import { test as base } from "./base.fixtures";
 import { expect, type Page } from "@playwright/test";
 import type { Browser } from "@playwright/test";
-import { adminFile, userFile } from "../utils/api/authPaths";
+import { adminFile, userFile } from "@utils/api/authPaths";
 
 function createRolePage(roleFile: string) {
     return async (

@@ -3,20 +3,20 @@ import {
     CREATE_UNIT_CONSTS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/createUnit.constants";
+} from "@constants/create-unit/createUnit.constants";
 import {
     DROPDOWN_ICON,
     SELECT_ICON,
     tabs,
-} from "../../constants/create-unit/fields.constants";
-import { ENDPOINTS } from "../../constants/endpoints.constants";
-import { test, expect } from "../../fixtures/indexV2";
+} from "@constants/create-unit/fields.constants";
+import { ENDPOINTS } from "@constants/endpoints.constants";
+import { test, expect } from "@fixtures/indexV2";
 import {
     expectFieldError,
     expectTabActive,
     expectTabInactive,
     expectTextColorError,
-} from "../../utils/uiMatchers";
+} from "@utils/uiMatchers";
 
 test.describe(
     "“Create unit” page | The “Price” tab",

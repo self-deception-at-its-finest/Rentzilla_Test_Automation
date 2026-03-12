@@ -2,7 +2,7 @@ import { Locator, Page } from "@playwright/test";
 import {
     tabs,
     KeysWithLabel,
-} from "../../../constants/create-unit/fields.constants";
+} from "@constants/create-unit/fields.constants";
 import { FieldActions } from "../FieldActions";
 
 export abstract class BaseComponent {

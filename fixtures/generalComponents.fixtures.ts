@@ -1,6 +1,6 @@
 import { test as base } from "./base.fixtures";
-import { AuthenticationComponent } from "../components/Authentication.component";
-import { HeaderComponent } from "../components/Header.component";
+import { AuthenticationComponent } from "@components/Authentication.component";
+import { HeaderComponent } from "@components/Header.component";
 
 type GeneralComponents = {
     authComponent: AuthenticationComponent;

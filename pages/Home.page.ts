@@ -1,7 +1,7 @@
-import { expect, type Locator, type Page } from '@playwright/test';
-import BasePage from './Base.page';
-import endpoints from '../constants/endpoints.constants.json';
-import { FooterComponent } from "../components/home-page/Footer.component";
+import { type Locator, type Page } from "@playwright/test";
+import BasePage from "./Base.page";
+import endpoints from "../constants/endpoints.constants.json";
+import { FooterComponent } from "@components/home-page/Footer.component";
 
 export class HomePage extends BasePage {
     public servicesTitle: Locator;
@@ -27,9 +27,11 @@ export class HomePage extends BasePage {
     constructor(page: Page) {
         super(page);
         this.endpoint = endpoints.home;
-        this.servicesTitle = page.getByTestId('services').getByTestId('title');
-        this.servicesPopularni = page.getByTestId('services__populyarni');
-        this.servicesSilskogospodarski = page.getByTestId('services__silskogospodarski');
+        this.servicesTitle = page.getByTestId("services").getByTestId("title");
+        this.servicesPopularni = page.getByTestId("services__populyarni");
+        this.servicesSilskogospodarski = page.getByTestId(
+            "services__silskogospodarski",
+        );
 
         this.footer = new FooterComponent(page);
 
@@ -39,14 +41,21 @@ export class HomePage extends BasePage {
         this.serviceItems = this.servicesSection.getByTestId(/^service__/);
         this.logo = page.locator('[data-testid="logo"]').first();
 
-        this.specialEquipmentSection = page.locator('section[data-testid="specialEquipment"]');
-        this.specialEquipmentTitle = this.specialEquipmentSection.locator('[data-testid="title"]');
-        this.specialEquipmentTabs = this.specialEquipmentSection.getByTestId(/^specialEquipment__/);
-        this.specialEquipmentItems = this.specialEquipmentSection.getByTestId(/^category__/);
+        this.specialEquipmentSection = page.locator(
+            'section[data-testid="specialEquipment"]',
+        );
+        this.specialEquipmentTitle = this.specialEquipmentSection.locator(
+            '[data-testid="title"]',
+        );
+        this.specialEquipmentTabs =
+            this.specialEquipmentSection.getByTestId(/^specialEquipment__/);
+        this.specialEquipmentItems =
+            this.specialEquipmentSection.getByTestId(/^category__/);
 
-        this.sidebarAdsCategory = page.getByTestId('leftsideCategory').filter({ hasText: 'Оголошення' });
+        this.sidebarAdsCategory = page
+            .getByTestId("leftsideCategory")
+            .filter({ hasText: "Оголошення" });
         this.navAdsLink = page.locator('a[href="/products/"]').first();
-        
     }
 
     async open(): Promise<void> {

@@ -1,34 +1,34 @@
-import { expect, test } from "../../fixtures/indexV2";
+import { expect, test } from "@fixtures/indexV2";
 import {
     BUTTONS,
     FORBIDDEN_SYMBOLS,
     MANUFACTURERS,
     TAB_NUMBERS,
     TAB_TITLES,
-} from "../../constants/create-unit/createUnit.constants";
+} from "@constants/create-unit/createUnit.constants";
 import {
     CREATE_UNIT_CONSTS,
     FIELDS_ERRORS,
-} from "../../constants/create-unit/createUnit.constants";
-import endpoints from "../../constants/endpoints.constants.json";
-import catalog from "../../constants/catalog.constants.json";
-import { isDesktop } from "../../utils/viewportGuard";
-import { markStepAsSkipped } from "../../utils/skipTest";
-import { getFieldPlaceholder } from "../../utils/formHelper";
+} from "@constants/create-unit/createUnit.constants";
+import endpoints from "@constants/endpoints.constants.json";
+import catalog from "@constants/catalog.constants.json";
+import { isDesktop } from "@utils/viewportGuard";
+import { markStepAsSkipped } from "@utils/skipTest";
+import { getFieldPlaceholder } from "@utils/formHelper";
 import {
     DEFAULT_LOCATION,
     tabs,
-} from "../../constants/create-unit/fields.constants";
-import { generateText, generateValidText } from "../../utils/fakeData";
-import { formatMissingManufacturerError } from "../../utils/formatErrorMessages";
-import { getRandomElement } from "../../utils/getElements";
+} from "@constants/create-unit/fields.constants";
+import { generateText, generateValidText } from "@utils/fakeData";
+import { formatMissingManufacturerError } from "@utils/formatErrorMessages";
+import { getRandomElement } from "@utils/getElements";
 import {
     expectFieldDefault,
     expectFieldError,
     expectTabActive,
     expectTabInactive,
-} from "../../utils/uiMatchers";
-import { clickOutside } from "../../utils/closeModal";
+} from "@utils/uiMatchers";
+import { clickOutside } from "@utils/closeModal";
 
 test.describe(
     "“Create unit” page | The “Main info” tab",

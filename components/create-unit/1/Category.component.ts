@@ -1,8 +1,8 @@
 import { Locator, Page } from "@playwright/test";
-import { isDesktop } from "../../../utils/viewportGuard";
+import { isDesktop } from "@utils/viewportGuard";
 import { BaseComponent } from "./Base.component";
-import { tabs } from "../../../constants/create-unit/fields.constants";
-import { FIELDS_ERRORS } from "../../../constants/create-unit/createUnit.constants";
+import { tabs } from "@constants/create-unit/fields.constants";
+import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
 
 export class CategoryComponent extends BaseComponent {
     readonly field: Locator;

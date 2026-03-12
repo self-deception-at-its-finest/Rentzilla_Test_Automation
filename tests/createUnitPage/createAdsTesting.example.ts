@@ -1,8 +1,8 @@
 import { test } from "@playwright/test";
-import { getAccessToken } from "../../utils/api/authToken";
-import { adminFile, userFile } from "../../utils/api/authPaths";
-import { ApiHelper } from "../../utils/api/ApiHelper";
-import { apiBuildAds } from "../../utils/builders/ad.builder";
+import { getAccessToken } from "@utils/api/authToken";
+import { adminFile, userFile } from "@utils/api/authPaths";
+import { ApiHelper } from "@utils/api/ApiHelper";
+import { apiBuildAds } from "@utils/builders/ad.builder";
 
 test.describe("API test | Create and delete ADs", () => {
     const adminToken = getAccessToken(adminFile);

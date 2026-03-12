@@ -1,5 +1,5 @@
 import type { Locator, Page } from "@playwright/test";
-import { tabs } from "../../../constants/create-unit/fields.constants";
+import { tabs } from "@constants/create-unit/fields.constants";
 import { FieldActions } from "../FieldActions";
 
 export class PriceComponent {
