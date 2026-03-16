@@ -32,6 +32,7 @@ const test = apiAuth.extend<{
     productsPage: ProductsPage;
     createUnitPageWithFilledThreeTabs: CreateUnitPage;
     homePage: HomePage;
+    myAdsPage: MyAdsPage;
 }>({
     unitPage: [
         async ({ userPage: page }, use) => {
@@ -145,6 +146,13 @@ const test = apiAuth.extend<{
             await use(new HomePage(page));
         },
         { box: false },
+    ],
+
+    myAdsPage: [
+        async ({ page }, use) => {
+            await use(new MyAdsPage(page));
+        },
+        { box: true },
     ],
 });
 
