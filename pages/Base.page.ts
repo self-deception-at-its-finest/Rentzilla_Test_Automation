@@ -7,6 +7,7 @@ export default class BasePage {
     readonly avatarBlock: Locator;
     readonly dropdownAdsItem: Locator;
     readonly sidebarFavoriteAdsVariant: Locator;
+    readonly sidebarMyAdsVariant: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -14,6 +15,7 @@ export default class BasePage {
         this.avatarBlock = page.getByTestId('avatarBlock');
         this.dropdownAdsItem = page.getByTestId('units');
         this.sidebarFavoriteAdsVariant = page.getByTestId('variant').filter({ hasText: 'Обрані оголошення' });
+        this.sidebarMyAdsVariant = page.getByTestId('variant').filter({ hasText: 'Мої оголошення' });
     }
 
     /**
@@ -30,5 +32,11 @@ export default class BasePage {
         await this.avatarBlock.click();
         await this.dropdownAdsItem.click();
         await this.sidebarFavoriteAdsVariant.click();
+    }
+
+    async navigateToMyAds() {
+        await this.avatarBlock.click();
+        await this.dropdownAdsItem.click();
+        await this.sidebarMyAdsVariant.click();
     }
 }

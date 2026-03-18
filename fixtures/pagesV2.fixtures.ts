@@ -15,9 +15,16 @@ import { getAccessToken } from "@utils/api/authToken";
 import { adminFile } from "@utils/api/authPaths";
 import { UnitPage } from "@pages/Unit.page";
 import { FavoriteUnitsPage } from "@pages/FavoriteUnits.page";
+import { MyAdsPage } from "@pages/MyAds.page";
 import { ProductsPage } from "@pages/Products.page";
 
+import { createAdsFlow } from "../flows/ads/createAds.flow";
+import { approveAdsFlow } from "../flows/admin/approveAds.flow";
+import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
+import { TestAdData } from "@custom-types/tabs";
+
 const test = apiAuth.extend<{
+    ads: TestAdData[];
     authorizedHomePage: HomePage;
     createUnitPage: CreateUnitPage;
     createUnitPageWithFilledTab1: CreateUnitPage;
@@ -32,7 +39,35 @@ const test = apiAuth.extend<{
     productsPage: ProductsPage;
     createUnitPageWithFilledThreeTabs: CreateUnitPage;
     homePage: HomePage;
+    myAdsPage: MyAdsPage;
 }>({
+
+    ads: [
+        async ({ browser, userPage }, use) => {
+            const testAds = buildTestAds(5);
+            
+            // 1. Створюємо оголошення від імені звичайного користувача (userPage вже авторизована)
+            await userPage.goto(endpoints["create unit"]);
+            await createAdsFlow(userPage, testAds);
+
+            // 2. СХВАЛЕННЯ: Створюємо окрему сторінку для Адміна
+            const adminContext = await browser.newContext({ storageState: adminFile }); // Завантажуємо стан адміна
+            const adminPage = await adminContext.newPage();
+            
+            // 3. Переходимо в адмін-панель
+            await adminPage.goto(endpoints.admin); 
+            await approveAdsFlow(adminPage, testAds);
+
+            await use(testAds);
+
+            // Очищення
+            await adminPage.close();
+            await adminContext.close();
+            await deleteAdsFlow(userPage, testAds);
+        },
+        { box: false },
+    ],
+
     unitPage: [
         async ({ userPage: page }, use) => {
             await use(new UnitPage(page));
@@ -68,6 +103,13 @@ const test = apiAuth.extend<{
             await favoritePage.clearAllFavorites();
         },
         { box: false, title: "Manage Favorite Units State" },
+    ],
+
+    myAdsPage: [
+        async ({ userPage: page }, use) => {
+            await use(new MyAdsPage(page));
+        },
+        { box: true },
     ],
 
     authorizedHomePage: [
@@ -146,6 +188,7 @@ const test = apiAuth.extend<{
         },
         { box: false },
     ],
+
 });
 
 export { test, expect };
