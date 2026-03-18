@@ -203,7 +203,7 @@ test.describe("My Ads", () => {
       }
     });
 
-  test.only("Заголовок оголошення search field functionality",
+  test("Заголовок оголошення search field functionality",
     {
       tag: "@functional",
       annotation: { type: "Test case", description: "C325" },
@@ -224,17 +224,18 @@ test.describe("My Ads", () => {
         await authorizedHomePage.navigateToMyAds();
       });
 
-      for (const tabName of tabs) { // !!!
+      for (const tabName of tabs) {
         await test.step(`--- Вкладка: ${tabName} ---`, async () => {
+          await myAdsPage.switchTab(tabName);
 
-          await test.step("2. Check for at least 2 ads", async () => {
+          await test.step("Check for at least 2 ads", async () => {
             await myAdsPage.unitCards.nth(1).waitFor({ state: 'visible' });
             allUnitNames = await myAdsPage.getVisibleUnitNames();
             expect(allUnitNames.length, 'The number of ads must be 2 or more').toBeGreaterThanOrEqual(2);
             targetName = allUnitNames[0];
           });
 
-          await test.step("3-4. Dynamic search and deletion", async () => {
+          await test.step("Dynamic search and deletion", async () => {
             // Type the target name letter by letter with a delay to simulate user input
             await myAdsPage.searchInput.pressSequentially(targetName, { delay: 100 });
             await expect(myAdsPage.unitCards).toContainText(targetName);
@@ -244,7 +245,7 @@ test.describe("My Ads", () => {
             await expect(myAdsPage.searchInput).toHaveValue("");
           });
 
-          await test.step("5. Case sensitivity check (Case-insensitive)", async () => {
+          await test.step("Case sensitivity check (Case-insensitive)", async () => {
             // Convert the target name to upper case
             const upperCaseName = targetName.toUpperCase();
             await myAdsPage.searchInput.fill(upperCaseName);
@@ -255,8 +256,8 @@ test.describe("My Ads", () => {
             await expect(myAdsPage.unitCards.first()).toContainText(targetName, { ignoreCase: true });
           });
 
-          await test.step("8-9. Non-existent name and Reset filters", async () => {
-            const fakeName = generateNonExistentName(allUnitNames); //
+          await test.step("Non-existent name and Reset filters", async () => {
+            const fakeName = generateNonExistentName(allUnitNames);
             await myAdsPage.searchInput.fill(fakeName);
             await expect(myAdsPage.emptyTitle).toHaveText(`Оголошення за назвою "${fakeName}" не знайдені`);
 
@@ -270,36 +271,50 @@ test.describe("My Ads", () => {
             { label: "Only spaces", value: "    " }
           ];
 
-          // for (const scenario of scenarios) {
-          //   await test.step(`10. Scenario: ${scenario.label}`, async () => {
-          //     await myAdsPage.searchInput.fill(scenario.value);
-          //     // Тут зазвичай очікується або "не знайдено", або ігнорування (якщо тільки пробіли)
-          //     if (scenario.value.trim() === "") {
-          //       await expect(myAdsPage.unitCards).toHaveCount(allUnitNames.length);
-          //     } else {
-          //       await expect(myAdsPage.emptyTitle).toBeVisible();
-          //     }
-          //     await myAdsPage.resetFiltersBtn.click();
-          //   });
-          // }
+          for (const scenario of scenarios) {
+            await test.step(`Scenario: ${scenario.label}`, async () => { // 10
+              await myAdsPage.searchInput.fill("");
 
-          // if (allUnitNames.length > 0) {
-          //   const pendingAd = allUnitNames[0];
-          //   await test.step("11-12. Verify Pending ad is NOT in Active tab", async () => {
-          //     await myAdsPage.switchTab(MY_ADS_CONSTS.TABS.ACTIVE);
-          //     await myAdsPage.searchInput.fill(pendingAd);
-          //     await expect(myAdsPage.emptyTitle).toBeVisible();
+              await myAdsPage.searchInput.fill(scenario.value);
 
-          //     // Повертаємось назад
-          //     await myAdsPage.switchTab(MY_ADS_CONSTS.TABS.PENDING);
-          //     await myAdsPage.searchInput.fill(pendingAd);
-          //     await expect(myAdsPage.unitCards.first()).toContainText(pendingAd);
-          //     await myAdsPage.resetFiltersBtn.click();
-          //   });
-          // }
-          // else {
-          //   console.log(`На вкладці ${tabName} немає оголошень, пропускаємо перевірку пошуку.`);
-          // }
+              // If the scenario value is empty, we expect to see all units. For invalid inputs, we expect to see the empty state
+              if (scenario.value === "") {
+                await expect(myAdsPage.unitCards).toHaveCount(allUnitNames.length);
+              } else {
+                await expect(myAdsPage.emptyTitle).toBeVisible();
+                await expect(myAdsPage.unitCards).toHaveCount(0);
+              }
+
+              await myAdsPage.resetFiltersBtn.click();
+              await expect(myAdsPage.searchInput).toHaveValue("");
+            });
+          }
+
+          if (tabName !== MY_ADS_CONSTS.TABS.ACTIVE && allUnitNames.length > 0) {
+            const unitToVerify = allUnitNames[0];
+
+            await test.step(`Verify unit from ${tabName} is NOT in Active tab`, async () => { // 11-12
+              await myAdsPage.searchInput.fill("");
+              await myAdsPage.switchTab(MY_ADS_CONSTS.TABS.ACTIVE);
+
+              const activeTabLocator = myAdsPage.getTab(MY_ADS_CONSTS.TABS.ACTIVE);
+              await expect(activeTabLocator).toHaveAttribute('aria-selected', 'true', { });
+
+              await myAdsPage.searchInput.fill(unitToVerify);
+              await expect(myAdsPage.emptyTitle).toBeVisible({ });
+              await myAdsPage.resetFiltersBtn.click();
+
+              await myAdsPage.switchTab(tabName);
+              const originalTabLocator = myAdsPage.getTab(tabName);
+              await expect(originalTabLocator).toHaveAttribute('aria-selected', 'true');
+
+              await myAdsPage.searchInput.fill(unitToVerify);
+              await expect(myAdsPage.unitCards.first()).toContainText(unitToVerify);
+
+              await myAdsPage.searchInput.fill("");
+              await expect(myAdsPage.searchInput).toHaveValue("");
+            });
+          }
 
         });
       }
