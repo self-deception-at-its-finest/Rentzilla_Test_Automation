@@ -44,7 +44,7 @@ test.describe(
 
                     await test.step("• has the “Спосіб оплати” text", async () => {
                         await expect(priceComponent.paymentLabel).toContainText(
-                            tabs.price.paymentLabel,
+                            tabs.price.paymentMethodLabel,
                         );
                     });
 
@@ -58,14 +58,14 @@ test.describe(
                 await test.step("The “Готівкою / на картку” option is displayed as default", async () => {
                     await expect(
                         priceComponent.selectedPaymentMethod,
-                    ).toHaveText(tabs.price.payment.cash);
+                    ).toHaveText(tabs.price.paymentMethods.cash);
                 });
 
                 await test.step("After clicking on field dropdown appeared with options: “Готівкою / на картку”, “Безготівковий розрахунок (без ПДВ)”, “Безготівковий розрахунок (з ПДВ)”", async () => {
                     await priceComponent.openPaymentMethodDropdown();
                     const allResults =
                         await priceComponent.allDropdownItems.allTextContents();
-                    const methods = Object.values(tabs.price.payment);
+                    const methods = Object.values(tabs.price.paymentMethods);
                     expect([...allResults].sort()).toEqual([...methods].sort());
                     await priceComponent.closePaymentMethodDropdown();
                 });
@@ -105,7 +105,7 @@ test.describe(
 
                     await test.step("• has the “Вартість мінімального замовлення” text", async () => {
                         await expect(priceComponent.priceLabel).toContainText(
-                            tabs.price.priceLabel,
+                            tabs.price.priceFieldLabel,
                         );
                     });
 
@@ -119,7 +119,7 @@ test.describe(
                 await test.step("The field has the “Наприклад, 1000” background text", async () => {
                     await expect(priceComponent.priceField).toHaveAttribute(
                         "placeholder",
-                        tabs.price.fieldPlaceholder,
+                        tabs.price.priceFieldPlaceholder,
                     );
                 });
 
@@ -221,7 +221,7 @@ test.describe(
                 await test.step("The clue line contains “За бажанням Ви можете додати вартість конкретних послуг, які надає технічний засіб”", async () => {
                     await expect(priceComponent.servicePriceDesc).toBeVisible();
                     await expect(priceComponent.servicePriceDesc).toContainText(
-                        tabs.price.servicePriceDesc,
+                        tabs.price.servicePriceDescription,
                     );
                 });
 
@@ -444,7 +444,7 @@ test.describe(
                 serviceComponent,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.cancelButton).toHaveText(BUTTONS.back);
+                    await expect(page.cancelButton).toHaveText(BUTTONS.BACK);
                 });
                 await test.step(`The user is redirected to the previous tab after clicking the “Назад” button`, async () => {
                     await page.previousStep();
@@ -474,7 +474,7 @@ test.describe(
                 priceComponent,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.nextButton).toHaveText(BUTTONS.next);
+                    await expect(page.nextButton).toHaveText(BUTTONS.NEXT);
                 });
 
                 await test.step("After clicking the «Далі» button the color of the price field and the field’s error message is red if user didn’t set the price", async () => {

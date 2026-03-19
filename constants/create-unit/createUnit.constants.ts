@@ -3,36 +3,37 @@ import { manufacturers } from "../manufacturers.constants.json";
 
 const data = { ...createUnitConstsJSON } as const;
 
-const FORBIDDEN_SYMBOLS = data["forbidden symbols"];
+const FORBIDDEN_SYMBOLS = data.forbiddenSymbols;
 
 const TAB_NUMBERS = Object.keys(data.tabs) as (keyof typeof data.tabs)[];
 
 const TAB_TITLES = Object.values(data.tabs).map((tab) => tab.title);
 
 const FIELDS_ERRORS = {
-    EMPTY: data["error messages"]["empty"],
-    LESS_10_SYMBOLS: data["error messages"]["less 10 symbols"],
-    MORE_100_SYMBOLS: data["error messages"]["more 100 symbols"],
-    MISSING_MANUFACTURER: data["error messages"]["missing manufacturer"],
-    MORE_15_SYMBOLS: data["error messages"]["more 15 symbols"],
-    MISSING_LOCATION: data["error messages"]["missing location"],
-    MISSING_SERVICE: data["error messages"]["missing service"],
-};
+    EMPTY: data.errorMessages.empty,
+    LESS_10_SYMBOLS: data.errorMessages.less10symbols,
+    MORE_100_SYMBOLS: data.errorMessages.more100symbols,
+    MISSING_MANUFACTURER: data.errorMessages.missingManufacturer,
+    MORE_15_SYMBOLS: data.errorMessages.more15symbols,
+    MISSING_LOCATION: data.errorMessages.missingLocation,
+    MISSING_SERVICE: data.errorMessages.missingService,
+    INVALID_PHONE_NUMBER: data.errorMessages.invalidPhoneNumber,
+} as const;
 
 // Common constants for the “Create unit” page
 const CREATE_UNIT_CONSTS = {
     BORDER_COLOR: "rgb(229, 229, 229)",
     ERR_BORDER_COLOR: "rgb(247, 56, 89)",
     ERR_TEXT_COLOR: "rgb(247, 56, 89)",
-    PAGE_TITLE: data["page title"],
+    PAGE_TITLE: data.pageTitle,
 } as const;
 
 const MANUFACTURERS = manufacturers;
 
 const BUTTONS = {
-    cancel: data.buttons.cancel,
-    back: data.buttons.back,
-    next: data.buttons.next,
+    CANCEL: data.buttons.cancel,
+    BACK: data.buttons.back,
+    NEXT: data.buttons.next,
 } as const;
 
 export {

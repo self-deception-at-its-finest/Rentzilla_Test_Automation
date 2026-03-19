@@ -1,12 +1,8 @@
 import { Locator, Page } from "@playwright/test";
-import {
-    tabs,
-    KeysWithLabel,
-} from "@constants/create-unit/fields.constants";
+import { tabs, KeysWithLabel } from "@constants/create-unit/fields.constants";
 import { FieldActions } from "../FieldActions";
 
 export abstract class BaseComponent {
-    readonly page: Page;
     readonly section: Locator;
     readonly label: Locator;
     readonly requiredSymbol?: Locator;
@@ -15,11 +11,10 @@ export abstract class BaseComponent {
     private readonly fieldActions: FieldActions;
 
     constructor(
-        page: Page,
+        protected readonly page: Page,
         fieldLabel: KeysWithLabel,
         required: boolean = true,
     ) {
-        this.page = page;
         this.tabTitle = this.page
             .getByTestId("wrapper-characteristics")
             .getByText("Основна інформація");
@@ -34,7 +29,7 @@ export abstract class BaseComponent {
             this.requiredSymbol = this.section.locator("span", {
                 hasText: "*",
             });
-        
+
         this.fieldActions = new FieldActions(this.page);
     }
 

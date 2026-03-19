@@ -34,7 +34,7 @@ export class CategoryComponent extends BaseComponent {
             `text=${
                 isDesktop(this.page)
                     ? tabs.mainInfo.category.popupTitle
-                    : tabs.mainInfo.category.mobPopupTitle
+                    : tabs.mainInfo.category.mobilePopupTitle
             }`,
         );
         this.popupCloseBtn = this.popup.getByTestId("closeIcon");

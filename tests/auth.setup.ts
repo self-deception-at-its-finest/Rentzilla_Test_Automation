@@ -1,10 +1,13 @@
 import { test as setup } from "@playwright/test";
 import { env } from "@config/env";
 import { ENDPOINTS } from "@constants/endpoints.constants";
-
 import fs from "fs";
-
-import { authDir, adminFile, userFile } from "@utils/api/authPaths";
+import {
+    authDir,
+    adminFile,
+    userFile,
+    newUserFile,
+} from "@utils/api/authPaths";
 
 fs.mkdirSync(authDir, { recursive: true });
 
@@ -20,6 +23,12 @@ fs.mkdirSync(authDir, { recursive: true });
         email: env.user.email,
         password: env.user.password,
         fileName: userFile,
+    },
+    {
+        role: "newUser",
+        email: env.newUser.email,
+        password: env.newUser.password,
+        fileName: newUserFile,
     },
 ].forEach(({ role, email, password, fileName }) => {
     setup(`authenticate role: ${role}`, async ({ request }) => {

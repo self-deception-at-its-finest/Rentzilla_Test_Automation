@@ -39,10 +39,10 @@ export class PriceComponent {
             .first();
 
         this.priceField = this.page
-            .getByPlaceholder(tabs.price.fieldPlaceholder)
+            .getByPlaceholder(tabs.price.priceFieldPlaceholder)
             .first();
         this.servicePriceField = this.page
-            .getByPlaceholder(tabs.price.fieldPlaceholder)
+            .getByPlaceholder(tabs.price.priceFieldPlaceholder)
             .last();
 
         this.paymentMethodDropdown = this.page
@@ -70,9 +70,9 @@ export class PriceComponent {
         this.allDropdownItems =
             this.dropdownItemsContainer.getByTestId("item-customSelect");
 
-        this.paymentLabel = this.page.getByText(tabs.price.paymentLabel);
+        this.paymentLabel = this.page.getByText(tabs.price.paymentMethodLabel);
         this.paymentRequiredSymbol = this.paymentLabel.locator("span");
-        this.priceLabel = this.page.getByText(tabs.price.priceLabel);
+        this.priceLabel = this.page.getByText(tabs.price.priceFieldLabel);
         this.priceRequiredSymbol = this.priceLabel.locator("span");
 
         this.priceCurrencyField = this.page
@@ -88,7 +88,7 @@ export class PriceComponent {
         this.servicePriceRequiredSymbol =
             this.servicePriceLabel.locator("span");
         this.servicePriceDesc = this.page.getByText(
-            tabs.price.servicePriceDesc,
+            tabs.price.servicePriceDescription,
         );
 
         this.selectedServicesSection = this.servicePriceLabel.locator(
