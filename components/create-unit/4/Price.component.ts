@@ -3,7 +3,6 @@ import { tabs } from "@constants/create-unit/fields.constants";
 import { FieldActions } from "../FieldActions";
 
 export class PriceComponent {
-    readonly page: Page;
     readonly priceField: Locator;
     readonly servicePriceField: Locator;
     readonly paymentMethodDropdown: Locator;
@@ -31,9 +30,7 @@ export class PriceComponent {
 
     private readonly fieldActions: FieldActions;
 
-    constructor(page: Page) {
-        this.page = page;
-
+    constructor(readonly page: Page) {
         this.requiredMessage = this.page
             .getByTestId("div_required_RowUnitPrice")
             .first();

@@ -2,7 +2,6 @@ import { Locator, Page } from "@playwright/test";
 import { TestAdData } from "@custom-types/tabs";
 
 export class AdminPage {
-    readonly page: Page;
     readonly adsLink: Locator;
     readonly servicesLink: Locator;
     readonly approveTab: Locator;
@@ -10,8 +9,7 @@ export class AdminPage {
     readonly dataSortColumn: Locator;
     readonly logoutButton: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(readonly page: Page) {
         this.adsLink = this.page
             .getByTestId("navigationContainer")
             .getByText("Оголошення");

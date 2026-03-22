@@ -1,7 +1,6 @@
 import { Page, Locator } from "@playwright/test";
 
 export class HeaderComponent {
-    readonly page: Page;
     readonly headerSection: Locator;
     // TODO `authenticationButton` should be moved to other component
     readonly authenticationButton: Locator;
@@ -12,8 +11,7 @@ export class HeaderComponent {
     readonly profileDropdownEmail : Locator;
     readonly profileDropdownLogoutButton : Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(readonly page: Page) {
         this.headerSection = this.page.locator("header");
         this.authenticationButton = this.page.getByText("Вхід");
         this.avatarBlock = this.page.getByTestId("avatarBlock");

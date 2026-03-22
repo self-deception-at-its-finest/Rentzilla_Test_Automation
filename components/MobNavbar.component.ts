@@ -1,12 +1,10 @@
 import { Page, Locator } from "@playwright/test";
 
 export class MobNavbarComponent {
-    readonly page: Page;
     readonly mobNavbar: Locator;
     readonly profileBtn: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(readonly page: Page) {
         this.mobNavbar = page.getByTestId("mobileNavbar");
         this.profileBtn = page.getByText("Профіль");
     }

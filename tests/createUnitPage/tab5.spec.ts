@@ -332,13 +332,13 @@ test.describe(
                         await expect(contacts.customerTypeLabel).toBeVisible();
                     });
 
-                    await test.step("• it’s has the correct text", async () => {
+                    await test.step("• it has the correct text", async () => {
                         await expect(contacts.customerTypeLabel).toContainText(
                             tabs.contacts.userTypeLabel,
                         );
                     });
 
-                    await test.step("• it’s has the asterisk (required field)", async () => {
+                    await test.step("• it has the asterisk (required field)", async () => {
                         await expect(contacts.customerTypeLabel).toContainText(
                             /\*$/,
                         );

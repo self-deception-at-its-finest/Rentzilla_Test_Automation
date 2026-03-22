@@ -4,7 +4,6 @@ import { MobNavbarComponent } from "./MobNavbar.component";
 import { isDesktop } from "@utils/viewportGuard";
 
 export class AuthenticationComponent {
-    readonly page: Page;
     readonly authContainer: Locator;
     readonly authTitle: Locator;
     readonly authCloseButton: Locator;
@@ -25,8 +24,7 @@ export class AuthenticationComponent {
     readonly adminSubmitButton: Locator;
     readonly profileButton: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(readonly page: Page) {
         this.authContainer = this.page.getByTestId("authorizationContainer");
         this.authTitle = this.authContainer.getByTestId("authorizationTitle");
         this.authCloseButton = this.authContainer.getByTestId("authClose");

@@ -10,7 +10,6 @@ type BoundingBox = {
 };
 
 export class ServiceComponent {
-    readonly page: Page;
     readonly title: Locator;
     readonly description: Locator;
     readonly addInfo: Locator;
@@ -31,8 +30,7 @@ export class ServiceComponent {
 
     private readonly fieldActions: FieldActions;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(readonly page: Page) {
         this.searchResultSection = this.page.getByTestId("searchResult");
         this.field = this.searchResultSection.getByRole("textbox");
         this.title = this.page.getByText(tabs.service.title);
