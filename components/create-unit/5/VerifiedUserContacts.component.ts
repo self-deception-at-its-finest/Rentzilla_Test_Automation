@@ -28,8 +28,6 @@ export class VerifiedUserContactsComponent extends BaseComponent {
             .getByTestId("paragraphWithIcon")
             .last()
             .locator("> div:last-of-type");
-        this.photoImg = this.readonlyContactsSection
-            .getByTestId("userInfo")
-            .getByTestId("photo");
+        this.photoImg = this.readonlyContactsSection.getByTestId("photo");
     }
 }

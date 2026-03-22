@@ -15,7 +15,7 @@ import { expectFieldDefault, expectFieldError } from "@utils/uiMatchers";
 const numberInputForbiddenPatterns = ["aaaaaaaaa", "!@#$%", " "];
 
 test.describe(
-    "“Create Unit” page | The “Contacts” tab (Verified user)",
+    "“Create Unit” page | The “Contacts” tab (filled account)",
     {
         annotation: [
             { type: "Testing page", description: "«Створення оголошення»" },
@@ -305,7 +305,7 @@ test.describe(
 );
 
 test.describe(
-    "“Create Unit” page | The “Contacts” tab (New user)",
+    "“Create Unit” page | The “Contacts” tab (unfilled account)",
     {
         annotation: [
             { type: "Testing page", description: "«Створення оголошення»" },
@@ -788,9 +788,8 @@ test.describe(
                 },
             },
             async ({
-                createUnitPageWithFilledFourTabsNewUser: _,
+                createUnitPageWithFilledFourTabsNewUser: createUnitPage,
                 newUserContactsComponent: contacts,
-                newUserPage: page,
             }) => {
                 const customerNamesFields: FieldData[] = [
                     {
@@ -812,14 +811,17 @@ test.describe(
                         labelText: tabs.contacts.patronymicLabel,
                     },
                 ];
-                const createUnitPage = new CreateUnitPage(page);
 
                 for (const field of customerNamesFields) {
-                    const isRequired = await contacts.isRequired(field.label);
+                    let isRequired: boolean;
+
+                    await test.step(`* Setting the required status of the “${field.labelText}” field`, async () => {
+                        isRequired = await contacts.isRequired(field.label);
+                    });
 
                     await test.step(`UI checking of “${field.labelText}” section`, async () => {
                         await createUnitPage.nextStep();
-                        
+
                         await test.step(`• the label of section is “${field.labelText} ${isRequired ? "*" : ""}”`, async () => {
                             await expect(field.label).toHaveText(
                                 `${field.labelText} ${isRequired ? "*" : ""}`,
@@ -843,9 +845,145 @@ test.describe(
                         }
                     });
 
-                    // await test.step(`Verify the “${field.labelText}” field`, async () => {
-                    //     await test.step("• it ");
-                    // });
+                    await test.step(`Verify the “${field.labelText}” field`, async () => {
+                        await test.step("• it should have at least 2 letters", async () => {
+                            await validateFieldByBothMethods(
+                                contacts,
+                                field,
+                                "A",
+                                async () => {
+                                    await createUnitPage.nextStep();
+
+                                    await expect(field.input).toHaveValue("A");
+                                    await expect(field.error).toHaveText(
+                                        `${field.labelText} ${tabs.contacts.namesErrors.less2}`,
+                                    );
+                                    await expectFieldError(field.input);
+                                },
+                            );
+                        });
+
+                        await test.step("• it shouldn’t have more than 25 letters", async () => {
+                            const pattern = "B".repeat(26);
+
+                            await validateFieldByBothMethods(
+                                contacts,
+                                field,
+                                pattern,
+                                async () => {
+                                    await createUnitPage.nextStep();
+
+                                    await expectFieldDefault(field.input);
+                                    await expect(field.input).toHaveValue(
+                                        new RegExp(pattern.slice(0, 25)),
+                                    );
+                                },
+                            );
+                        });
+
+                        await test.step("• it shouldn’t have numbers", async () => {
+                            const pattern = "12345";
+
+                            await validateFieldByBothMethods(
+                                contacts,
+                                field,
+                                pattern,
+                                async () => {
+                                    await createUnitPage.nextStep();
+
+                                    await expectFieldError(field.input);
+                                    await expect(field.input).toHaveValue(
+                                        pattern,
+                                    );
+                                    await expect(field.error).toHaveText(
+                                        `${field.labelText} ${tabs.contacts.namesErrors.lettersOnly}`,
+                                    );
+                                },
+                            );
+                        });
+
+                        await test.step("• it can have only allowed spec. symbols: !@#$%", async () => {
+                            const allowedSymbols = "!@#$%";
+                            const deniedSymbols = "<>{};^";
+
+                            await validateFieldByBothMethods(
+                                contacts,
+                                field,
+                                allowedSymbols + deniedSymbols,
+                                async () => {
+                                    await createUnitPage.nextStep();
+
+                                    await expect(field.input).toHaveValue(
+                                        allowedSymbols,
+                                    );
+                                    await expectFieldError(field.input);
+                                    await expect(field.error).toHaveText(
+                                        `${field.labelText} ${tabs.contacts.namesErrors.lettersOnly}`,
+                                    );
+                                },
+                            );
+                        });
+
+                        await test.step("• it cannot have spaces only", async () => {
+                            if (isRequired)
+                                await validateFieldByBothMethods(
+                                    contacts,
+                                    field,
+                                    " ",
+                                    async () => {
+                                        await createUnitPage.nextStep();
+
+                                        await expect(field.input).toHaveValue(
+                                            "",
+                                        );
+                                        await expectFieldError(field.input);
+                                        await expect(field.error).toHaveText(
+                                            FIELDS_ERRORS.EMPTY,
+                                        );
+                                    },
+                                );
+                        });
+
+                        await test.step("• it cannot have spaces in the names", async () => {
+                            for (const pattern of ["AAA BBB", "AAABBB "])
+                                await validateFieldByBothMethods(
+                                    contacts,
+                                    field,
+                                    pattern,
+                                    async () => {
+                                        await createUnitPage.nextStep();
+
+                                        await expect(field.input).toHaveValue(
+                                            pattern,
+                                        );
+                                        await expectFieldError(field.input);
+                                        await expect(field.error).toHaveText(
+                                            `${field.labelText} ${tabs.contacts.namesErrors.lettersOnly}`,
+                                        );
+                                    },
+                                );
+                        });
+
+                        await test.step("• the error disappear when filling the correct strings", async () => {
+                            for (const pattern of ["aa", "aa-aa", "абвгд"])
+                                await validateFieldByBothMethods(
+                                    contacts,
+                                    field,
+                                    pattern,
+                                    async () => {
+                                        await createUnitPage.nextStep();
+
+                                        await expect(field.input).toHaveValue(
+                                            pattern.capitalize(),
+                                        );
+                                        await expectFieldDefault(field.input);
+                                        await expect(field.error).toHaveCount(
+                                            0,
+                                        );
+                                    },
+                                );
+                        });
+                    });
                 }
             },
         );

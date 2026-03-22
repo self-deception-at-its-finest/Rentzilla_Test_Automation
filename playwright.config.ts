@@ -1,3 +1,4 @@
+import "./utils/extensions/string.extenstion";
 import { defineConfig, devices } from "@playwright/test";
 import "dotenv/config";
 
@@ -10,7 +11,7 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 2,
     workers: process.env.CI ? 5 : 1,
-    reporter: [["html", { title: "Rentzila test report"}]],
+    reporter: [["html", { title: "Rentzila test report" }]],
     use: {
         baseURL: process.env.BASE_URL,
         screenshot: process.env.CI ? "only-on-failure" : "on",
@@ -19,7 +20,7 @@ export default defineConfig({
         actionTimeout: 10 * 1000,
         navigationTimeout: 10 * 1000,
     },
-    
+
     projects: [
         {
             name: "auth",

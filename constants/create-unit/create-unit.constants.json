@@ -120,6 +120,10 @@
             "legalNumberErrorText": "Код ЄДРПОУ не може бути коротше 8 символів",
             "legalNameLabel": "Назва юридичної особи",
             "lastNameLabel": "Прізвище",
+            "namesErrors": {
+                "lettersOnly": "має містити лише літери",
+                "less2":"має містити щонайменше 2 літери"
+            },
             "firstNameLabel": "Ім'я",
             "patronymicLabel": "По-батькові",
             "cityLabel": "Місто",
@@ -135,7 +139,7 @@
             "operatorFirstNameLabel": "Ім’я",
             "operatorPhoneLabel": "Телефон",
             "operatorNameErrors": {
-                "less2": " має містити щонайменше дві літери",
+                "less2": "має містити щонайменше дві літери",
                 "more25": "Введіть не більше 25 символів"
             },
             "operatorPhoneErrorText": "Введіть коректний мобільний номер телефону"
