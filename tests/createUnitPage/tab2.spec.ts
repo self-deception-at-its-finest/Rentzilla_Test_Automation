@@ -176,10 +176,10 @@ test.describe(
                     await expect(photos.uploadedPhotoButtons).toHaveCount(1);
                 });
 
-                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.button}” button`, async () => {
+                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.buttonText}” button`, async () => {
                     await photos.uploadPhoto("1");
                     await expect(photos.errorModalOKButton).toHaveText(
-                        tabs.photos.errorModals.button,
+                        tabs.photos.errorModals.buttonText,
                     );
                     await photos.errorModalOKButton.click();
                     await expect(photos.errorModalText).toBeHidden();
@@ -221,10 +221,10 @@ test.describe(
                     await expect(photos.uploadedPhotoButtons).toHaveCount(0);
                 });
 
-                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.button}” button`, async () => {
+                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.buttonText}” button`, async () => {
                     await photos.uploadPhoto("invalid_image");
                     await expect(photos.errorModalOKButton).toHaveText(
-                        tabs.photos.errorModals.button,
+                        tabs.photos.errorModals.buttonText,
                     );
                     await photos.errorModalOKButton.click();
                     await expect(photos.errorModalText).toBeHidden();
@@ -266,10 +266,10 @@ test.describe(
                     await expect(photos.uploadedPhotoButtons).toHaveCount(0);
                 });
 
-                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.button}” button`, async () => {
+                await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.buttonText}” button`, async () => {
                     await photos.uploadPhoto("large_image");
                     await expect(photos.errorModalOKButton).toHaveText(
-                        tabs.photos.errorModals.button,
+                        tabs.photos.errorModals.buttonText,
                     );
                     await photos.errorModalOKButton.click();
                     await expect(photos.errorModalText).toBeHidden();
@@ -300,7 +300,7 @@ test.describe(
                 locationComponent: location,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.cancelButton).toHaveText(BUTTONS.back);
+                    await expect(page.cancelButton).toHaveText(BUTTONS.BACK);
                 });
                 await test.step("The user is redirected to the previous tab after clicking the “Назад” button", async () => {
                     await page.previousStep();
@@ -330,7 +330,7 @@ test.describe(
                 photosComponent: photos,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.nextButton).toHaveText(BUTTONS.next);
+                    await expect(page.nextButton).toHaveText(BUTTONS.NEXT);
                 });
 
                 await test.step("The color of the clue line is red if user didn’t upload any image", async () => {

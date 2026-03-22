@@ -4,7 +4,6 @@ import type { Locator, Page } from "@playwright/test";
 import { tabs } from "@constants/create-unit/fields.constants";
 
 export class PhotosComponent {
-    readonly page: Page;
     readonly photosFormTitle: Locator;
     readonly photosFormDescription: Locator;
     readonly uploadPhotoButtonsWrapper: Locator;
@@ -18,8 +17,7 @@ export class PhotosComponent {
     readonly closeModalIcon: Locator;
     readonly errorModalOKButton: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(readonly page: Page) {
         this.photosFormTitle = this.page
             .getByTestId("ImagesUnitFlow")
             .getByText(new RegExp(`^${tabs.photos.photosForm.label}.*`));

@@ -165,7 +165,7 @@ test.describe(
                         await expect(category.popupTitle).toHaveText(
                             isDesktop(page)
                                 ? tabs.mainInfo.category.popupTitle
-                                : tabs.mainInfo.category.mobPopupTitle,
+                                : tabs.mainInfo.category.mobilePopupTitle,
                         );
                     });
 
@@ -657,7 +657,7 @@ test.describe(
             async ({ createUnitPage, userPage: page }) => {
                 await test.step("The button has the correct text", async () => {
                     await expect(createUnitPage.cancelButton).toHaveText(
-                        BUTTONS.cancel,
+                        BUTTONS.CANCEL,
                     );
                 });
 
@@ -685,7 +685,7 @@ test.describe(
                 photosComponent: photos,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.nextButton).toHaveText(BUTTONS.next);
+                    await expect(page.nextButton).toHaveText(BUTTONS.NEXT);
                 });
 
                 await test.step("Warnings are displayed about the need to fill in mandatory fields", async () => {

@@ -3,7 +3,6 @@ import { tabs } from "@constants/create-unit/fields.constants";
 import { FieldActions } from "../FieldActions";
 
 export class PriceComponent {
-    readonly page: Page;
     readonly priceField: Locator;
     readonly servicePriceField: Locator;
     readonly paymentMethodDropdown: Locator;
@@ -31,18 +30,16 @@ export class PriceComponent {
 
     private readonly fieldActions: FieldActions;
 
-    constructor(page: Page) {
-        this.page = page;
-
+    constructor(readonly page: Page) {
         this.requiredMessage = this.page
             .getByTestId("div_required_RowUnitPrice")
             .first();
 
         this.priceField = this.page
-            .getByPlaceholder(tabs.price.fieldPlaceholder)
+            .getByPlaceholder(tabs.price.priceFieldPlaceholder)
             .first();
         this.servicePriceField = this.page
-            .getByPlaceholder(tabs.price.fieldPlaceholder)
+            .getByPlaceholder(tabs.price.priceFieldPlaceholder)
             .last();
 
         this.paymentMethodDropdown = this.page
@@ -70,9 +67,9 @@ export class PriceComponent {
         this.allDropdownItems =
             this.dropdownItemsContainer.getByTestId("item-customSelect");
 
-        this.paymentLabel = this.page.getByText(tabs.price.paymentLabel);
+        this.paymentLabel = this.page.getByText(tabs.price.paymentMethodLabel);
         this.paymentRequiredSymbol = this.paymentLabel.locator("span");
-        this.priceLabel = this.page.getByText(tabs.price.priceLabel);
+        this.priceLabel = this.page.getByText(tabs.price.priceFieldLabel);
         this.priceRequiredSymbol = this.priceLabel.locator("span");
 
         this.priceCurrencyField = this.page
@@ -88,7 +85,7 @@ export class PriceComponent {
         this.servicePriceRequiredSymbol =
             this.servicePriceLabel.locator("span");
         this.servicePriceDesc = this.page.getByText(
-            tabs.price.servicePriceDesc,
+            tabs.price.servicePriceDescription,
         );
 
         this.selectedServicesSection = this.servicePriceLabel.locator(

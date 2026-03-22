@@ -376,7 +376,7 @@ test.describe(
                 photosComponent: photos,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.cancelButton).toHaveText(BUTTONS.back);
+                    await expect(page.cancelButton).toHaveText(BUTTONS.BACK);
                 });
                 await test.step(`The user is redirected to the previous tab after clicking the “Назад” button`, async () => {
                     await page.previousStep();
@@ -406,7 +406,7 @@ test.describe(
                 serviceComponent: service,
             }) => {
                 await test.step("The button has the correct text", async () => {
-                    await expect(page.nextButton).toHaveText(BUTTONS.next);
+                    await expect(page.nextButton).toHaveText(BUTTONS.NEXT);
                 });
 
                 await test.step("After clicking the «Далі» button the color of the clue line is red if user didn’t set any service", async () => {

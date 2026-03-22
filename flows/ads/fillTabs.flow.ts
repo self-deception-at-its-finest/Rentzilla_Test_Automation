@@ -6,6 +6,7 @@ import { LocationComponent } from "@components/create-unit/1/Location.component"
 import { ManufacturerComponent } from "@components/create-unit/1/Manufacturer.component";
 import { PhotosComponent } from "@components/create-unit/2/Photos.component";
 import { ServiceComponent } from "@components/create-unit/3/Service.component";
+import { PriceComponent } from "@components/create-unit/4/Price.component";
 
 export async function fillTab1Flow(page: Page, ad: TestAdData) {
     await new CategoryComponent(page).selectCategory();
@@ -20,4 +21,8 @@ export async function fillTab2Flow(page: Page, photo: string) {
 
 export async function fillTab3Flow(page: Page, service: string) {
     await new ServiceComponent(page).typeAndSelectService(service);
+}
+
+export async function fillTab4Flow(page: Page, price: string) {
+    await new PriceComponent(page).fillPrice(price);
 }

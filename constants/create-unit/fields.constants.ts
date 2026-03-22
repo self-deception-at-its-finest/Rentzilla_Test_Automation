@@ -1,188 +1,25 @@
 import { data } from "./createUnit.constants";
 
-type Tab1 = (typeof data)["tabs"]["1"];
+type tab1 = (typeof data)["tabs"]["1"];
 type KeysWithLabel = {
-    [K in keyof Tab1]: Tab1[K] extends { label: string } ? K : never;
-}[keyof Tab1];
-
-type FieldSection = {
-    label: string;
-    placeholder: string;
-};
-
-type CategorySection = FieldSection & {
-    popupTitle: string;
-    mobPopupTitle: string;
-};
-
-type LocationSection = FieldSection & {
-    buttonText: string;
-    modal: {
-        title: string;
-        cancel: string;
-        accept: string;
-    };
-};
-
-type MainInfoTab = {
-    title: string;
-    category: CategorySection;
-    ad: FieldSection;
-    manufacturer: FieldSection;
-    model: FieldSection;
-    location: LocationSection;
-    specifications: Pick<FieldSection, "label">;
-    details: Pick<FieldSection, "label">;
-};
-
-type PhotosTab = {
-    title: string;
-    photosForm: {
-        label: string;
-        description: string;
-    };
-    errorModals: {
-        sameImage: string;
-        invalidPhoto: string;
-        button: string;
-    };
-};
-
-type ServiceTab = {
-    title: string;
-    description: string;
-    addInfo: string;
-    placeholder: string;
-    addedServicesTitle: string;
-    addServiceButtonText: string;
-};
-
-type PriceTab = {
-    title: string;
-    paymentLabel: string;
-    payment: {
-        cash: string;
-        cashlessNoVAT: string;
-        cashlessVAT: string;
-    };
-    priceLabel: string;
-    fieldPlaceholder: string;
-    servicePriceLabel: string;
-    servicePriceDesc: string;
-    addServicePrice: string;
-    servicePriceTypes: {
-        h: string;
-        sh: string;
-        t: string;
-        ga: string;
-        m2: string;
-        m3: string;
-        km: string;
-    };
-    shifts: {
-        eight: string;
-        four: string;
-    };
-};
+    [K in keyof tab1]: tab1[K] extends { label: string } ? K : never;
+}[keyof tab1];
 
 type Tabs = {
-    mainInfo: MainInfoTab;
-    photos: PhotosTab;
-    service: ServiceTab;
-    price: PriceTab;
+    mainInfo: (typeof data.tabs)["1"];
+    photos: (typeof data.tabs)["2"];
+    service: (typeof data.tabs)["3"];
+    price: (typeof data.tabs)["4"];
+    contacts: (typeof data.tabs)["5"];
 };
 
-const tab1 = data.tabs["1"];
-const tab2 = data.tabs["2"];
-const tab3 = data.tabs["3"];
-const tab4 = data.tabs["4"];
-
-const tabs: Tabs = {
-    mainInfo: {
-        title: tab1.title,
-        category: {
-            label: tab1.category.label,
-            placeholder: tab1.category.placeholder,
-            popupTitle: tab1.category["popup title"],
-            mobPopupTitle: tab1.category["mobile popup title"],
-        },
-        ad: {
-            label: tab1.ad.label,
-            placeholder: tab1.ad.placeholder,
-        },
-        manufacturer: {
-            label: tab1.manufacturer.label,
-            placeholder: tab1.manufacturer.placeholder,
-        },
-        model: {
-            label: tab1.model.label,
-            placeholder: tab1.model.placeholder,
-        },
-        location: {
-            label: tab1.location.label,
-            placeholder: tab1.location.placeholder,
-            buttonText: tab1.location["button text"],
-            modal: {
-                title: tab1.location.modal.title,
-                cancel: tab1.location.modal.cancel,
-                accept: tab1.location.modal.accept,
-            },
-        },
-        specifications: {
-            label: tab1.specifications.label,
-        },
-        details: {
-            label: tab1.details.label,
-        },
-    },
-    photos: {
-        title: tab2.title,
-        photosForm: {
-            label: tab2["photos form"].label,
-            description: tab2["photos form"].description,
-        },
-        errorModals: {
-            sameImage: tab2["error modals"]["same image"],
-            invalidPhoto: tab2["error modals"]["invalid photo"],
-            button: tab2["error modals"]["button"],
-        },
-    },
-    service: {
-        title: tab3.title,
-        description: tab3.description,
-        addInfo: tab3["add info"],
-        placeholder: tab3.placeholder,
-        addedServicesTitle: tab3["added services title"],
-        addServiceButtonText: tab3["add service button text"],
-    },
-    price: {
-        title: tab4.title,
-        paymentLabel: tab4["payment method label"],
-        payment: {
-            cash: tab4["payment methods"].cash,
-            cashlessNoVAT: tab4["payment methods"]["cashless without VAT"],
-            cashlessVAT: tab4["payment methods"]["cashless with VAT"],
-        },
-        priceLabel: tab4["price field label"],
-        fieldPlaceholder: tab4["price field placeholder"],
-        servicePriceLabel: tab4["service price label"],
-        servicePriceDesc: tab4["service price description"],
-        addServicePrice: tab4["add service price"],
-        servicePriceTypes: {
-            h: tab4["service price types"].h,
-            sh: tab4["service price types"].sh,
-            t: tab4["service price types"].t,
-            ga: tab4["service price types"].ga,
-            m2: tab4["service price types"].m2,
-            m3: tab4["service price types"].m3,
-            km: tab4["service price types"].km,
-        },
-        shifts: {
-            eight: tab4["shifts"].eight,
-            four: tab4["shifts"].four,
-        },
-    },
-} as const;
+const tabs = {
+    mainInfo: data.tabs["1"],
+    photos: data.tabs["2"],
+    service: data.tabs["3"],
+    price: data.tabs["4"],
+    contacts: data.tabs["5"],
+} satisfies Tabs;
 
 const DEFAULT_LOCATION = "Київ, Україна, Київська область";
 

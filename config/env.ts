@@ -16,5 +16,11 @@ export const env = {
         password: getEnv("USER_PASSWORD"),
         phone: getEnv("USER_PHONE"),
         id: getEnv("USER_ID"),
+        firstName: getEnv("USER_FIRST_NAME"),
+        lastName: getEnv("USER_LAST_NAME"),
+    },
+    newUser: {
+        email: getEnv("NEW_USER_EMAIL"),
+        password: getEnv("NEW_USER_PASSWORD"),
     },
 };

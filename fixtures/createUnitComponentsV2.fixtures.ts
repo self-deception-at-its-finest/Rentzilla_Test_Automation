@@ -8,8 +8,9 @@ import { SpecificationsComponent } from "@components/create-unit/1/Specification
 import { PhotosComponent } from "@components/create-unit/2/Photos.component";
 import { ServiceComponent } from "@components/create-unit/3/Service.component";
 import { PriceComponent } from "@components/create-unit/4/Price.component";
-import { ContactsComponent } from "@components/create-unit/5/Contacts.component";
+import { VerifiedUserContactsComponent } from "@components/create-unit/5/VerifiedUserContacts.component";
 import { test as base } from "./apiAuth.fixtures";
+import { NewUserContactsComponent } from "@components/create-unit/5/NewUserContacts.component";
 
 type MainInfoComponents = {
     adComponent: AdComponent;
@@ -34,7 +35,8 @@ type PriceComponents = {
 };
 
 type ContactsComponents = {
-    contactsComponent: ContactsComponent;
+    verifiedUserContactsComponent: VerifiedUserContactsComponent;
+    newUserContactsComponent: NewUserContactsComponent;
 };
 
 export const test = base.extend<
@@ -101,6 +103,18 @@ export const test = base.extend<
     priceComponent: [
         async ({ userPage }, use) => {
             await use(new PriceComponent(userPage));
+        },
+        { box: true },
+    ],
+    verifiedUserContactsComponent: [
+        async ({ userPage }, use) => {
+            await use(new VerifiedUserContactsComponent(userPage));
+        },
+        { box: true },
+    ],
+    newUserContactsComponent: [
+        async ({ newUserPage }, use) => {
+            await use(new NewUserContactsComponent(newUserPage));
         },
         { box: true },
     ],

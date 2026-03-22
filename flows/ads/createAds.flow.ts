@@ -1,7 +1,7 @@
 import { PhotosComponent } from "@components/create-unit/2/Photos.component";
 import { ServiceComponent } from "@components/create-unit/3/Service.component";
 import { PriceComponent } from "@components/create-unit/4/Price.component";
-import { ContactsComponent } from "@components/create-unit/5/Contacts.component";
+import { VerifiedUserContactsComponent } from "@components/create-unit/5/VerifiedUserContacts.component";
 import { HeaderComponent } from "@components/Header.component";
 import { TestAdData } from "@custom-types/tabs";
 import { Page } from "@playwright/test";
@@ -39,7 +39,7 @@ export async function createAdsFlow(page: Page, ads: TestAdData[]) {
         await createUnitPage.nextStep();
 
         // Fifth tab
-        await new ContactsComponent(page).setAsOperator();
+        await new VerifiedUserContactsComponent(page).checkAsOperator();
         await createUnitPage.nextStep();
 
         await createUnitPage.successfullCreating.waitFor({ state: "visible" });

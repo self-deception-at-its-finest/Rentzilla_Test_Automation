@@ -1,16 +1,13 @@
 import type { Locator, Page } from "@playwright/test";
 
 export default class BasePage {
-    protected readonly page: Page;
     protected endpoint = "";
 
     readonly avatarBlock: Locator;
     readonly dropdownAdsItem: Locator;
     readonly sidebarFavoriteAdsVariant: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
-
+    constructor(protected readonly page: Page) {
         this.avatarBlock = page.getByTestId('avatarBlock');
         this.dropdownAdsItem = page.getByTestId('units');
         this.sidebarFavoriteAdsVariant = page.getByTestId('variant').filter({ hasText: 'Обрані оголошення' });
