@@ -26,6 +26,7 @@ import { TestAdData } from "@custom-types/tabs";
 const test = apiAuth.extend<{
     ads: TestAdData[];
     authorizedHomePage: HomePage;
+    authorizedUser2HomePage: HomePage;
     createUnitPage: CreateUnitPage;
     createUnitPageWithFilledTab1: CreateUnitPage;
     createUnitPageWithFilledTwoTabs: CreateUnitPage;
@@ -40,12 +41,13 @@ const test = apiAuth.extend<{
     createUnitPageWithFilledThreeTabs: CreateUnitPage;
     homePage: HomePage;
     myAdsPage: MyAdsPage;
+    myAdsUser2Page: MyAdsPage;
 }>({
 
     ads: [
         async ({ browser, userPage }, use) => {
             const testAds = buildTestAds(5);
-            
+
             // 1. Створюємо оголошення від імені звичайного користувача (userPage вже авторизована)
             await userPage.goto(endpoints["create unit"]);
             await createAdsFlow(userPage, testAds);
@@ -53,9 +55,9 @@ const test = apiAuth.extend<{
             // 2. СХВАЛЕННЯ: Створюємо окрему сторінку для Адміна
             const adminContext = await browser.newContext({ storageState: adminFile }); // Завантажуємо стан адміна
             const adminPage = await adminContext.newPage();
-            
+
             // 3. Переходимо в адмін-панель
-            await adminPage.goto(endpoints.admin); 
+            await adminPage.goto(endpoints.admin);
             await approveAdsFlow(adminPage, testAds);
 
             await use(testAds);
@@ -112,10 +114,25 @@ const test = apiAuth.extend<{
         { box: true },
     ],
 
+    myAdsUser2Page: [
+        async ({ user2Page: page }, use) => {
+            await use(new MyAdsPage(page));
+        },
+        { box: true },
+    ],
+
     authorizedHomePage: [
         async ({ userPage }, use) => {
             await userPage.goto(endpoints.home);
             await use(new HomePage(userPage));
+        },
+        { box: true },
+    ],
+
+    authorizedUser2HomePage: [
+        async ({ user2Page }, use) => {
+            await user2Page.goto(endpoints.home);
+            await use(new HomePage(user2Page));
         },
         { box: true },
     ],

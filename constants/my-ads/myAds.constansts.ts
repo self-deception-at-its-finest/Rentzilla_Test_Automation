@@ -1,7 +1,6 @@
 import myAdsData from "./myAds.constants.json";
 
 const MY_ADS_CONSTS = {
-    URL: myAdsData.url,
     EMPTY_STATE: {
         TITLE: myAdsData["empty state"].title,
         DESCRIPTION: myAdsData["empty state"].description,

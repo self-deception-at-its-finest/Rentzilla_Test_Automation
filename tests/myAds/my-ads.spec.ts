@@ -4,33 +4,63 @@ import { ENDPOINTS } from "../../constants/endpoints.constants";
 import { extractAllTitles } from "../../utils/subCategories";
 import { SPECIAL_EQUIPMENT } from "../../constants/catalog.constants";
 import { generateNonExistentName } from "@utils/getRandomName";
+import { sortUnitNames } from "@utils/sortUnitNames";
 
-test.describe("My Ads", () => {
+test.describe("My Ads User2", () => {
 
-  test.skip("The 'Мої оголошення' page without any created units.", // Precondition: the user has no created ads
+  test("The 'Мої оголошення' page without any created units.", // Precondition: the user has no created ads
     {
       tag: "@UI",
       annotation: { type: "Test case", description: "C321" },
     },
-    async ({ authorizedHomePage, myAdsPage, userPage: page }) => {
+    async ({ authorizedUser2HomePage, myAdsUser2Page, user2Page: page }) => {
 
-      await test.step("--- Navigate to 'Мої оголошення'", async () => {
-        await authorizedHomePage.navigateToMyAds();
-        await expect(page).toHaveURL(MY_ADS_CONSTS.URL);
+      await test.step("Navigate to 'Мої оголошення'", async () => {
+        await authorizedUser2HomePage.navigateToMyAds();
       });
 
       await test.step("1. The message is displayed on the screen", async () => {
-        await expect(myAdsPage.emptyTitle).toBeVisible();
-        await expect(myAdsPage.emptyTitle).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.TITLE);
+        await expect(myAdsUser2Page.emptyTitle).toBeVisible();
+        await expect(myAdsUser2Page.emptyTitle).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.TITLE);
       });
 
       await test.step("2. After click on the 'Подати оголошення' button the user is redirected to the 'Створення оголошення' page", async () => {
-        await expect(myAdsPage.createUnitButton).toBeVisible();
-        await expect(myAdsPage.createUnitButton).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.CREATE_UNIT_BTN);
-        await myAdsPage.createUnitButton.click();
+        await expect(myAdsUser2Page.createUnitButton).toBeVisible();
+        await expect(myAdsUser2Page.createUnitButton).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.CREATE_UNIT_BTN);
+        await myAdsUser2Page.createUnitButton.click();
         await expect(page).toHaveURL(ENDPOINTS.CREATE_UNIT);
       });
     });
+
+});
+
+test.describe("My Ads Standard User", () => {
+
+  test.beforeEach(async ({ authorizedHomePage }) => {
+    await test.step("Navigate to 'Мої оголошення'", async () => {
+      await authorizedHomePage.navigateToMyAds();
+    });
+  });
+
+  // test("The 'Мої оголошення' page without any created units.", // Precondition: the user has no created ads
+  //   {
+  //     tag: "@UI",
+  //     annotation: { type: "Test case", description: "C321" },
+  //   },
+  //   async ({ myAdsPage, user2Page: page }) => {
+
+  //     await test.step("1. The message is displayed on the screen", async () => {
+  //       await expect(myAdsPage.emptyTitle).toBeVisible();
+  //       await expect(myAdsPage.emptyTitle).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.TITLE);
+  //     });
+
+  //     await test.step("2. After click on the 'Подати оголошення' button the user is redirected to the 'Створення оголошення' page", async () => {
+  //       await expect(myAdsPage.createUnitButton).toBeVisible();
+  //       await expect(myAdsPage.createUnitButton).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.CREATE_UNIT_BTN);
+  //       await myAdsPage.createUnitButton.click();
+  //       await expect(page).toHaveURL(ENDPOINTS.CREATE_UNIT);
+  //     });
+  //   });
 
 
   test("Verify that the tabs are clickable",
@@ -38,11 +68,7 @@ test.describe("My Ads", () => {
       tag: "@UI",
       annotation: { type: "Test case", description: "C322" },
     },
-    async ({ authorizedHomePage, myAdsPage }) => { /// myAdsPage is not created any ads
-
-      await test.step("Navigate to 'Мої оголошення'", async () => {
-        await authorizedHomePage.navigateToMyAds();
-      });
+    async ({ myAdsPage }) => { /// myAdsPage is not created any ads
 
       const tabData = [
         { name: MY_ADS_CONSTS.TABS.ACTIVE, emptyMsg: MY_ADS_CONSTS.EMPTY_TITLES.ACTIVE },
@@ -95,10 +121,7 @@ test.describe("My Ads", () => {
       tag: "@functional",
       annotation: { type: "Test case", description: "C323" },
     },
-    async ({ authorizedHomePage, myAdsPage }) => {
-      await test.step("Navigate to 'Мої оголошення'", async () => {
-        await authorizedHomePage.navigateToMyAds();
-      });
+    async ({ myAdsPage }) => {
 
       for (const category of categoriesToCheck) {
         await test.step(`Filter by category: ${category}`, async () => {
@@ -109,10 +132,7 @@ test.describe("My Ads", () => {
             await test.step(`Verify category ${category} in tab ${tabName}`, async () => {
               await myAdsPage.switchTab(tabName);
 
-              // Check the status: either there are cards or a text message
-              const isCardsVisible = await myAdsPage.unitCards.first().isVisible();
-
-              if (isCardsVisible) {
+              if (await myAdsPage.isCardsVisible()) {
                 // The category text on the card should contain our category name
                 await expect(myAdsPage.unitCategoryLabel.first()).toContainText(category);
                 // Get the full text (for example "Складська техніка / Техніка для складування / Ножичні візки")
@@ -139,11 +159,7 @@ test.describe("My Ads", () => {
       tag: "@functional",
       annotation: { type: "Test case", description: "C324" },
     },
-    async ({ authorizedHomePage, myAdsPage, userPage: page }) => {
-
-      await test.step("Navigate to 'Мої оголошення'", async () => {
-        await authorizedHomePage.navigateToMyAds();
-      });
+    async ({ myAdsPage, userPage: page }) => {
 
       const tabs = [
         MY_ADS_CONSTS.TABS.ACTIVE,
@@ -166,12 +182,7 @@ test.describe("My Ads", () => {
 
               // The logic uses a regex to detect Latin characters and prioritize them at the top of the list.
               const names = await myAdsPage.unitNames.allInnerTexts();
-              const sortedNames = [...names].sort((a, b) => {
-                const isLatin = (str: string) => /^[A-Z]/i.test(str);
-                if (isLatin(a) && !isLatin(b)) return -1;
-                if (!isLatin(a) && isLatin(b)) return 1;
-                return a.localeCompare(b, "uk", { sensitivity: "base" });
-              });
+              const sortedNames = sortUnitNames(names);
 
               expect(names, "Units should be sorted alphabetically (Latin first)").toEqual(sortedNames);
             });
@@ -208,7 +219,7 @@ test.describe("My Ads", () => {
       tag: "@functional",
       annotation: { type: "Test case", description: "C325" },
     },
-    async ({ authorizedHomePage, myAdsPage }) => {
+    async ({ myAdsPage }) => {
 
       let targetName: string;
       let allUnitNames: string[] = [];
@@ -219,10 +230,6 @@ test.describe("My Ads", () => {
         MY_ADS_CONSTS.TABS.PENDING,
         MY_ADS_CONSTS.TABS.REJECTED
       ];
-
-      await test.step("Navigate to 'Мої оголошення'", async () => {
-        await authorizedHomePage.navigateToMyAds();
-      });
 
       for (const tabName of tabs) {
         await test.step(`--- Вкладка: ${tabName} ---`, async () => {
@@ -248,17 +255,18 @@ test.describe("My Ads", () => {
           await test.step("Case sensitivity check (Case-insensitive)", async () => {
             // Convert the target name to upper case
             const upperCaseName = targetName.toUpperCase();
-            await myAdsPage.searchInput.fill(upperCaseName);
+            await myAdsPage.fieldActions.typeIntoField(myAdsPage.searchInput, upperCaseName);
             // Expect at least one result to be found, since the search should be case-insensitive
             const count = await myAdsPage.unitCards.count();
             expect(count, `The search should be case-insensitive: when searching for "${upperCaseName}", ${count} ads were found`).toBeGreaterThan(0);
             // Additionally, check that the visible card contain the target name
             await expect(myAdsPage.unitCards.first()).toContainText(targetName, { ignoreCase: true });
+            await myAdsPage.clearSearch();
           });
 
           await test.step("Non-existent name and Reset filters", async () => {
             const fakeName = generateNonExistentName(allUnitNames);
-            await myAdsPage.searchInput.fill(fakeName);
+            await myAdsPage.fieldActions.typeIntoField(myAdsPage.searchInput, fakeName);
             await expect(myAdsPage.emptyTitle).toHaveText(`Оголошення за назвою "${fakeName}" не знайдені`);
 
             await myAdsPage.resetFiltersBtn.click();
@@ -273,9 +281,9 @@ test.describe("My Ads", () => {
 
           for (const scenario of scenarios) {
             await test.step(`Scenario: ${scenario.label}`, async () => { // 10
-              await myAdsPage.searchInput.fill("");
+              await myAdsPage.clearSearch();
 
-              await myAdsPage.searchInput.fill(scenario.value);
+              await myAdsPage.fieldActions.typeIntoField(myAdsPage.searchInput, scenario.value);
 
               // If the scenario value is empty, we expect to see all units. For invalid inputs, we expect to see the empty state
               if (scenario.value === "") {
@@ -294,24 +302,24 @@ test.describe("My Ads", () => {
             const unitToVerify = allUnitNames[0];
 
             await test.step(`Verify unit from ${tabName} is NOT in Active tab`, async () => { // 11-12
-              await myAdsPage.searchInput.fill("");
+              await myAdsPage.clearSearch();
               await myAdsPage.switchTab(MY_ADS_CONSTS.TABS.ACTIVE);
 
               const activeTabLocator = myAdsPage.getTab(MY_ADS_CONSTS.TABS.ACTIVE);
-              await expect(activeTabLocator).toHaveAttribute('aria-selected', 'true', { });
+              await expect(activeTabLocator).toHaveAttribute('aria-selected', 'true');
 
-              await myAdsPage.searchInput.fill(unitToVerify);
-              await expect(myAdsPage.emptyTitle).toBeVisible({ });
+              await myAdsPage.fieldActions.typeIntoField(myAdsPage.searchInput, unitToVerify);
+              await expect(myAdsPage.emptyTitle).toBeVisible({});
               await myAdsPage.resetFiltersBtn.click();
 
               await myAdsPage.switchTab(tabName);
               const originalTabLocator = myAdsPage.getTab(tabName);
               await expect(originalTabLocator).toHaveAttribute('aria-selected', 'true');
 
-              await myAdsPage.searchInput.fill(unitToVerify);
+              await myAdsPage.fieldActions.typeIntoField(myAdsPage.searchInput, unitToVerify);
               await expect(myAdsPage.unitCards.first()).toContainText(unitToVerify);
 
-              await myAdsPage.searchInput.fill("");
+              await myAdsPage.clearSearch();
               await expect(myAdsPage.searchInput).toHaveValue("");
             });
           }

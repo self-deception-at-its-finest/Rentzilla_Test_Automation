@@ -1,7 +1,9 @@
 import type { Page, Locator } from "@playwright/test";
 import BasePage from "./Base.page";
+import { FieldActions } from "@components/create-unit/FieldActions";
 
 export class MyAdsPage extends BasePage {
+    readonly fieldActions: FieldActions;
     readonly emptyTitle: Locator;
     readonly createUnitButton: Locator;
     readonly unitCards: Locator;
@@ -16,6 +18,7 @@ export class MyAdsPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
+        this.fieldActions = new FieldActions(page);
         this.emptyTitle = page.getByTestId('title');
         this.createUnitButton = page.getByTestId('emptyBlockButton');
         this.unitCards = page.getByTestId('unitCard');
@@ -56,5 +59,13 @@ export class MyAdsPage extends BasePage {
         for (let i = 0; i < currentText.length; i++) {
             await this.searchInput.press('Backspace');
         }
+    }
+
+    async isCardsVisible() {
+        return await this.unitCards.first().isVisible();
+    }
+
+    async clearSearch() {
+        await this.fieldActions.clearField(this.searchInput);
     }
 }
