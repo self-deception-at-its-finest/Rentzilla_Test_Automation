@@ -1,6 +1,7 @@
 import { Locator, Page } from "@playwright/test";
-import { tabs, KeysWithLabel } from "@constants/create-unit/fields.constants";
-import { FieldActions } from "../FieldActions";
+import { tabs } from "@constants/create-unit/fields.constants";
+import { FieldActions } from "@components/FieldActions";
+import { Tab1KeysWithLabel } from "@custom-types/tabs";
 
 export abstract class BaseComponent {
     readonly section: Locator;
@@ -12,7 +13,7 @@ export abstract class BaseComponent {
 
     constructor(
         protected readonly page: Page,
-        fieldLabel: KeysWithLabel,
+        fieldLabel: Tab1KeysWithLabel,
         required: boolean = true,
     ) {
         this.tabTitle = this.page

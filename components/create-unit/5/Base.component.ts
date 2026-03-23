@@ -1,6 +1,6 @@
 import { tabs } from "@constants/create-unit/fields.constants";
 import type { Locator, Page } from "@playwright/test";
-import { FieldActions } from "../FieldActions";
+import { FieldActions } from "@components/FieldActions";
 
 export abstract class BaseComponent {
     readonly contactsOfOperatorTitle: Locator;
@@ -102,6 +102,8 @@ export abstract class BaseComponent {
     }
 
     async isRequired(fieldLabel: Locator): Promise<boolean> {
-        return (await fieldLabel.locator("span", { hasText: "*" }).count()) === 1;
+        return (
+            (await fieldLabel.locator("span", { hasText: "*" }).count()) === 1
+        );
     }
 }
