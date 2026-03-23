@@ -42,33 +42,12 @@ test.describe("My Ads Standard User", () => {
     });
   });
 
-  // test("The 'Мої оголошення' page without any created units.", // Precondition: the user has no created ads
-  //   {
-  //     tag: "@UI",
-  //     annotation: { type: "Test case", description: "C321" },
-  //   },
-  //   async ({ myAdsPage, user2Page: page }) => {
-
-  //     await test.step("1. The message is displayed on the screen", async () => {
-  //       await expect(myAdsPage.emptyTitle).toBeVisible();
-  //       await expect(myAdsPage.emptyTitle).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.TITLE);
-  //     });
-
-  //     await test.step("2. After click on the 'Подати оголошення' button the user is redirected to the 'Створення оголошення' page", async () => {
-  //       await expect(myAdsPage.createUnitButton).toBeVisible();
-  //       await expect(myAdsPage.createUnitButton).toHaveText(MY_ADS_CONSTS.EMPTY_STATE.CREATE_UNIT_BTN);
-  //       await myAdsPage.createUnitButton.click();
-  //       await expect(page).toHaveURL(ENDPOINTS.CREATE_UNIT);
-  //     });
-  //   });
-
-
   test("Verify that the tabs are clickable",
     {
       tag: "@UI",
       annotation: { type: "Test case", description: "C322" },
     },
-    async ({ myAdsPage }) => { /// myAdsPage is not created any ads
+    async ({ myAdsPage }) => { 
 
       const tabData = [
         { name: MY_ADS_CONSTS.TABS.ACTIVE, emptyMsg: MY_ADS_CONSTS.EMPTY_TITLES.ACTIVE },
@@ -85,8 +64,7 @@ test.describe("My Ads Standard User", () => {
           // Check that the clicked tab is active
           await expect(currentTab).toHaveAttribute('aria-selected', 'true');
           // Verify content: either unit cards or a message about the empty list
-          const isCardsVisible = await myAdsPage.unitCards.first().isVisible();
-          if (isCardsVisible) {
+          if (await myAdsPage.isCardsVisible()) {
             await expect(myAdsPage.unitCards.first()).toBeVisible();
           } else {
             await expect(myAdsPage.emptyTitle).toHaveText(tab.emptyMsg);

@@ -18,13 +18,7 @@ import { FavoriteUnitsPage } from "@pages/FavoriteUnits.page";
 import { MyAdsPage } from "@pages/MyAds.page";
 import { ProductsPage } from "@pages/Products.page";
 
-import { createAdsFlow } from "../flows/ads/createAds.flow";
-import { approveAdsFlow } from "../flows/admin/approveAds.flow";
-import { deleteAdsFlow } from "../flows/admin/deleteAds.flow";
-import { TestAdData } from "@custom-types/tabs";
-
 const test = apiAuth.extend<{
-    ads: TestAdData[];
     authorizedHomePage: HomePage;
     authorizedUser2HomePage: HomePage;
     createUnitPage: CreateUnitPage;
@@ -43,32 +37,6 @@ const test = apiAuth.extend<{
     myAdsPage: MyAdsPage;
     myAdsUser2Page: MyAdsPage;
 }>({
-
-    ads: [
-        async ({ browser, userPage }, use) => {
-            const testAds = buildTestAds(5);
-
-            // 1. Створюємо оголошення від імені звичайного користувача (userPage вже авторизована)
-            await userPage.goto(endpoints["create unit"]);
-            await createAdsFlow(userPage, testAds);
-
-            // 2. СХВАЛЕННЯ: Створюємо окрему сторінку для Адміна
-            const adminContext = await browser.newContext({ storageState: adminFile }); // Завантажуємо стан адміна
-            const adminPage = await adminContext.newPage();
-
-            // 3. Переходимо в адмін-панель
-            await adminPage.goto(endpoints.admin);
-            await approveAdsFlow(adminPage, testAds);
-
-            await use(testAds);
-
-            // Очищення
-            await adminPage.close();
-            await adminContext.close();
-            await deleteAdsFlow(userPage, testAds);
-        },
-        { box: false },
-    ],
 
     unitPage: [
         async ({ userPage: page }, use) => {

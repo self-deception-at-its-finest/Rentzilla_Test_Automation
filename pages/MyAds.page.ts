@@ -1,6 +1,6 @@
 import type { Page, Locator } from "@playwright/test";
 import BasePage from "./Base.page";
-import { FieldActions } from "@components/create-unit/FieldActions";
+import { FieldActions } from "@components/FieldActions";
 
 export class MyAdsPage extends BasePage {
     readonly fieldActions: FieldActions;

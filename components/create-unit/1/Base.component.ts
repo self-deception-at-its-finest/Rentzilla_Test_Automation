@@ -3,7 +3,7 @@ import {
     tabs,
     KeysWithLabel,
 } from "@constants/create-unit/fields.constants";
-import { FieldActions } from "../FieldActions";
+import { FieldActions } from "../../FieldActions";
 
 export abstract class BaseComponent {
     readonly page: Page;
