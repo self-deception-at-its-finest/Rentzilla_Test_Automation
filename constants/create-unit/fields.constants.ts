@@ -1,9 +1,9 @@
 import { data } from "./createUnit.constants";
 
-type tab1 = (typeof data)["tabs"]["1"];
+type Tab1 = (typeof data)["tabs"]["1"];
 type KeysWithLabel = {
-    [K in keyof tab1]: tab1[K] extends { label: string } ? K : never;
-}[keyof tab1];
+    [K in keyof Tab1]: Tab1[K] extends { label: string } ? K : never;
+}[keyof Tab1];
 
 type Tabs = {
     mainInfo: (typeof data.tabs)["1"];
