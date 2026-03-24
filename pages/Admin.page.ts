@@ -1,5 +1,5 @@
 import { Locator, Page } from "@playwright/test";
-import { TestAdData } from "@custom-types/tabs";
+import { TestAdData } from "@custom-types/tabs.types";
 
 export class AdminPage {
     readonly adsLink: Locator;

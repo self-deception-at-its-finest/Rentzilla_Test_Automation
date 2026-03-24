@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { TestAdData } from "@custom-types/tabs";
+import { TestAdData } from "@custom-types/tabs.types";
 import { AdComponent } from "@components/create-unit/1/Ad.component";
 import { CategoryComponent } from "@components/create-unit/1/Category.component";
 import { LocationComponent } from "@components/create-unit/1/Location.component";

@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import { tabs } from "@constants/create-unit/fields.constants";
 import { FieldActions } from "@components/FieldActions";
-import { Tab1KeysWithLabel } from "@custom-types/tabs";
+import { Tab1KeysWithLabel } from "@custom-types/tabs.types";
 
 export abstract class BaseComponent {
     readonly section: Locator;
@@ -18,7 +18,7 @@ export abstract class BaseComponent {
     ) {
         this.tabTitle = this.page
             .getByTestId("wrapper-characteristics")
-            .getByText("Основна інформація");
+            .getByText(tabs.mainInfo.title);
         this.section = this.page
             .getByText(tabs.mainInfo[fieldLabel].label)
             .locator("..");

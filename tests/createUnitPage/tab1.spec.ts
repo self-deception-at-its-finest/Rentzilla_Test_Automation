@@ -1,15 +1,13 @@
 import { expect, test } from "@fixtures/indexV2";
 import {
     BUTTONS,
+    createUnitConsts as data,
     FORBIDDEN_SYMBOLS,
     MANUFACTURERS,
     TAB_NUMBERS,
     TAB_TITLES,
 } from "@constants/create-unit/createUnit.constants";
-import {
-    CREATE_UNIT_CONSTS,
-    FIELDS_ERRORS,
-} from "@constants/create-unit/createUnit.constants";
+import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
 import endpoints from "@constants/endpoints.constants.json";
 import catalog from "@constants/catalog.constants.json";
 import { isDesktop } from "@utils/viewportGuard";
@@ -51,9 +49,7 @@ test.describe(
                         await expect(page.pageTitle).toBeVisible();
                     });
                     await test.step("• correct", async () => {
-                        await expect(page.pageTitle).toHaveText(
-                            CREATE_UNIT_CONSTS.PAGE_TITLE,
-                        );
+                        await expect(page.pageTitle).toHaveText(data.pageTitle);
                     });
                 });
 
@@ -715,9 +711,7 @@ test.describe(
 
                     await test.step("• keeps the page title visibility and text unchanged", async () => {
                         await expect(page.pageTitle).toBeVisible();
-                        await expect(page.pageTitle).toHaveText(
-                            CREATE_UNIT_CONSTS.PAGE_TITLE,
-                        );
+                        await expect(page.pageTitle).toHaveText(data.pageTitle);
                     });
 
                     await test.step("• keeps inactive tabs unchanged", async () => {

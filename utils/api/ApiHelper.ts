@@ -1,6 +1,6 @@
 import { APIRequestContext } from "@playwright/test";
 import { ENDPOINTS } from "@constants/endpoints.constants";
-import { CreateUnitPayload } from "@custom-types/tabs";
+import { CreateUnitPayload } from "@custom-types/tabs.types";
 
 export class ApiHelper {
     constructor(private request: APIRequestContext) {

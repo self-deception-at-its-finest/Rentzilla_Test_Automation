@@ -3,7 +3,7 @@ import { ServiceComponent } from "@components/create-unit/3/Service.component";
 import { PriceComponent } from "@components/create-unit/4/Price.component";
 import { VerifiedUserContactsComponent } from "@components/create-unit/5/VerifiedUserContacts.component";
 import { HeaderComponent } from "@components/Header.component";
-import { TestAdData } from "@custom-types/tabs";
+import { TestAdData } from "@custom-types/tabs.types";
 import { Page } from "@playwright/test";
 import { CreateUnitPage } from "@pages/CreateUnit.page";
 import { fillTab1Flow } from "./fillTab1.flow";

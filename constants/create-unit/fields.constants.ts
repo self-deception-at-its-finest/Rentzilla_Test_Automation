@@ -1,7 +1,6 @@
-import { Tabs } from "@custom-types/tabs";
-import { data } from "./createUnit.constants";
+import { createUnitConsts as data } from "./createUnit.constants";
 
-const tabs: Tabs = {
+const tabs = {
     mainInfo: data.tabs["1"],
     photos: data.tabs["2"],
     service: data.tabs["3"],

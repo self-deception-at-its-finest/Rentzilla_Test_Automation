@@ -1,4 +1,4 @@
-import { data } from "@constants/create-unit/createUnit.constants";
+import { createUnitConsts as data } from "@constants/create-unit/createUnit.constants";
 
 export type TabNumber = keyof typeof data.tabs;
 
@@ -10,21 +10,13 @@ const tabMap = {
     contacts: "5",
 } as const;
 
-export type Tabs = {
+type Tabs = {
     [K in keyof typeof tabMap]: (typeof data.tabs)[(typeof tabMap)[K]];
 };
-
-export type Tab1 = Tabs["mainInfo"];
+type Tab1 = Tabs["mainInfo"];
 export type Tab1KeysWithLabel = {
     [K in keyof Tab1]: Tab1[K] extends { label: string } ? K : never;
 }[keyof Tab1];
-
-export type TabTitle =
-    | "Основна інформація"
-    | "Фотографії"
-    | "Послуги"
-    | "Вартість"
-    | "Контакти";
 
 /**
  * This type uses for test data.

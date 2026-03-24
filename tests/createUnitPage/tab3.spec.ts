@@ -8,7 +8,7 @@ import {
 import { getFieldPlaceholder } from "@utils/formHelper";
 import {
     BUTTONS,
-    CREATE_UNIT_CONSTS,
+    createUnitConsts as data,
     FORBIDDEN_SYMBOLS,
     TAB_NUMBERS,
     TAB_TITLES,
@@ -423,9 +423,7 @@ test.describe(
                     await expectTabActive(page.tabList.nth(3));
 
                     await expect(page.pageTitle).toBeVisible();
-                    await expect(page.pageTitle).toHaveText(
-                        CREATE_UNIT_CONSTS.PAGE_TITLE,
-                    );
+                    await expect(page.pageTitle).toHaveText(data.pageTitle);
                 });
 
                 await test.step("Other tabs are inactive and unchanged", async () => {

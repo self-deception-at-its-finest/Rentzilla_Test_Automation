@@ -1,7 +1,7 @@
 import { env } from "@config/env";
 import { SERVICES } from "@constants/catalog.constants";
 import { MANUFACTURERS } from "@constants/create-unit/createUnit.constants";
-import { CreateUnitPayload, TestAdData } from "@custom-types/tabs";
+import { CreateUnitPayload, TestAdData } from "@custom-types/tabs.types";
 import { generateText } from "../fakeData";
 import { getRandomElement } from "../getElements";
 import { getRandomManufacturerId, getRandomPrice } from "../getRandomIndices";

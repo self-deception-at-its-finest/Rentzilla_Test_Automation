@@ -1,6 +1,6 @@
 import {
     BUTTONS,
-    CREATE_UNIT_CONSTS,
+    createUnitConsts as data,
     TAB_NUMBERS,
     TAB_TITLES,
 } from "@constants/create-unit/createUnit.constants";
@@ -494,9 +494,7 @@ test.describe(
 
                     await expect(page.pageTitle).toBeVisible();
 
-                    await expect(page.pageTitle).toHaveText(
-                        CREATE_UNIT_CONSTS.PAGE_TITLE,
-                    );
+                    await expect(page.pageTitle).toHaveText(data.pageTitle);
                 });
 
                 await test.step("Other tabs are inactive and unchanged", async () => {

@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 import { env } from "@config/env";
 import { AdminPage } from "@pages/Admin.page";
-import { TestAdData } from "@custom-types/tabs";
+import { TestAdData } from "@custom-types/tabs.types";
 import { switchToAdminFlow } from "../switchLogins.flow";
 
 export async function approveAdsFlow(page: Page, ads: TestAdData[]) {
