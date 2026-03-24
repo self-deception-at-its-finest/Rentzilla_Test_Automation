@@ -14,35 +14,35 @@ import endpoints from "@constants/endpoints.constants.json";
  * @param ads Thе data object for creating new ads
  */
 export async function createAdsFlow(page: Page, ads: TestAdData[]) {
-    await page.goto(endpoints["create unit"]);
+	await page.goto(endpoints["create unit"]);
 
-    const createUnitPage = new CreateUnitPage(page);
-    for (let i = 0; i < ads.length; i++) {
-        // First tab
-        await fillTab1Flow(page, ads[i]);
-        await createUnitPage.nextStep();
-        // Second tab
-        await new PhotosComponent(page).uploadPhoto(ads[i].photo);
+	const createUnitPage = new CreateUnitPage(page);
+	for (let i = 0; i < ads.length; i++) {
+		// First tab
+		await fillTab1Flow(page, ads[i]);
+		await createUnitPage.nextStep();
+		// Second tab
+		await new PhotosComponent(page).uploadPhoto(ads[i].photo);
 
-        await createUnitPage.nextStep();
+		await createUnitPage.nextStep();
 
-        // Third tab
-        // TODO create a random choice of service
-        // it’s constant service for now
-        await new ServiceComponent(page).typeAndSelectService(ads[i].service);
+		// Third tab
+		// TODO create a random choice of service
+		// it’s constant service for now
+		await new ServiceComponent(page).typeAndSelectService(ads[i].service);
 
-        await createUnitPage.nextStep();
+		await createUnitPage.nextStep();
 
-        // Fourth tab
-        await new PriceComponent(page).typePrice(ads[i].price);
+		// Fourth tab
+		await new PriceComponent(page).typePrice(ads[i].price);
 
-        await createUnitPage.nextStep();
+		await createUnitPage.nextStep();
 
-        // Fifth tab
-        await new VerifiedUserContactsComponent(page).checkAsOperator();
-        await createUnitPage.nextStep();
+		// Fifth tab
+		await new VerifiedUserContactsComponent(page).checkAsOperator();
+		await createUnitPage.nextStep();
 
-        await createUnitPage.successfullCreating.waitFor({ state: "visible" });
-        await new HeaderComponent(page).clickCreateAdLink();
-    }
+		await createUnitPage.successfullCreating.waitFor({ state: "visible" });
+		await new HeaderComponent(page).clickCreateAdLink();
+	}
 }

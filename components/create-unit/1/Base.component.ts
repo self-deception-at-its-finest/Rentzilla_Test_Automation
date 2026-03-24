@@ -4,46 +4,40 @@ import { FieldActions } from "@components/FieldActions";
 import { Tab1KeysWithLabel } from "@custom-types/tabs.types";
 
 export abstract class BaseComponent {
-    readonly section: Locator;
-    readonly label: Locator;
-    readonly requiredSymbol?: Locator;
-    readonly tabTitle: Locator;
+	readonly section: Locator;
+	readonly label: Locator;
+	readonly requiredSymbol?: Locator;
+	readonly tabTitle: Locator;
 
-    private readonly fieldActions: FieldActions;
+	private readonly fieldActions: FieldActions;
 
-    constructor(
-        protected readonly page: Page,
-        fieldLabel: Tab1KeysWithLabel,
-        required: boolean = true,
-    ) {
-        this.tabTitle = this.page
-            .getByTestId("wrapper-characteristics")
-            .getByText(tabs.mainInfo.title);
-        this.section = this.page
-            .getByText(tabs.mainInfo[fieldLabel].label)
-            .locator("..");
+	constructor(
+		protected readonly page: Page,
+		fieldLabel: Tab1KeysWithLabel,
+		required: boolean = true,
+	) {
+		this.tabTitle = this.page.getByTestId("wrapper-characteristics").getByText(tabs.mainInfo.title);
+		this.section = this.page.getByText(tabs.mainInfo[fieldLabel].label).locator("..");
 
-        this.label = this.section.getByText(
-            new RegExp(`^${tabs.mainInfo[fieldLabel].label}.*`),
-        );
-        if (required)
-            this.requiredSymbol = this.section.locator("span", {
-                hasText: "*",
-            });
+		this.label = this.section.getByText(new RegExp(`^${tabs.mainInfo[fieldLabel].label}.*`));
+		if (required)
+			this.requiredSymbol = this.section.locator("span", {
+				hasText: "*",
+			});
 
-        this.fieldActions = new FieldActions(this.page);
-    }
+		this.fieldActions = new FieldActions(this.page);
+	}
 
-    // Need to type, not paste
-    protected async typeIntoField(field: Locator, str: string) {
-        await this.fieldActions.typeIntoField(field, str);
-    }
+	// Need to type, not paste
+	protected async typeIntoField(field: Locator, str: string) {
+		await this.fieldActions.typeIntoField(field, str);
+	}
 
-    protected async fillInField(field: Locator, str: string) {
-        await this.fieldActions.fillInField(field, str);
-    }
+	protected async fillInField(field: Locator, str: string) {
+		await this.fieldActions.fillInField(field, str);
+	}
 
-    protected async clearField(field: Locator) {
-        await this.fieldActions.clearField(field);
-    }
+	protected async clearField(field: Locator) {
+		await this.fieldActions.clearField(field);
+	}
 }

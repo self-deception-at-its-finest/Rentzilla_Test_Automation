@@ -4,32 +4,29 @@ import type { Browser } from "@playwright/test";
 import { adminFile, newUserFile, userFile } from "@utils/api/authPaths";
 
 function createRolePage(roleFile: string) {
-    return async (
-        { browser }: { browser: Browser },
-        use: (page: Page) => Promise<void>,
-    ) => {
-        const context = await browser.newContext({
-            storageState: roleFile,
-        });
+	return async ({ browser }: { browser: Browser }, use: (page: Page) => Promise<void>) => {
+		const context = await browser.newContext({
+			storageState: roleFile,
+		});
 
-        const page = await context.newPage();
+		const page = await context.newPage();
 
-        await use(page);
+		await use(page);
 
-        await context.close();
-    };
+		await context.close();
+	};
 }
 
 type MyFixtures = {
-    adminPage: Page;
-    userPage: Page;
-    newUserPage: Page;
+	adminPage: Page;
+	userPage: Page;
+	newUserPage: Page;
 };
 
 export const test = base.extend<MyFixtures>({
-    adminPage: createRolePage(adminFile),
-    userPage: createRolePage(userFile),
-    newUserPage: createRolePage(newUserFile)
+	adminPage: createRolePage(adminFile),
+	userPage: createRolePage(userFile),
+	newUserPage: createRolePage(newUserFile),
 });
 
 export { expect };

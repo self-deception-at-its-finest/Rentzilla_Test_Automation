@@ -5,6 +5,6 @@ import { TestAdData } from "@custom-types/tabs.types";
 import { switchToAdminFlow } from "../switchLogins.flow";
 
 export async function approveAdsFlow(page: Page, ads: TestAdData[]) {
-    await switchToAdminFlow(page, env.admin);
-    await new AdminPage(page).approveAds(ads);
+	await switchToAdminFlow(page, env.admin);
+	await new AdminPage(page).approveAds(ads);
 }

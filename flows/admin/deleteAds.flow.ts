@@ -5,6 +5,6 @@ import { env } from "@config/env";
 import { TestAdData } from "@custom-types/tabs.types";
 
 export async function deleteAdsFlow(page: Page, ads: TestAdData[]) {
-    await switchToAdminFlow(page, env.admin);
-    await new AdminPage(page).deleteAds(ads);
+	await switchToAdminFlow(page, env.admin);
+	await new AdminPage(page).deleteAds(ads);
 }

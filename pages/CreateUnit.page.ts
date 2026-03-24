@@ -1,66 +1,57 @@
 import type { Locator, Page } from "@playwright/test";
 import BasePage from "./Base.page";
-import {
-    createUnitConsts as data,
-} from "@constants/create-unit/createUnit.constants";
+import { createUnitConsts as data } from "@constants/create-unit/createUnit.constants";
 import { TabNumber } from "@custom-types/tabs.types";
 import { TAB_NUMBERS } from "@constants/create-unit/createUnit.constants";
 
 type TabInfo = {
-    title: string;
-    number: string;
+	title: string;
+	number: string;
 };
 
 export class CreateUnitPage extends BasePage {
-    readonly pageTitle: Locator;
-    readonly tabList: Locator;
-    readonly nextButton: Locator;
-    readonly cancelButton: Locator;
-    readonly successfullCreating: Locator;
+	readonly pageTitle: Locator;
+	readonly tabList: Locator;
+	readonly nextButton: Locator;
+	readonly cancelButton: Locator;
+	readonly successfullCreating: Locator;
 
-    constructor(page: Page) {
-        super(page);
-        this.pageTitle = this.page
-            .getByText(data.pageTitle)
-            .first();
-        this.tabList = this.page.locator('[role="tablist"] > button');
-        this.nextButton = this.page.getByTestId("nextButton");
-        this.cancelButton = this.page.getByTestId("prevButton");
-        this.successfullCreating = this.page.getByText(
-            "Ваше оголошення подане на розгляд",
-        );
-    }
+	constructor(page: Page) {
+		super(page);
+		this.pageTitle = this.page.getByText(data.pageTitle).first();
+		this.tabList = this.page.locator('[role="tablist"] > button');
+		this.nextButton = this.page.getByTestId("nextButton");
+		this.cancelButton = this.page.getByTestId("prevButton");
+		this.successfullCreating = this.page.getByText("Ваше оголошення подане на розгляд");
+	}
 
-    async getTabMetaInfo(tabNumber: TabNumber): Promise<TabInfo> {
-        const index = TAB_NUMBERS.indexOf(tabNumber);
-        if (index === -1)
-            throw new Error(`The “${tabNumber}” tab key is not found`);
+	async getTabMetaInfo(tabNumber: TabNumber): Promise<TabInfo> {
+		const index = TAB_NUMBERS.indexOf(tabNumber);
+		if (index === -1) throw new Error(`The “${tabNumber}” tab key is not found`);
 
-        const tab = this.tabList.nth(index);
-        const number = await tab
-            .locator("span", { hasText: tabNumber })
-            .textContent();
-        const title = await tab
-            .locator("span", {
-                hasText: data.tabs[tabNumber].title,
-            })
-            .textContent();
+		const tab = this.tabList.nth(index);
+		const number = await tab.locator("span", { hasText: tabNumber }).textContent();
+		const title = await tab
+			.locator("span", {
+				hasText: data.tabs[tabNumber].title,
+			})
+			.textContent();
 
-        return {
-            number: number?.trim() ?? "",
-            title: title?.trim() ?? "",
-        };
-    }
+		return {
+			number: number?.trim() ?? "",
+			title: title?.trim() ?? "",
+		};
+	}
 
-    async previousStep() {
-        await this.cancelButton.click();
-    }
+	async previousStep() {
+		await this.cancelButton.click();
+	}
 
-    async nextStep() {
-        await this.nextButton.click();
-    }
+	async nextStep() {
+		await this.nextButton.click();
+	}
 
-    async cancelAdCreating() {
-        await this.cancelButton.click();
-    }
+	async cancelAdCreating() {
+		await this.cancelButton.click();
+	}
 }
