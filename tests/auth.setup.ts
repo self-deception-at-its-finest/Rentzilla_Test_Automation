@@ -4,7 +4,7 @@ import { ENDPOINTS } from "@constants/endpoints.constants";
 
 import fs from "fs";
 
-import { authDir, adminFile, userFile } from "@utils/api/authPaths";
+import { authDir, adminFile, userFile, user2File } from "@utils/api/authPaths";
 
 fs.mkdirSync(authDir, { recursive: true });
 
@@ -21,6 +21,12 @@ fs.mkdirSync(authDir, { recursive: true });
         password: env.user.password,
         fileName: userFile,
     },
+    {
+        role: "user2",
+        email: env.user2.email,
+        password: env.user2.password,
+        fileName: user2File,
+    }
 ].forEach(({ role, email, password, fileName }) => {
     setup(`authenticate role: ${role}`, async ({ request }) => {
         if (fs.existsSync(fileName)) {

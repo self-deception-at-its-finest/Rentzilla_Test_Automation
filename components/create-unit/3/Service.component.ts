@@ -1,6 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 import { tabs } from "@constants/create-unit/fields.constants";
-import { FieldActions } from "../FieldActions";
+import { FieldActions } from "../../FieldActions";
 
 type BoundingBox = {
     x: number;
