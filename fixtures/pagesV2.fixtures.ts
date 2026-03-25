@@ -11,10 +11,12 @@ import { getAccessToken } from "@utils/api/authToken";
 import { adminFile } from "@utils/api/authPaths";
 import { UnitPage } from "@pages/Unit.page";
 import { FavoriteUnitsPage } from "@pages/FavoriteUnits.page";
+import { MyAdsPage } from "@pages/MyAds.page";
 import { ProductsPage } from "@pages/Products.page";
 
 const test = apiAuth.extend<{
 	authorizedHomePage: HomePage;
+	authorizedUser2HomePage: HomePage;
 	createUnitPage: CreateUnitPage;
 	createUnitPageNewUser: CreateUnitPage;
 	createUnitPageWithFilledTab1: CreateUnitPage;
@@ -31,6 +33,8 @@ const test = apiAuth.extend<{
 	favoriteUnitsState: string[];
 	productsPage: ProductsPage;
 	homePage: HomePage;
+    myAdsPage: MyAdsPage;
+    myAdsUser2Page: MyAdsPage;
 }>({
 	unitPage: [
 		async ({ userPage: page }, use) => {
@@ -68,6 +72,20 @@ const test = apiAuth.extend<{
 		},
 		{ box: false, title: "Manage Favorite Units State" },
 	],
+	
+	myAdsPage: [
+        async ({ userPage: page }, use) => {
+            await use(new MyAdsPage(page));
+        },
+        { box: true },
+    ],
+
+    myAdsUser2Page: [
+        async ({ user2Page: page }, use) => {
+            await use(new MyAdsPage(page));
+        },
+        { box: true },
+    ],
 
 	authorizedHomePage: [
 		async ({ userPage }, use) => {
@@ -175,6 +193,14 @@ const test = apiAuth.extend<{
 		},
 		{ box: false },
 	],
+	
+	authorizedUser2HomePage: [
+        async ({ user2Page }, use) => {
+            await user2Page.goto(endpoints.home);
+            await use(new HomePage(user2Page));
+        },
+        { box: true },
+    ],
 
 	homePage: [
 		async ({ page }, use) => {
