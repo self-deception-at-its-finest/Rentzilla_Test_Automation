@@ -2,7 +2,7 @@ import { test as setup } from "@playwright/test";
 import { env } from "@config/env";
 import { ENDPOINTS } from "@constants/endpoints.constants";
 import fs from "fs";
-import { authDir, adminFile, userFile, newUserFile } from "@utils/api/authPaths";
+import { authDir, adminFile, userFile, newUserFile, user2File } from "@utils/api/authPaths";
 
 fs.mkdirSync(authDir, { recursive: true });
 
@@ -25,6 +25,12 @@ fs.mkdirSync(authDir, { recursive: true });
 		password: env.newUser.password,
 		fileName: newUserFile,
 	},
+	{
+        role: "user2",
+        email: env.user2.email,
+        password: env.user2.password,
+        fileName: user2File,
+    }
 ].forEach(({ role, email, password, fileName }) => {
 	setup.describe("Creating user browser contexts", () => {
 		setup(`authenticate role: ${role}`, async ({ request }) => {
