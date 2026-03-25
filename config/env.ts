@@ -23,10 +23,10 @@ export const env = {
 		email: getEnv("NEW_USER_EMAIL"),
 		password: getEnv("NEW_USER_PASSWORD"),
 	},
-    user2: {
-      email: getEnv("USER2_EMAIL"),
-      password: getEnv("USER2_PASSWORD"),
-      phone: getEnv("USER2_PHONE"),
-      id: getEnv("USER2_ID"),
-  	},
+	user2: {
+		email: getEnv("USER2_EMAIL"),
+		password: getEnv("USER2_PASSWORD"),
+		phone: getEnv("USER2_PHONE"),
+		id: getEnv("USER2_ID"),
+	},
 };
