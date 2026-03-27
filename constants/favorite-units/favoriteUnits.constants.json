@@ -1,38 +1,38 @@
 {
-    "url": "/owner-favourite-units/",
-    "empty state": {
-        "title": "У Вас поки немає обраних оголошень",
-        "description": "Ви можете додати оголошення в обране зі сторінки оголошення або зі сторінки списку оголошень, натиснувши на “сердечко”",
-        "button": "До списку оголошень"
-    },
-    "heart attributes": {
-        "active fill": "#F73859",
-        "inactive stroke": "#404B69"
-    },
-    "classes": {
-        "navbarActive": "Navbar_active"
-    },
-    "testId": {
-        "unitName": "unitName",
-        "favourite": "favourite"
-    },
-    "sortOptions": {
-        "date": "По даті створення",
-        "name": "По назві"
-    },
-    "categories": {
-        "all": "Всі категорії"
-    },
-    "names": {
-        "units": "Оголошення",
-        "favorite": "Обране",
-        "favorites": "Обрані",
-        "favoriteUnits": "Обрані оголошення",
-        "clear": "Очистити список",
-        "yes": "Так",
-        "no": "Ні",
-        "resetFilters": "Скинути фільтри",
-        "searchByName": "Пошук по назві",
-        "goToAds": "До списку оголошень"
-    }
+	"url": "/owner-favourite-units/",
+	"empty state": {
+		"title": "У Вас поки немає обраних оголошень",
+		"description": "Ви можете додати оголошення в обране зі сторінки оголошення або зі сторінки списку оголошень, натиснувши на “сердечко”",
+		"button": "До списку оголошень"
+	},
+	"heart attributes": {
+		"active fill": "#F73859",
+		"inactive stroke": "#404B69"
+	},
+	"classes": {
+		"navbarActive": "Navbar_active"
+	},
+	"testId": {
+		"unitName": "unitName",
+		"favourite": "favourite"
+	},
+	"sortOptions": {
+		"date": "По даті створення",
+		"name": "По назві"
+	},
+	"categories": {
+		"all": "Всі категорії"
+	},
+	"names": {
+		"units": "Оголошення",
+		"favorite": "Обране",
+		"favorites": "Обрані",
+		"favoriteUnits": "Обрані оголошення",
+		"clear": "Очистити список",
+		"yes": "Так",
+		"no": "Ні",
+		"resetFilters": "Скинути фільтри",
+		"searchByName": "Пошук по назві",
+		"goToAds": "До списку оголошень"
+	}
 }

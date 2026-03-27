@@ -1,37 +1,31 @@
+import { COLORS } from "@constants/colors.constants";
 import { expect, Locator } from "@playwright/test";
-import { CREATE_UNIT_CONSTS } from "@constants/create-unit/createUnit.constants";
+
+async function expectColor(field: Locator, color: string, property: string = "border") {
+	const escapedColor = color.replace(/[()]/g, "\\$&");
+	await expect(field).toHaveCSS(property, new RegExp(`${escapedColor}$`));
+}
 
 export async function expectFieldError(field: Locator) {
-    await expect
-        .soft(field)
-        .toHaveCSS(
-            "border",
-            `1px solid ${CREATE_UNIT_CONSTS.ERR_BORDER_COLOR}`,
-        );
+	await expectColor(field, COLORS.ERROR);
 }
 
 export async function expectTextColorError(field: Locator) {
-    await expect(field).toHaveCSS(
-        "color",
-        `${CREATE_UNIT_CONSTS.ERR_TEXT_COLOR}`,
-    );
+	await expectColor(field, COLORS.ERROR, "color");
 }
 
 export async function expectFieldDefault(field: Locator) {
-    await expect(field).toHaveCSS(
-        "border",
-        `1px solid ${CREATE_UNIT_CONSTS.BORDER_COLOR}`,
-    );
+	await expectColor(field, COLORS.DEFAULT);
 }
 
 async function expectTabAriaSelected(tab: Locator, value: "true" | "false") {
-    await expect(tab).toHaveAttribute("aria-selected", value);
+	await expect(tab).toHaveAttribute("aria-selected", value);
 }
 
 export async function expectTabActive(tab: Locator) {
-    await expectTabAriaSelected(tab, "true");
+	await expectTabAriaSelected(tab, "true");
 }
 
 export async function expectTabInactive(tab: Locator) {
-    await expectTabAriaSelected(tab, "false");
+	await expectTabAriaSelected(tab, "false");
 }
