@@ -26,11 +26,11 @@ fs.mkdirSync(authDir, { recursive: true });
 		fileName: newUserFile,
 	},
 	{
-        role: "user2",
-        email: env.user2.email,
-        password: env.user2.password,
-        fileName: user2File,
-    }
+		role: "user2",
+		email: env.user2.email,
+		password: env.user2.password,
+		fileName: user2File,
+	},
 ].forEach(({ role, email, password, fileName }) => {
 	setup.describe("Creating user browser contexts", () => {
 		setup(`authenticate role: ${role}`, async ({ request }) => {
@@ -38,6 +38,12 @@ fs.mkdirSync(authDir, { recursive: true });
 				console.log(`“${role}” auth file already exists`);
 				return;
 			}
+
+			if (!email || !password) {
+				console.log(`"${role}" credentials not configured, skipping`);
+				return;
+			}
+
 			const response = await request.post(ENDPOINTS.API.CREATE_OR_LOGIN, {
 				data: {
 					email: email,

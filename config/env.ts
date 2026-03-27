@@ -1,9 +1,5 @@
-function getEnv(name: string): string {
-	const value = process.env[name];
-	if (!value) {
-		throw new Error(`Environment variable ${name} is not defined`);
-	}
-	return value;
+function getEnv(name: string): string | undefined {
+	return process.env[name];
 }
 
 export const env = {

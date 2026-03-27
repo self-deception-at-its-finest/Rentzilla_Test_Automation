@@ -1,4 +1,5 @@
 import { env } from "@config/env";
+import { CODES } from "@constants/codes.constants";
 import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
 import { tabs } from "@constants/create-unit/fields.constants";
 import { ENDPOINTS } from "@constants/endpoints.constants";
@@ -39,7 +40,7 @@ test.describe(
 					await test.step("• Full name", async () => {
 						await expect(contacts.userNameText).toContainText(`${env.user.firstName} ${env.user.lastName}`);
 					});
-					await test.step("• TIN", async () => {
+					await test.step("• The “РНОКПП (ІПН)” data", async () => {
 						await expect(contacts.tinText).toContainText(tabs.contacts.tinLabel);
 					});
 					await test.step("• Phone", async () => {
@@ -137,7 +138,7 @@ test.describe(
 					for (const field of operatorFields) await expect(field.input).toBeVisible();
 				});
 
-				await test.step("Validate name inputs: ⤵️", async () => {
+				await test.step("Validate “Прізвище” and “Ім’я” inputs: ⤵️", async () => {
 					await test.step("• The fields cannot contain less than 2 characters", async () => {
 						for (const field of operatorNameFields) {
 							await validateFieldByBothMethods(contacts, field, "a", async () => {
@@ -154,6 +155,16 @@ test.describe(
 								await expect(field.error).toContainText(tabs.contacts.operatorNameErrors.more25);
 							});
 						}
+					});
+
+					await test.step("• The fields cannot contain spec. symbols, digits and spaces", async () => {
+						for (const field of operatorNameFields)
+							for (const pattern of ["123456", "!@#$%", " "])
+								await validateFieldByBothMethods(contacts, field, pattern, async () => {
+									await expect(field.input).toHaveValue(pattern);
+									await expectFieldError(field.input);
+									await expect(field.error).toContainText(tabs.contacts.namesErrors.lettersOnly);
+								});
 					});
 
 					await test.step("• The fields can contain 2–25 letters/dashes", async () => {
@@ -197,9 +208,7 @@ test.describe(
 					});
 
 					await test.step("• the number can contain 9 significant digits with correct operator’s codes", async () => {
-						const codes = [50, 66, 95, 99, 67, 68, 96, 97, 98, 63, 73, 93, 91, 92, 94];
-
-						for (const code of codes) {
+						for (const code of CODES) {
 							await validateTypeIntoField(contacts, field, code + "1234567", async () => {
 								await expectFieldDefault(field.input);
 								await expect(field.input).toHaveValue("+380 " + code + " 123 4567");
