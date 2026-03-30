@@ -1,7 +1,7 @@
 import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
 
 function formatErrorMessage(message: string, missingObject: string): string {
-    return message.replace("““", `“${missingObject}“`);
+	return message.replace("““", `“${missingObject}“`);
 }
 
 /**
@@ -10,13 +10,8 @@ function formatErrorMessage(message: string, missingObject: string): string {
  * @param manufacturerName - The name of the missing manufacturer to insert
  * @returns Formatted error message with manufacturer name
  */
-export function formatMissingManufacturerError(
-    manufacturerName: string,
-): string {
-    return formatErrorMessage(
-        FIELDS_ERRORS.MISSING_MANUFACTURER,
-        manufacturerName,
-    );
+export function formatMissingManufacturerError(manufacturerName: string): string {
+	return formatErrorMessage(FIELDS_ERRORS.MISSING_MANUFACTURER, manufacturerName);
 }
 
 /**
@@ -26,5 +21,5 @@ export function formatMissingManufacturerError(
  * @returns Formatted error message with the service
  */
 export function formatMissingServiceError(service: string): string {
-    return formatErrorMessage(FIELDS_ERRORS.MISSING_SERVICE, service);
+	return formatErrorMessage(FIELDS_ERRORS.MISSING_SERVICE, service);
 }

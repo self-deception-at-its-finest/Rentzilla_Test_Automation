@@ -8,12 +8,10 @@ yarn-error.log*
 /.pnp
 .pnp.js
 
-.vscode/*
 .DS_Store
 
 start_ts.ps1
 
-# Playwright
 node_modules/
 /test-results/
 /playwright-report/

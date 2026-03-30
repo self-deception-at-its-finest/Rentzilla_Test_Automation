@@ -1,106 +1,90 @@
 import type { Locator, Page } from "@playwright/test";
 import { tabs } from "@constants/create-unit/fields.constants";
-import { FieldActions } from "../../FieldActions";
+import { FieldActions } from "@components/FieldActions";
 
 type BoundingBox = {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+	x: number;
+	y: number;
+	width: number;
+	height: number;
 };
 
 export class ServiceComponent {
-    readonly page: Page;
-    readonly title: Locator;
-    readonly description: Locator;
-    readonly addInfo: Locator;
-    readonly searchResultSection: Locator;
-    readonly field: Locator;
-    readonly loupeIcon: Locator;
-    readonly searchResultsContainer: Locator;
-    readonly searchResults: Locator;
-    readonly requiredSymbol: Locator;
+	readonly title: Locator;
+	readonly description: Locator;
+	readonly addInfo: Locator;
+	readonly searchResultSection: Locator;
+	readonly field: Locator;
+	readonly loupeIcon: Locator;
+	readonly searchResultsContainer: Locator;
+	readonly searchResults: Locator;
+	readonly requiredSymbol: Locator;
 
-    readonly selectedServicesSection: Locator;
-    readonly selectedServicesSectionTitle: Locator;
-    readonly selectedServices: Locator;
+	readonly selectedServicesSection: Locator;
+	readonly selectedServicesSectionTitle: Locator;
+	readonly selectedServices: Locator;
 
-    readonly notFoundServiceText: Locator;
-    readonly addServiceButton: Locator;
-    readonly addServiceIcon: Locator;
+	readonly notFoundServiceText: Locator;
+	readonly addServiceButton: Locator;
+	readonly addServiceIcon: Locator;
 
-    private readonly fieldActions: FieldActions;
+	private readonly fieldActions: FieldActions;
 
-    constructor(page: Page) {
-        this.page = page;
-        this.searchResultSection = this.page.getByTestId("searchResult");
-        this.field = this.searchResultSection.getByRole("textbox");
-        this.title = this.page.getByText(tabs.service.title);
-        this.description = this.page.getByText(tabs.service.description);
-        this.addInfo = this.page.getByTestId("add-info");
-        this.requiredSymbol = this.description.locator("span");
-        this.loupeIcon = this.searchResultSection.locator("svg");
-        this.searchResultsContainer = this.page
-            .getByTestId("searchItem-servicesUnitFlow")
-            .locator("..");
-        this.searchResults = this.page.getByTestId(
-            "searchItem-servicesUnitFlow",
-        );
-        this.selectedServicesSection = this.page
-            .getByTestId("item-servicesUnitFlow")
-            .locator("..");
-        this.selectedServicesSectionTitle = this.page.getByText(
-            tabs.service.addedServicesTitle,
-        );
-        this.selectedServices = this.page.getByTestId("item-servicesUnitFlow");
+	constructor(readonly page: Page) {
+		this.searchResultSection = this.page.getByTestId("searchResult");
+		this.field = this.searchResultSection.getByRole("textbox");
+		this.title = this.page.getByText(tabs.service.title);
+		this.description = this.page.getByText(tabs.service.description);
+		this.addInfo = this.page.getByTestId("add-info");
+		this.requiredSymbol = this.description.locator("span");
+		this.loupeIcon = this.searchResultSection.locator("svg");
+		this.searchResultsContainer = this.page.getByTestId("searchItem-servicesUnitFlow").locator("..");
+		this.searchResults = this.page.getByTestId("searchItem-servicesUnitFlow");
+		this.selectedServicesSection = this.page.getByTestId("item-servicesUnitFlow").locator("..");
+		this.selectedServicesSectionTitle = this.page.getByText(tabs.service.addedServicesTitle);
+		this.selectedServices = this.page.getByTestId("item-servicesUnitFlow");
 
-        this.notFoundServiceText = this.searchResultSection.getByTestId(
-            "p2-notFound-addNewItem",
-        );
-        this.addServiceButton =
-            this.searchResultSection.getByTestId("btn-addNewItem");
-        this.addServiceIcon = this.addServiceButton.getByTestId(
-            "svg-plus-addNewItem",
-        );
-        this.fieldActions = new FieldActions(this.page);
-    }
+		this.notFoundServiceText = this.searchResultSection.getByTestId("p2-notFound-addNewItem");
+		this.addServiceButton = this.searchResultSection.getByTestId("btn-addNewItem");
+		this.addServiceIcon = this.addServiceButton.getByTestId("svg-plus-addNewItem");
+		this.fieldActions = new FieldActions(this.page);
+	}
 
-    async getLoupeCoords(): Promise<BoundingBox | null> {
-        return await this.loupeIcon.boundingBox();
-    }
+	async getLoupeCoords(): Promise<BoundingBox | null> {
+		return await this.loupeIcon.boundingBox();
+	}
 
-    async getFieldCoords(): Promise<BoundingBox | null> {
-        return await this.field.boundingBox();
-    }
+	async getFieldCoords(): Promise<BoundingBox | null> {
+		return await this.field.boundingBox();
+	}
 
-    getRemoveIcon(locator: Locator) {
-        return locator.getByTestId("remove-servicesUnitFlow");
-    }
+	getRemoveIcon(locator: Locator) {
+		return locator.getByTestId("remove-servicesUnitFlow");
+	}
 
-    getPathElement(element: Locator) {
-        return element.locator("svg > path");
-    }
+	getPathElement(element: Locator) {
+		return element.locator("svg > path");
+	}
 
-    async typeService(str: string) {
-        await this.fieldActions.typeIntoField(this.field, str);
-    }
+	async typeService(str: string) {
+		await this.fieldActions.typeIntoField(this.field, str);
+	}
 
-    async fillField(str: string) {
-        await this.fieldActions.fillInField(this.field, str);
-    }
+	async fillField(str: string) {
+		await this.fieldActions.fillInField(this.field, str);
+	}
 
-    async selectService(num: number = 0) {
-        await this.searchResults.nth(num).scrollIntoViewIfNeeded();
-        await this.searchResults.nth(num).click();
-    }
+	async selectService(num: number = 0) {
+		await this.searchResults.nth(num).scrollIntoViewIfNeeded();
+		await this.searchResults.nth(num).click();
+	}
 
-    async typeAndSelectService(str: string) {
-        await this.typeService(str);
-        if (await this.searchResultsContainer.isVisible())
-            await this.selectService();
-    }
+	async typeAndSelectService(str: string) {
+		await this.typeService(str);
+		if (await this.searchResultsContainer.isVisible()) await this.selectService();
+	}
 
-    async clearField() {
-        await this.fieldActions.clearField(this.field);
-    }
+	async clearField() {
+		await this.fieldActions.clearField(this.field);
+	}
 }
