@@ -48,6 +48,8 @@ export class NewUserContactsComponent extends BaseComponent {
 	readonly contactsLabel: Locator;
 	readonly ownerProfileNumberContainer: Locator;
 	readonly phoneNumberSection: Locator;
+	readonly phoneNumberInputLabel: Locator;
+	readonly phoneNumberInput: Locator;
 	readonly verificationSection: Locator;
 	readonly verificationLabel: Locator;
 	readonly verificationTelegramButton: Locator;
@@ -121,6 +123,8 @@ export class NewUserContactsComponent extends BaseComponent {
 		this.contactsLabel = this.contactsContainer.getByText(tabs.contacts.yourContactsLabel);
 		this.ownerProfileNumberContainer = this.contactsContainer.getByTestId("OwnerProfileNumber");
 		this.phoneNumberSection = this.ownerProfileNumberContainer.getByTestId("inputWrapper_OwnerProfileNumber");
+		this.phoneNumberInputLabel = this.phoneNumberSection.locator("> div").first();
+		this.phoneNumberInput = this.phoneNumberSection.getByTestId("input_OwnerProfileNumber");
 		this.verificationSection = this.ownerProfileNumberContainer.locator("div").last();
 		this.verificationLabel = this.verificationSection.locator("div").first();
 		this.verificatioSmsButton = this.verificationSection.getByTestId("smsButton_OwnerProfileNumber");

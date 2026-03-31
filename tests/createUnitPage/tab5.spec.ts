@@ -679,5 +679,26 @@ test.describe(
 				}
 			},
 		);
+
+		test(
+			"Verify “Номер телефону” and email sections, with unfilled personal info account (account registrated using email)",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C547" },
+			},
+			async ({ createUnitPageWithFilledFourTabsNewUser: _, newUserContactsComponent: contacts }) => {
+				await test.step("The input is empty by default", async () => {
+					await expect(contacts.phoneNumberInput).toHaveValue("");
+				});
+
+				await test.step("The input title is visible", async () => {
+					await expect(contacts.phoneNumberInputLabel).toBeVisible();
+				});
+
+				await test.step("The input title has the “Номер телефону *” text", async () => {
+					await expect(contacts.phoneNumberInputLabel).toHaveText(tabs.contacts.userPhoneLabel + " *");
+				});
+			},
+		);
 	},
 );

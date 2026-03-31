@@ -34,10 +34,10 @@ export function apiBuildAds(count: number): CreateUnitPayload[] {
 		minimal_price: getRandomPrice(),
 		money_value: "UAH",
 		payment_method: "CASH_OR_CARD",
-		phone: env.user.phone, // linked to user
+		phone: env.user.phone!, // linked to user
 		type_of_work: "HOUR",
 		time_of_work: "",
-		owner: +env.user.id, // linked to user
+		owner: +env.user.id!, // linked to user
 		services: [130],
 	}));
 }

@@ -30,7 +30,7 @@ export default defineConfig({
 			name: "api-authed-tests",
 			use: {
 				...devices["Desktop Chrome"],
-				viewport: { width: 1920, height: 1080 },
+				viewport: { width: 1440, height: 900 },
 			},
 			dependencies: ["auth"],
 		},
