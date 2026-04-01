@@ -14,9 +14,16 @@ import { adminFile } from "@utils/api/authPaths";
 import { BaseFixtures } from "@custom-types/fixtures/all.fixtures.type";
 
 const test = apiAuth.extend<BaseFixtures>({
+	authorizedUser2HomePage: makeFixture(HomePage, "user2Page", "home"),
+	homePage: makeFixture(HomePage, "page"),
 	unitPage: makeFixture(UnitPage),
 	productsPage: makeFixture(ProductsPage),
 	favoritePage: makeFixture(FavoriteUnitsPage),
+	myAdsPage: makeFixture(MyAdsPage),
+	myAdsUser2Page: makeFixture(MyAdsPage, "user2Page"),
+	authorizedHomePage: makeFixture(HomePage, "home"),
+	createUnitPage: makeFixture(CreateUnitPage, "create unit"),
+	createUnitPageNewUser: makeFixture(CreateUnitPage, "newUserPage", "create unit"),
 	favoriteUnitsState: [
 		async ({ authorizedHomePage, productsPage, favoritePage }, use) => {
 			// Setup: Add 3 units to favorites and store their names
@@ -33,16 +40,6 @@ const test = apiAuth.extend<BaseFixtures>({
 		},
 		{ box: false, title: "Manage Favorite Units State" },
 	],
-	myAdsPage: makeFixture(MyAdsPage),
-	myAdsUser2Page: [
-		async ({ user2Page: page }, use) => {
-			await use(new MyAdsPage(page));
-		},
-		{ box: true },
-	],
-	authorizedHomePage: makeFixture(HomePage, "home"),
-	createUnitPage: makeFixture(CreateUnitPage, "create unit"),
-	createUnitPageNewUser: makeFixture(CreateUnitPage, "newUserPage", "create unit"),
 	createUnitPageWithFilledTab1: [
 		async ({ createUnitPage: _, userPage }, use) => {
 			await use(await fillTabsUpTo(userPage, 1));
@@ -81,8 +78,6 @@ const test = apiAuth.extend<BaseFixtures>({
 		},
 		{ box: true },
 	],
-	authorizedUser2HomePage: makeFixture(HomePage, "user2Page", "home"),
-	homePage: makeFixture(HomePage, "page"),
 });
 
 export { test, expect };
