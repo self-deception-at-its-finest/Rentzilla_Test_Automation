@@ -11,7 +11,7 @@ import { fillTabsUpTo } from "@utils/fillTabsUpTo";
 import { ApiHelper } from "@utils/api/ApiHelper";
 import { getAccessToken } from "@utils/api/authToken";
 import { adminFile } from "@utils/api/authPaths";
-import { BaseFixtures } from "@custom-types/fixtures/all.fixtures.type";
+import { BaseFixtures } from "@custom-types/fixtures/all.fixtures.types";
 
 const test = apiAuth.extend<BaseFixtures>({
 	authorizedUser2HomePage: makeFixture(HomePage, "user2Page", "home"),

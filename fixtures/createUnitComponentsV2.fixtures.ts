@@ -12,7 +12,7 @@ import { PriceComponent } from "@components/create-unit/4/Price.component";
 import { VerifiedUserContactsComponent } from "@components/create-unit/5/VerifiedUserContacts.component";
 import { NewUserContactsComponent } from "@components/create-unit/5/NewUserContacts.component";
 import { makeFixture } from "./factories/makeFixture.factory";
-import { BaseFixtures } from "@custom-types/fixtures/all.fixtures.type";
+import { BaseFixtures } from "@custom-types/fixtures/all.fixtures.types";
 
 export const test = base.extend<BaseFixtures>({
 	categoryComponent: makeFixture(CategoryComponent),

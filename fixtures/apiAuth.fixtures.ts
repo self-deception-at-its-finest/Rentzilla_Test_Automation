@@ -1,4 +1,4 @@
-import { UserPageFixtures } from "@custom-types/fixtures/userPage.fixtures.type";
+import { UserPageFixtures } from "@custom-types/fixtures/userPage.fixtures.types";
 import { test as base } from "./base.fixtures";
 import { expect } from "@playwright/test";
 import { adminFile, newUserFile, user2File, userFile } from "@utils/api/authPaths";

@@ -1,7 +1,7 @@
 import type { Page, TestFixture } from "@playwright/test";
-import { ExtendedPageKey, UserPageKey } from "@custom-types/fixtures/userPage.fixtures.type";
-import { AllFixtures } from "@custom-types/fixtures/all.fixtures.type";
-import { EndpointKey } from "@custom-types/fixtures/page.fixtures.type";
+import { ExtendedPageKey, UserPageKey } from "@custom-types/fixtures/userPage.fixtures.types";
+import { AllFixtures } from "@custom-types/fixtures/all.fixtures.types";
+import { EndpointKey } from "@custom-types/fixtures/page.fixtures.types";
 import endpointsJson from "@constants/endpoints.constants.json";
 
 /**
