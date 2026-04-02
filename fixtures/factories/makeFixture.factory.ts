@@ -1,9 +1,13 @@
-import type { Page, TestFixture } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import { ExtendedPageKey, UserPageKey } from "@custom-types/fixtures/userPage.fixtures.types";
 import { AllFixtures } from "@custom-types/fixtures/all.fixtures.types";
 import { EndpointKey } from "@custom-types/fixtures/page.fixtures.types";
 import endpointsJson from "@constants/endpoints.constants.json";
 
+type FixtureTuple<T> = [
+	(args: AllFixtures, use: (value: T) => Promise<void>) => Promise<void>,
+	{ box: boolean; title?: string },
+];
 /**
  * Creates a Playwright fixture that instantiates a page object or component
  * using one of the available browser pages (`page`, `userPage`, `newUserPage`,
@@ -15,80 +19,84 @@ import endpointsJson from "@constants/endpoints.constants.json";
  *
  * ### 1. Only the page object class:
  * ```ts
- * // Uses `"userPage"` as the default page key and no endpoint.
- * makeFixture(HomePage)
+ * // Uses `"userPage"` as the default page key and no endpoint, with `{ box: true }`.
+ * makeFixture(HomePage);
  * ```
+ *
  * ### 2. Class + endpoint:
  * ```ts
  * // Treats the second argument as an endpoint and uses `"userPage"` as the default page key.
- * makeFixture(HomePage, "home")
+ * // Options (e.g. `{ box: false }`) can be passed as the third argument.
+ * makeFixture(HomePage, "home");
+ * makeFixture(HomePage, "home", { box: false });
  * ```
  *
  * ### 3. Class + page key:
  * ```ts
  * // Uses the provided page key and no endpoint.
- * makeFixture(HomePage, "page")
+ * // Options can be passed as the third argument.
+ * makeFixture(HomePage, "page");
+ * makeFixture(HomePage, "page", { box: false });
  * ```
  *
  * ### 4. Class + page key + endpoint:
  * ```ts
  * // Uses the specified page key and navigates to the given endpoint.
- * makeFixture(HomePage, "userPage", "home")
- * ```
- *
- * ### 5. Any of the above with an additional `options` object:
- * ```ts
- * makeFixture(HomePage, "home", { box: false })
- * makeFixture(HomePage, "page", "home", { box: false })
+ * // Options can be passed as the fourth argument.
+ * makeFixture(HomePage, "userPage", "home");
+ * makeFixture(HomePage, "userPage", "home", { box: false });
  * ```
  *
  * **Behavior**:
  * - If no page key is provided, `"userPage"` is used by default.
- * - If the first argument after the class matches an endpoint key, it is treated
- *   as an endpoint rather than a page key.
- * - If an endpoint is provided, the selected page automatically navigates to it
- *   before the page object is constructed.
+ * - If the first argument after the class is recognized as an endpoint key,
+ *   it is treated as an endpoint; otherwise, it is treated as a page key.
+ * - When both a page key and an endpoint are provided, the selected page
+ *   automatically navigates to that endpoint before the page object is constructed.
  * - The returned fixture injects an instance of the provided page object class
- *   into the test context.
+ *   into the test context via `use(new PageClass(selectedPage))`.
+ * - `options.box` controls the `box` flag for the underlying fixture metadata
+ *   and defaults to `true` when not provided.
  *
- * @param PageClass  The page object or component class to instantiate.
- * @param pageKeyOrEndpoint  Optional page key or endpoint, depending on overload.
- * @param endpointOrOptions  Optional endpoint or options object.
- * @param options  Optional fixture options (e.g., `{ box: boolean }`).
- * @returns A Playwright TestFixture that provides an instance of the page object.
+ * @param PageClass           The page object or component class to instantiate.
+ * @param pageKeyOrEndpoint   Optional page key or endpoint, depending on overload.
+ * @param endpointOrOptions   Optional endpoint or options object, depending on overload.
+ * @param options             Optional fixture options (e.g., `{ box: boolean }`).
+ * @returns A fixture tuple (`FixtureTuple<T>`) that Playwright uses as a TestFixture.
  */
+
 export function makeFixture<T>(
 	PageClass: new (page: Page) => T,
 	pageKey?: ExtendedPageKey,
 	endpoint?: EndpointKey,
 	options?: { box: boolean },
-): TestFixture<T, AllFixtures>;
+): FixtureTuple<T>;
 
 export function makeFixture<T>(
 	PageClass: new (page: Page) => T,
 	endpoint: EndpointKey,
 	options?: { box: boolean },
-): TestFixture<T, AllFixtures>;
+): FixtureTuple<T>;
 
 export function makeFixture<T>(
 	PageClass: new (page: Page) => T,
 	pageKey: ExtendedPageKey,
 	endpoint: EndpointKey,
 	options?: { box: boolean },
-): TestFixture<T, AllFixtures>;
+): FixtureTuple<T>;
 
 export function makeFixture<T>(
 	PageClass: new (page: Page) => T,
 	pageKey: ExtendedPageKey,
 	options?: { box: boolean },
-): TestFixture<T, AllFixtures>;
+): FixtureTuple<T>;
 
 export function makeFixture<T>(
 	PageClass: new (page: Page) => T,
 	pageKeyOrEndpoint?: ExtendedPageKey | EndpointKey,
 	endpointOrOptions?: EndpointKey | { box: boolean },
 	options?: { box: boolean },
-): TestFixture<T, AllFixtures> {
+): FixtureTuple<T> {
 	let pageKey: ExtendedPageKey = "userPage";
 	let endpoint: EndpointKey | undefined;
 	let opts: { box: boolean } = { box: true };
@@ -131,7 +139,7 @@ export function makeFixture<T>(
 			await use(new PageClass(p));
 		},
 		opts,
-	] as unknown as TestFixture<T, AllFixtures>;
+	];
 }
 
 function isEndpoint(value: string): value is EndpointKey {

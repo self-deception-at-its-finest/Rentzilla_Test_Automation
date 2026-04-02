@@ -183,7 +183,7 @@ test.describe("My Ads Standard User", () => {
 
 							const dateStrings = await myAdsPage.unitDates.allInnerTexts();
 							// Parse dates in DD.MM.YYYY format
-							const dates = dateStrings.map((d) => {
+							const dates = dateStrings.map((d: string) => {
 								const [day, month, year] = d.split(".").map(Number);
 								return new Date(year, month - 1, day).getTime();
 							});
