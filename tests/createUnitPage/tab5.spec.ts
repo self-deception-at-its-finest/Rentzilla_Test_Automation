@@ -1,6 +1,6 @@
 import { env } from "@config/env";
 import { CODES } from "@constants/codes.constants";
-import { FIELDS_ERRORS } from "@constants/create-unit/createUnit.constants";
+import { FIELDS_ERRORS, FORBIDDEN_SYMBOLS } from "@constants/create-unit/createUnit.constants";
 import { tabs } from "@constants/create-unit/fields.constants";
 import { ENDPOINTS } from "@constants/endpoints.constants";
 import { test, expect } from "@fixtures/indexV2";
@@ -11,6 +11,7 @@ import {
 	validateFillInField,
 	validateTypeIntoField,
 } from "@utils/fieldValidation";
+import { getFieldPlaceholder } from "@utils/formHelper";
 import { expectFieldDefault, expectFieldError } from "@utils/uiMatchers";
 
 const numberInputForbiddenPatterns = ["aaaaaaaaa", "!@#$%", " "];
@@ -677,6 +678,316 @@ test.describe(
 						});
 					});
 				}
+			},
+		);
+
+		test(
+			"Verify “Номер телефону” and email sections, with unfilled personal info account (account registrated using email)",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C547" },
+			},
+			async ({ createUnitPageWithFilledFourTabsNewUser: _, newUserContactsComponent: contacts }) => {
+				await test.step("The input is empty by default", async () => {
+					await expect(contacts.phoneNumberInput).toHaveValue("");
+				});
+
+				await test.step("The input title is visible", async () => {
+					await expect(contacts.phoneNumberInputLabel).toBeVisible();
+				});
+
+				await test.step("The input title has the “Номер телефону *” text", async () => {
+					await expect(contacts.phoneNumberInputLabel).toHaveText(tabs.contacts.userPhoneLabel + " *");
+				});
+
+				await test.step("The field title is visible and has the “Email *” text", async () => {
+					await expect(contacts.emailLabel).toBeVisible();
+					await expect(contacts.emailLabel).toHaveText(tabs.contacts.emailLabel + " *");
+				});
+
+				await test.step("The “Email” field contains the user’s email", async () => {
+					await expect(contacts.emailInput).toHaveValue(env.newUser.email!);
+				});
+			},
+		);
+
+		test(
+			"Verify messenger section",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C546" },
+			},
+			async ({ createUnitPageWithFilledFourTabsNewUser: page, newUserContactsComponent: contacts }) => {
+				await test.step("UI checking of the Viber field: ⤵️", async () => {
+					await test.step("• has the “+380 12 345 67 89” background text", async () => {
+						expect(await getFieldPlaceholder(contacts.viberInput)).toEqual(
+							tabs.contacts.viberInputPlaceholder,
+						);
+					});
+
+					await test.step("• is empty by default", async () => {
+						await expect(contacts.viberInput).toHaveValue("");
+					});
+
+					await test.step("• is not blocked", async () => {
+						await expect(contacts.viberInput).toBeEditable();
+					});
+
+					await test.step("• has the “Viber” visible title", async () => {
+						await expect(contacts.viberLabel).toBeVisible();
+						await expect(contacts.viberLabel).toHaveText(tabs.contacts.viberLabel);
+					});
+				});
+
+				await test.step("Validation of the “Viber” field: ⤵️", async () => {
+					await test.step("• has the “+380” text when it got the focus", async () => {
+						await contacts.viberInput.click();
+						await expect(contacts.viberInput).toHaveValue("+380");
+					});
+
+					await test.step("• the field’s border is red", async () => {
+						await expectFieldError(contacts.viberInput);
+					});
+
+					await test.step("• the “Некоректний номер телефону” error message is visible", async () => {
+						await expect(contacts.viberError).toBeVisible();
+						await expect(contacts.viberError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+					});
+
+					await test.step("• the field should not have LESS than 12 digits", async () => {
+						await contacts.fieldActions.clearField(contacts.viberInput);
+
+						await validateFieldByBothMethods(
+							contacts,
+							contacts.viberInput,
+							"38093869278",
+							async () => {
+								await expect(contacts.viberInput).toHaveValue("+380 93 869 278");
+								await expectFieldError(contacts.viberInput);
+								await expect(contacts.viberError).toBeVisible();
+								await expect(contacts.viberError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+							},
+							true,
+						);
+					});
+
+					await test.step("• the field cannot have MORE than 12 digits", async () => {
+						await validateTypeIntoField(contacts, contacts.viberInput, "3809386927888", async () => {
+							await expect(contacts.viberInput).toHaveValue("+380 93 869 2788");
+							await expectFieldDefault(contacts.viberInput);
+							await expect(contacts.viberError).toBeHidden();
+						});
+
+						await validateFillInField(
+							contacts,
+							contacts.viberInput,
+							"3809386927888",
+							async () => {
+								await expect(contacts.viberInput).toHaveValue("+380 938 692 7888");
+								await expectFieldError(contacts.viberInput);
+								await expect(contacts.viberError).toBeVisible();
+								await expect(contacts.viberError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+							},
+							true,
+						);
+					});
+
+					await test.step("• the field cannot approve the invalid code number", async () => {
+						await validateFieldByBothMethods(
+							contacts,
+							contacts.viberInput,
+							"123456789012",
+							async () => {
+								await expect(contacts.viberInput).toHaveValue("+1 23456789012");
+								await expectFieldError(contacts.viberInput);
+								await expect(contacts.viberError).toBeVisible();
+								await expect(contacts.viberError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+							},
+							true,
+						);
+					});
+
+					await test.step("• the field cannot have letters, space and special symbols", async () => {
+						for (const pattern of ["aaaaaaaaaaaa", " ", "!@#$%"]) {
+							await validateTypeIntoField(contacts, contacts.viberInput, pattern, async () => {
+								await expect(contacts.viberInput).toHaveValue("");
+								await expectFieldDefault(contacts.viberInput);
+								await expect(contacts.viberError).toBeHidden();
+							});
+
+							await validateFillInField(contacts, contacts.viberInput, pattern, async () => {
+								await expect(contacts.viberInput).toHaveValue("+380");
+								await expectFieldError(contacts.viberInput);
+								await expect(contacts.viberError).toBeVisible();
+								await expect(contacts.viberError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+							});
+						}
+					});
+
+					await test.step("• the field can have the “+380xxxxxxxxx” number", async () => {
+						await validateFieldByBothMethods(
+							contacts,
+							contacts.viberInput,
+							"+380931234567",
+							async () => {
+								await page.nextStep();
+								await expect(contacts.viberInput).toHaveValue("+380 93 123 4567");
+								await expectFieldDefault(contacts.viberInput);
+								await expect(contacts.viberError).toBeHidden();
+							},
+							true,
+						);
+					});
+				});
+
+				await test.step("UI checking of the Telegram field: ⤵️", async () => {
+					await test.step("• is empty by default", async () => {
+						await expect(contacts.telegramInput).toHaveValue("");
+					});
+
+					await test.step("• is not blocked", async () => {
+						await expect(contacts.telegramInput).toBeEditable();
+					});
+
+					await test.step("• has the “Telegram” visible title", async () => {
+						await expect(contacts.telegramLabel).toBeVisible();
+						await expect(contacts.telegramLabel).toHaveText(tabs.contacts.telegramLabel);
+					});
+				});
+
+				await test.step("Validation of the “Telegram” field: ⤵️", async () => {
+					await test.step("• the field cannot approve LESS than 12 digits", async () => {
+						await validateFieldByBothMethods(contacts, contacts.telegramInput, "+38093869278", async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue("+38093869278");
+							await expectFieldError(contacts.telegramInput);
+							await expect(contacts.telegramError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+						});
+					});
+
+					await test.step("• the field cannot have MORE than 12 digits", async () => {
+						await validateFieldByBothMethods(
+							contacts,
+							contacts.telegramInput,
+							"+3809386927888",
+							async () => {
+								await page.nextStep();
+								await expect(contacts.telegramInput).toHaveValue("+380938692788");
+								await expectFieldDefault(contacts.telegramInput);
+								await expect(contacts.telegramError).toBeHidden();
+							},
+						);
+					});
+
+					await test.step("• the field cannot approve the invalid code number", async () => {
+						await validateFieldByBothMethods(
+							contacts,
+							contacts.telegramInput,
+							"+123456789012",
+							async () => {
+								await page.nextStep();
+								await expect(contacts.telegramInput).toHaveValue("+123456789012");
+								await expectFieldError(contacts.telegramInput);
+								await expect(contacts.telegramError).toBeVisible();
+								await expect(contacts.telegramError).toHaveText(FIELDS_ERRORS.INVALID_PHONE_NUMBER);
+							},
+						);
+					});
+
+					const invalidPattern = "abcdeabcdeabcdeabcdeabcdeabcde123";
+
+					await test.step("• the field cannot approve LESS than 4 allowed symbols", async () => {
+						await validateFieldByBothMethods(
+							contacts,
+							contacts.telegramInput,
+							invalidPattern.slice(0, 3),
+							async () => {
+								await page.nextStep();
+								await expect(contacts.telegramInput).toHaveValue(invalidPattern.slice(0, 3));
+								await expectFieldError(contacts.telegramInput);
+								await expect(contacts.telegramError).toHaveText(tabs.contacts.telegramErrors.less4);
+							},
+						);
+					});
+
+					await test.step("• the field cannot have MORE than 13 allowed symbols via filling in", async () => {
+						await validateFillInField(contacts, contacts.telegramInput, invalidPattern, async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue(invalidPattern.slice(0, 13));
+							await expectFieldDefault(contacts.telegramInput);
+							await expect(contacts.telegramError).toBeHidden();
+						});
+					});
+
+					await test.step("• the field cannot have MORE than 30 allowed symbols via typing", async () => {
+						await validateTypeIntoField(contacts, contacts.telegramInput, invalidPattern, async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue(invalidPattern.slice(0, 30));
+							await expectFieldDefault(contacts.telegramInput);
+							await expect(contacts.telegramError).toBeHidden();
+						});
+					});
+
+					await test.step("• the field cannot have a string with spaces", async () => {
+						const validPattern = "abcde";
+						await validateTypeIntoField(contacts, contacts.telegramInput, "ab cde", async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue(validPattern);
+							await expectFieldDefault(contacts.telegramInput);
+							await expect(contacts.telegramError).toBeHidden();
+						});
+
+						await validateFillInField(contacts, contacts.telegramInput, "ab cde", async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue("ab cde");
+							await expectFieldError(contacts.telegramInput);
+							await expect(contacts.telegramError).toBeVisible();
+							await expect(contacts.telegramError).toHaveText(tabs.contacts.telegramErrors.incorrect);
+						});
+
+						await validateFieldByBothMethods(contacts, contacts.telegramInput, "abcde ", async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue(validPattern);
+							await expectFieldDefault(contacts.telegramInput);
+							await expect(contacts.telegramError).toBeHidden();
+						});
+					});
+
+					await test.step("• the field cannot have just a space or these symbols: <>{};^", async () => {
+						for (const invalidPattern of [" ", FORBIDDEN_SYMBOLS])
+							await validateFieldByBothMethods(
+								contacts,
+								contacts.telegramInput,
+								invalidPattern,
+								async () => {
+									await page.nextStep();
+									await expect(contacts.telegramInput).toHaveValue("");
+									await expectFieldDefault(contacts.telegramInput);
+									await expect(contacts.telegramError).toBeHidden();
+								},
+							);
+					});
+
+					await test.step("• the field cannot accept Cyrillic symbols", async () => {
+						await validateFieldByBothMethods(contacts, contacts.telegramInput, "абвгде", async () => {
+							await page.nextStep();
+							await expect(contacts.telegramInput).toHaveValue("абвгде");
+							await expectFieldError(contacts.telegramInput);
+							await expect(contacts.telegramError).toBeVisible();
+							await expect(contacts.telegramError).toHaveText(tabs.contacts.telegramErrors.incorrect);
+						});
+					});
+
+					for (const pattern of ["+380931234567", "Tester_1"])
+						await test.step(`• the field can have the “${pattern}” as a valid data`, async () => {
+							await validateFieldByBothMethods(contacts, contacts.telegramInput, pattern, async () => {
+								await page.nextStep();
+								await expect(contacts.telegramInput).toHaveValue(pattern);
+								await expectFieldDefault(contacts.telegramInput);
+								await expect(contacts.viberError).toBeHidden();
+							});
+						});
+				});
 			},
 		);
 	},

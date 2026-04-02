@@ -2,60 +2,28 @@ import { test as apiAuth } from "./apiAuth.fixtures";
 import { expect } from "@playwright/test";
 import { HomePage } from "@pages/Home.page";
 import { CreateUnitPage } from "@pages/CreateUnit.page";
-import endpoints from "@constants/endpoints.constants.json";
-import { buildTestAds } from "@utils/builders/ad.builders";
-import { fillTab1Flow, fillTab2Flow, fillTab3Flow, fillTab4Flow } from "@flows/ads/fillTabs.flow";
-import { generateText } from "@utils/fakeData";
-import { ApiHelper } from "@utils/api/ApiHelper";
-import { getAccessToken } from "@utils/api/authToken";
-import { adminFile } from "@utils/api/authPaths";
 import { UnitPage } from "@pages/Unit.page";
 import { FavoriteUnitsPage } from "@pages/FavoriteUnits.page";
 import { MyAdsPage } from "@pages/MyAds.page";
 import { ProductsPage } from "@pages/Products.page";
+import { makeFixture } from "./factories/makeFixture.factory";
+import { fillTabsUpTo } from "@utils/fillTabsUpTo";
+import { ApiHelper } from "@utils/api/ApiHelper";
+import { getAccessToken } from "@utils/api/authToken";
+import { adminFile } from "@utils/api/authPaths";
+import { BaseFixtures } from "@custom-types/fixtures/all.fixtures.types";
 
-const test = apiAuth.extend<{
-	authorizedHomePage: HomePage;
-	authorizedUser2HomePage: HomePage;
-	createUnitPage: CreateUnitPage;
-	createUnitPageNewUser: CreateUnitPage;
-	createUnitPageWithFilledTab1: CreateUnitPage;
-	createUnitPageWithFilledTwoTabs: CreateUnitPage;
-	createUnitPageWithFilledTwoTabsAndNewService: {
-		createUnitPage: CreateUnitPage;
-		service: string;
-	};
-	createUnitPageWithFilledThreeTabs: CreateUnitPage;
-	createUnitPageWithFilledFourTabs: CreateUnitPage;
-	createUnitPageWithFilledFourTabsNewUser: CreateUnitPage;
-	unitPage: UnitPage;
-	favoritePage: FavoriteUnitsPage;
-	favoriteUnitsState: string[];
-	productsPage: ProductsPage;
-	homePage: HomePage;
-    myAdsPage: MyAdsPage;
-    myAdsUser2Page: MyAdsPage;
-}>({
-	unitPage: [
-		async ({ userPage: page }, use) => {
-			await use(new UnitPage(page));
-		},
-		{ box: true },
-	],
-	productsPage: [
-		async ({ userPage: page }, use) => {
-			await use(new ProductsPage(page));
-		},
-		{ box: true },
-	],
-
-	favoritePage: [
-		async ({ userPage: page }, use) => {
-			await use(new FavoriteUnitsPage(page));
-		},
-		{ box: true },
-	],
-
+const test = apiAuth.extend<BaseFixtures>({
+	authorizedUser2HomePage: makeFixture(HomePage, "user2Page", "home"),
+	homePage: makeFixture(HomePage, "page"),
+	unitPage: makeFixture(UnitPage),
+	productsPage: makeFixture(ProductsPage),
+	favoritePage: makeFixture(FavoriteUnitsPage),
+	myAdsPage: makeFixture(MyAdsPage),
+	myAdsUser2Page: makeFixture(MyAdsPage, "user2Page"),
+	authorizedHomePage: makeFixture(HomePage, "home"),
+	createUnitPage: makeFixture(CreateUnitPage, "create unit"),
+	createUnitPageNewUser: makeFixture(CreateUnitPage, "newUserPage", "create unit"),
 	favoriteUnitsState: [
 		async ({ authorizedHomePage, productsPage, favoritePage }, use) => {
 			// Setup: Add 3 units to favorites and store their names
@@ -72,141 +40,43 @@ const test = apiAuth.extend<{
 		},
 		{ box: false, title: "Manage Favorite Units State" },
 	],
-	
-	myAdsPage: [
-        async ({ userPage: page }, use) => {
-            await use(new MyAdsPage(page));
-        },
-        { box: true },
-    ],
-
-    myAdsUser2Page: [
-        async ({ user2Page: page }, use) => {
-            await use(new MyAdsPage(page));
-        },
-        { box: true },
-    ],
-
-	authorizedHomePage: [
-		async ({ userPage }, use) => {
-			await userPage.goto(endpoints.home);
-			await use(new HomePage(userPage));
-		},
-		{ box: true },
-	],
-
-	createUnitPage: [
-		async ({ userPage }, use) => {
-			await userPage.goto(endpoints["create unit"]);
-			await use(new CreateUnitPage(userPage));
-		},
-		{ box: false },
-	],
-
-	createUnitPageNewUser: [
-		async ({ newUserPage }, use) => {
-			await newUserPage.goto(endpoints["create unit"]);
-			await use(new CreateUnitPage(newUserPage));
-		},
-		{ box: false },
-	],
-
 	createUnitPageWithFilledTab1: [
-		async ({ createUnitPage, userPage }, use) => {
-			await fillTab1Flow(userPage, buildTestAds(1)[0]);
-			await createUnitPage.nextStep();
-			await use(createUnitPage);
+		async ({ createUnitPage: _, userPage }, use) => {
+			await use(await fillTabsUpTo(userPage, 1));
 		},
 		{ box: true },
 	],
-
 	createUnitPageWithFilledTwoTabs: [
-		async ({ createUnitPage, userPage }, use) => {
-			const ad = buildTestAds(1)[0];
-			await fillTab1Flow(userPage, ad);
-			await createUnitPage.nextStep();
-			await fillTab2Flow(userPage, ad.photo);
-			await createUnitPage.nextStep();
-			await use(createUnitPage);
+		async ({ createUnitPage: _, userPage }, use) => {
+			await use(await fillTabsUpTo(userPage, 2));
 		},
-		{ box: false },
+		{ box: true },
 	],
-
 	createUnitPageWithFilledTwoTabsAndNewService: [
-		async ({ createUnitPage, userPage, request }, use) => {
-			const ad = buildTestAds(1)[0];
-			const service = ad.service + generateText(10);
-
-			await fillTab1Flow(userPage, ad);
-			await createUnitPage.nextStep();
-			await fillTab2Flow(userPage, ad.photo);
-			await createUnitPage.nextStep();
-
-			await use({ createUnitPage, service });
-			await new ApiHelper(request).deleteServiceByName(getAccessToken(adminFile), service);
+		async ({ createUnitPage: _, userPage, request }, use) => {
+			const result = await fillTabsUpTo(userPage, 3, true);
+			await use(result);
+			await new ApiHelper(request).deleteServiceByName(getAccessToken(adminFile), result.service);
 		},
-		{ box: false },
+		{ box: true },
 	],
-
 	createUnitPageWithFilledThreeTabs: [
-		async ({ createUnitPage, userPage }, use) => {
-			const ad = buildTestAds(1)[0];
-			await fillTab1Flow(userPage, ad);
-			await createUnitPage.nextStep();
-			await fillTab2Flow(userPage, ad.photo);
-			await createUnitPage.nextStep();
-			await fillTab3Flow(userPage, ad.service);
-			await createUnitPage.nextStep();
-			await use(createUnitPage);
+		async ({ createUnitPage: _, userPage }, use) => {
+			await use(await fillTabsUpTo(userPage, 3));
 		},
-		{ box: false },
+		{ box: true },
 	],
-
 	createUnitPageWithFilledFourTabs: [
-		async ({ createUnitPage, userPage }, use) => {
-			const ad = buildTestAds(1)[0];
-			await fillTab1Flow(userPage, ad);
-			await createUnitPage.nextStep();
-			await fillTab2Flow(userPage, ad.photo);
-			await createUnitPage.nextStep();
-			await fillTab3Flow(userPage, ad.service);
-			await createUnitPage.nextStep();
-			await fillTab4Flow(userPage, ad.price);
-			await createUnitPage.nextStep();
-			await use(createUnitPage);
+		async ({ createUnitPage: _, userPage }, use) => {
+			await use(await fillTabsUpTo(userPage, 4));
 		},
-		{ box: false },
+		{ box: true },
 	],
-
 	createUnitPageWithFilledFourTabsNewUser: [
-		async ({ createUnitPageNewUser, newUserPage }, use) => {
-			const ad = buildTestAds(1)[0];
-			await fillTab1Flow(newUserPage, ad);
-			await createUnitPageNewUser.nextStep();
-			await fillTab2Flow(newUserPage, ad.photo);
-			await createUnitPageNewUser.nextStep();
-			await fillTab3Flow(newUserPage, ad.service);
-			await createUnitPageNewUser.nextStep();
-			await fillTab4Flow(newUserPage, ad.price);
-			await createUnitPageNewUser.nextStep();
-			await use(createUnitPageNewUser);
+		async ({ createUnitPageNewUser: _, newUserPage }, use) => {
+			await use(await fillTabsUpTo(newUserPage, 4));
 		},
-		{ box: false },
-	],
-	
-	authorizedUser2HomePage: [
-        async ({ user2Page }, use) => {
-            await user2Page.goto(endpoints.home);
-            await use(new HomePage(user2Page));
-        },
-        { box: true },
-    ],
-
-	homePage: [
-		async ({ page }, use) => {
-			await use(new HomePage(page));
-		},
-		{ box: false },
+		{ box: true },
 	],
 });
 
