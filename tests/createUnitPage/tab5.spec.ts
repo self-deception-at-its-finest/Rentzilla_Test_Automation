@@ -746,6 +746,7 @@ test.describe(
 					});
 
 					await test.step("• the field’s border is red", async () => {
+						await contacts.viberLabel.click();
 						await expectFieldError(contacts.viberInput);
 					});
 
@@ -984,7 +985,7 @@ test.describe(
 								await page.nextStep();
 								await expect(contacts.telegramInput).toHaveValue(pattern);
 								await expectFieldDefault(contacts.telegramInput);
-								await expect(contacts.viberError).toBeHidden();
+								await expect(contacts.telegramError).toBeHidden();
 							});
 						});
 				});
