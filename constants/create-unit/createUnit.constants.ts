@@ -141,6 +141,10 @@ const createUnitConsts = {
 			viberLabel: "Viber",
 			viberInputPlaceholder: "+380 12 345 67 89",
 			telegramLabel: "Telegram",
+			telegramErrors: {
+				less4: "Поле повинно містити не менше 4 символів",
+				incorrect: "Некоректне ім'я користувача",
+			},
 			emailLabel: "Email",
 			contactsOfOperatorLabel: "Контакти оператора",
 			iAmTheOperator: "Я оператор технічного засобу",

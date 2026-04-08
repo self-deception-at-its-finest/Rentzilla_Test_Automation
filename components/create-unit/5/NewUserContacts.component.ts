@@ -48,13 +48,24 @@ export class NewUserContactsComponent extends BaseComponent {
 	readonly contactsLabel: Locator;
 	readonly ownerProfileNumberContainer: Locator;
 	readonly phoneNumberSection: Locator;
+	readonly phoneNumberInputLabel: Locator;
+	readonly phoneNumberInput: Locator;
 	readonly verificationSection: Locator;
 	readonly verificationLabel: Locator;
 	readonly verificationTelegramButton: Locator;
 	readonly verificatioSmsButton: Locator;
+	readonly messengersContainer: Locator;
 	readonly viberSection: Locator;
+	readonly viberLabel: Locator;
+	readonly viberInput: Locator;
+	readonly viberError: Locator;
 	readonly telegramSection: Locator;
+	readonly telegramLabel: Locator;
+	readonly telegramInput: Locator;
+	readonly telegramError: Locator;
 	readonly emailSection: Locator;
+	readonly emailLabel: Locator;
+	readonly emailInput: Locator;
 
 	constructor(page: Page) {
 		super(page);
@@ -121,16 +132,30 @@ export class NewUserContactsComponent extends BaseComponent {
 		this.contactsLabel = this.contactsContainer.getByText(tabs.contacts.yourContactsLabel);
 		this.ownerProfileNumberContainer = this.contactsContainer.getByTestId("OwnerProfileNumber");
 		this.phoneNumberSection = this.ownerProfileNumberContainer.getByTestId("inputWrapper_OwnerProfileNumber");
+		this.phoneNumberInputLabel = this.phoneNumberSection.locator("> div").first();
+		this.phoneNumberInput = this.phoneNumberSection.getByTestId("input_OwnerProfileNumber");
 		this.verificationSection = this.ownerProfileNumberContainer.locator("div").last();
 		this.verificationLabel = this.verificationSection.locator("div").first();
 		this.verificatioSmsButton = this.verificationSection.getByTestId("smsButton_OwnerProfileNumber");
 		this.verificationTelegramButton = this.verificationSection.getByTestId("telegramButton_OwnerProfileNumber");
 
-		this.viberSection = this.contactsContainer.getByText(tabs.contacts.viberLabel).locator("..");
-		this.telegramSection = this.contactsContainer
+		this.messengersContainer = this.page.getByTestId("OwnerProfileAdditionalInfo");
+
+		this.viberSection = this.messengersContainer.getByText(tabs.contacts.viberLabel).locator("..");
+		this.viberLabel = this.viberSection.getByText(tabs.contacts.viberLabel);
+		this.viberInput = this.viberSection.getByRole("textbox");
+		this.viberError = this.viberInput.locator(" ~ div");
+
+		this.telegramSection = this.messengersContainer
 			.getByTestId("customInputWrapper")
 			.filter({ hasText: tabs.contacts.telegramLabel });
+		this.telegramLabel = this.telegramSection.getByText(tabs.contacts.telegramLabel);
+		this.telegramInput = this.telegramSection.getByRole("textbox");
+		this.telegramError = this.telegramSection.getByTestId("descriptionError");
+
 		this.emailSection = this.contactsContainer.getByTestId("OwnerProfileEmail").locator("> div").first();
+		this.emailLabel = this.emailSection.locator("> div").first();
+		this.emailInput = this.emailSection.getByTestId("custom-input");
 	}
 
 	private async isDropdownVisible(container: Locator): Promise<boolean> {

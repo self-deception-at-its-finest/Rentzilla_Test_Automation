@@ -1,7 +1,7 @@
 declare global {
 	interface String {
 		/**
-		 * Capitalize the string
+		 * Capitalize the first letter in the string
 		 *
 		 * **Usage:**
 		 *

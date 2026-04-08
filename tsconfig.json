@@ -10,16 +10,16 @@
 		"resolveJsonModule": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"baseUrl": ".",
+		"types": ["node", "playwright"],
 		"paths": {
-			"@fixtures/*": ["fixtures/*"],
-			"@utils/*": ["utils/*"],
-			"@constants/*": ["constants/*"],
-			"@pages/*": ["pages/*"],
-			"@custom-types/*": ["types/*"],
-			"@config/*": ["config/*"],
-			"@flows/*": ["flows/*"],
-			"@components/*": ["components/*"]
+			"@fixtures/*": ["./fixtures/*"],
+			"@utils/*": ["./utils/*"],
+			"@constants/*": ["./constants/*"],
+			"@pages/*": ["./pages/*"],
+			"@custom-types/*": ["./types/*"],
+			"@config/*": ["./config/*"],
+			"@flows/*": ["./flows/*"],
+			"@components/*": ["./components/*"]
 		}
 	},
 	"include": [
