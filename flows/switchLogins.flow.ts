@@ -4,8 +4,8 @@ import endpoints from "@constants/endpoints.constants.json";
 import { AdminPage } from "@pages/Admin.page";
 
 type User = {
-	email: string;
-	password: string;
+	email: string | undefined;
+	password: string | undefined;
 };
 
 export async function switchToAdminFlow(page: Page, { email, password }: User) {
