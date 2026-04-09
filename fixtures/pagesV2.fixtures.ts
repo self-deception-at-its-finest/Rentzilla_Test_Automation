@@ -68,13 +68,26 @@ const test = apiAuth.extend<BaseFixtures>({
 	],
 	createUnitPageWithFilledFourTabs: [
 		async ({ createUnitPage }, use) => {
-			await use(await fillTabsUpTo(createUnitPage.page, 4));
+			await use((await fillTabsUpTo(createUnitPage.page, 4)).createUnitPage);
 		},
 		{ box: true },
 	],
 	createUnitPageWithFilledFourTabsNewUser: [
 		async ({ createUnitPageNewUser }, use) => {
-			await use(await fillTabsUpTo(createUnitPageNewUser.page, 4));
+			await use((await fillTabsUpTo(createUnitPageNewUser.page, 4)).createUnitPage);
+		},
+		{ box: true },
+	],
+	createUnitPageSuccessfullySubmitted: [
+		async ({ createUnitPage }, use) => {
+			const filledPage = await fillTabsUpTo(createUnitPage.page, 4);
+			await use(filledPage.createUnitPage);
+
+			console.log("Ad created with title: " + filledPage.title);
+			await new ApiHelper(createUnitPage.page.request).declineUnitByName(
+				getAccessToken(adminFile),
+				filledPage.title,
+			);
 		},
 		{ box: true },
 	],

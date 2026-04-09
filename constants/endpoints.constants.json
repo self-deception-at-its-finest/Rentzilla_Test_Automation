@@ -3,6 +3,7 @@
         "create or login": "/api/auth/jwt/create/",
         "categories": "/api/categories/",
         "units": "/api/units/",
+        "crm units": "/api/crm/units/",
         "moderate unit base": "/api/crm/units",
         "manufacturer": "/api/crm/manufacturers",
         "service categories": "/api/crm/service/categories",

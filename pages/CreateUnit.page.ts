@@ -15,6 +15,7 @@ export class CreateUnitPage extends BasePage {
 	readonly nextButton: Locator;
 	readonly cancelButton: Locator;
 	readonly successfullCreating: Locator;
+	readonly notificationContainer: Locator;
 
 	readonly mainInfoTab: MainInfoComponent;
 	readonly photosTab: PhotosComponent;
@@ -29,7 +30,7 @@ export class CreateUnitPage extends BasePage {
 		this.tabList = this.page.locator('[role="tablist"] > button');
 		this.nextButton = this.page.getByTestId("nextButton");
 		this.cancelButton = this.page.getByTestId("prevButton");
-		this.successfullCreating = this.page.getByText("Ваше оголошення подане на розгляд");
+		this.successfullCreating = this.page.getByText(data.successfullCreatingMessage);
 
 		this.mainInfoTab = new MainInfoComponent(this.page);
 		this.photosTab = new PhotosComponent(this.page);
@@ -38,6 +39,8 @@ export class CreateUnitPage extends BasePage {
 
 		this.verifiedUserContactsTab = new VerifiedUserContactsComponent(this.page);
 		this.newUserContactsTab = new NewUserContactsComponent(this.page);
+
+		this.notificationContainer = this.page.getByTestId("notificationContainer");
 	}
 
 	async getTabMetaInfo(tabNumber: TabNumber): Promise<{ title: string; number: string }> {

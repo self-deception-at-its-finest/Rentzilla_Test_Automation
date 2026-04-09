@@ -63,4 +63,32 @@ export class ApiHelper {
 			console.log(`Unit with “${unitId}” was not found`);
 		}
 	}
+
+	async declineUnitByName(token: string, unitName: string): Promise<void> {
+		let response = await this.request.get(ENDPOINTS.API.CRM_UNITS, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			params: {
+				search: unitName,
+				status: "pending",
+			},
+		});
+
+		const unit = await response.json();
+
+		response = await this.request.patch(`${ENDPOINTS.API.CRM_UNIT_MODERATE(unit.results[0].id)}`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+			data: {
+				is_approved: false,
+			},
+		});
+
+		if (response.ok()) {
+			console.log(`Unit "${unitName}" was declined`);
+			return;
+		} else throw new Error(`Unit wasn’t declined: ${response.status()} ${await response.text()}`);
+	}
 }

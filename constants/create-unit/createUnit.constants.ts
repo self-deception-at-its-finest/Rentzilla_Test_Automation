@@ -15,6 +15,7 @@ const createUnitConsts = {
 		invalidPhoneNumber: "Некоректний номер телефону",
 	},
 	forbiddenSymbols: "<>{};^",
+	successfullCreatingMessage: "Ваше оголошення подане на розгляд",
 	tabs: {
 		"1": {
 			title: "Основна інформація",
@@ -162,6 +163,7 @@ const createUnitConsts = {
 		back: "Назад",
 		review: "Переглянути оголошення",
 		next: "Далі",
+		send: "Подати на розгляд",
 	},
 } as const;
 
@@ -188,6 +190,8 @@ const BUTTONS = {
 	CANCEL: createUnitConsts.buttons.cancel,
 	BACK: createUnitConsts.buttons.back,
 	NEXT: createUnitConsts.buttons.next,
+	REVIEW: createUnitConsts.buttons.review,
+	SEND: createUnitConsts.buttons.send,
 } as const;
 
 export { createUnitConsts, FORBIDDEN_SYMBOLS, TAB_NUMBERS, BUTTONS, TAB_TITLES, FIELDS_ERRORS, MANUFACTURERS };

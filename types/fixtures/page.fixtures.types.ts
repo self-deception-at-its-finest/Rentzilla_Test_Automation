@@ -22,6 +22,7 @@ export type PageFixtures = {
 	createUnitPageWithFilledFourTabs: CreateUnitPage;
 	createUnitPageWithFilledFourTabsNewUser: CreateUnitPage;
 	createUnitPageWithFilledFourTabsNewUser2: CreateUnitPage;
+	createUnitPageSuccessfullySubmitted: CreateUnitPage;
 	unitPage: UnitPage;
 	favoritePage: FavoriteUnitsPage;
 	favoriteUnitsState: string[];

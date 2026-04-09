@@ -223,6 +223,25 @@ test.describe(
 				});
 			},
 		);
+
+		test(
+			"Verify the “Подати на розгляд” button",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C539" },
+			},
+			async ({ createUnitPageSuccessfullySubmitted: page }) => {
+				await test.step("The button has the correct text", async () => {
+					await expect(page.nextButton).toHaveText(BUTTONS.SEND);
+				});
+
+				await test.step("After clicking on the button, the successfull creating message appears", async () => {
+					await page.nextStep();
+					await expect(page.notificationContainer).toBeVisible();
+					await expect(page.successfullCreating).toBeVisible();
+				});
+			},
+		);
 	},
 );
 
