@@ -26,31 +26,31 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C367" },
 			},
-			async ({ createUnitPageWithFilledTab1: _, photosComponent: photos }) => {
+			async ({ createUnitPageWithFilledTab1: page }) => {
 				await test.step("The form title: ⤵️", async () => {
 					await test.step("• is visible", async () => {
-						await expect(photos.photosFormTitle).toBeVisible();
+						await expect(page.photosTab.photosFormTitle).toBeVisible();
 					});
 
 					await test.step(`• has the “Фото технічного засобу” text`, async () => {
-						await expect(photos.photosFormTitle).toContainText(tabs.photos.photosForm.label);
+						await expect(page.photosTab.photosFormTitle).toContainText(tabs.photos.photosForm.label);
 					});
 
 					await test.step("• has an asterisk", async () => {
-						await expect(photos.requiredSymbol).toBeVisible();
+						await expect(page.photosTab.requiredSymbol).toBeVisible();
 					});
 				});
 
 				await test.step("Clue line has the correct text", async () => {
-					await expect(photos.photosFormDescription).toBeVisible();
+					await expect(page.photosTab.photosFormDescription).toBeVisible();
 				});
 
 				await test.step("The “Upload file” window appears after clicking on the buttons", async () => {
-					const count = await photos.uploadPhotoButtons.count();
+					const count = await page.photosTab.uploadPhotoButtons.count();
 					for (let i = 0; i < count; i++) {
 						const [fileChooser] = await Promise.all([
-							photos.page.waitForEvent("filechooser"),
-							clickElement(photos.uploadPhotoButtons.nth(i)),
+							page.photosTab.page.waitForEvent("filechooser"),
+							clickElement(page.photosTab.uploadPhotoButtons.nth(i)),
 						]);
 
 						// Verify that the click triggered a file chooser
@@ -63,29 +63,29 @@ test.describe(
 
 				await test.step(`12 valid images loaded successfully`, async () => {
 					for (let i = 1; i <= MAX_IMAGES; i++) {
-						const before = await photos.uploadedPhotoButtons.count();
+						const before = await page.photosTab.uploadedPhotoButtons.count();
 
-						await photos.uploadPhoto(String(i));
+						await page.photosTab.uploadPhoto(String(i));
 
-						await expect(photos.uploadedPhotoButtons).toHaveCount(before + 1);
+						await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(before + 1);
 					}
 
-					await expect(photos.uploadedPhotoButtons).toHaveCount(MAX_IMAGES);
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(MAX_IMAGES);
 				});
 
 				await test.step("Images are swapped after dragging the random image to the first slot", async () => {
 					// Get the start order
-					const orderBeforeDragging = await photos.getAllImageSrcs();
+					const orderBeforeDragging = await page.photosTab.getAllImageSrcs();
 					// Get random index excluding 0
 					const randomIndex = Math.floor(Math.random() * (orderBeforeDragging.length - 1)) + 1;
 
 					const mainImageBeforeDragging = orderBeforeDragging[0];
 					const randomImageBeforeDragging = orderBeforeDragging[randomIndex];
 					// Move the random image to “ГОЛОВНЕ”
-					await photos.dragImage(randomIndex, 0);
+					await page.photosTab.dragImage(randomIndex, 0);
 
 					// Get the current order
-					const orderAfterDragging = await photos.getAllImageSrcs();
+					const orderAfterDragging = await page.photosTab.getAllImageSrcs();
 
 					const mainImageAfterDragging = orderAfterDragging[0];
 					const randomImageAfterDragging = orderAfterDragging[randomIndex];
@@ -95,33 +95,33 @@ test.describe(
 				});
 
 				await test.step("Delete button appears after hovering the cursor on the image", async () => {
-					const count = await photos.uploadedPhotoButtons.count();
+					const count = await page.photosTab.uploadedPhotoButtons.count();
 					for (let i = 0; i < count; i++) {
-						const photo = photos.uploadedPhotoButtons.nth(i);
+						const photo = page.photosTab.uploadedPhotoButtons.nth(i);
 
 						await photo.hover();
-						await expect(photos.getRemoveButton(photo)).toBeVisible();
+						await expect(page.photosTab.getRemoveButton(photo)).toBeVisible();
 					}
 				});
 
 				await test.step("Placeholder count matches images count rule", async () => {
-					await photos.removePhotos(5);
+					await page.photosTab.removePhotos(5);
 
 					// After removing 5 images,
 					// there should be 1 placeholder (since 7 images remain)
 					// (two images’ lines remaining)
-					await expect(photos.placeholderButtons).toHaveCount(1);
+					await expect(page.photosTab.placeholderButtons).toHaveCount(1);
 
-					await photos.removePhotos(4);
+					await page.photosTab.removePhotos(4);
 
 					// After removing 4 images,
 					// there should be 1 placeholder (since 3 images remain)
 					// (one images’ line remaining)
-					await expect(photos.placeholderButtons).toHaveCount(1);
+					await expect(page.photosTab.placeholderButtons).toHaveCount(1);
 
-					await photos.removePhotos();
+					await page.photosTab.removePhotos();
 
-					await expect(photos.placeholderButtons).toHaveCount(4);
+					await expect(page.photosTab.placeholderButtons).toHaveCount(4);
 				});
 			},
 		);
@@ -132,36 +132,36 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C384" },
 			},
-			async ({ createUnitPageWithFilledTab1: _, photosComponent: photos }) => {
+			async ({ createUnitPageWithFilledTab1: page }) => {
 				await test.step("The error modal appears when uploading the same image twice", async () => {
-					await photos.uploadPhoto("1");
-					await photos.uploadPhoto("1");
+					await page.photosTab.uploadPhoto("1");
+					await page.photosTab.uploadPhoto("1");
 
-					await expect(photos.errorModalText).toBeVisible();
-					await expect(photos.errorModalText).toContainText(tabs.photos.errorModals.sameImage);
+					await expect(page.photosTab.errorModalText).toBeVisible();
+					await expect(page.photosTab.errorModalText).toContainText(tabs.photos.errorModals.sameImage);
 				});
 
 				await test.step("The error modal can be closed by the close icon", async () => {
-					await photos.closeModalIcon.click();
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(1);
+					await page.photosTab.closeModalIcon.click();
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(1);
 				});
 
 				await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.buttonText}” button`, async () => {
-					await photos.uploadPhoto("1");
+					await page.photosTab.uploadPhoto("1");
 
-					await expect(photos.errorModalOKButton).toHaveText(tabs.photos.errorModals.buttonText);
-					await photos.errorModalOKButton.click();
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(1);
+					await expect(page.photosTab.errorModalOKButton).toHaveText(tabs.photos.errorModals.buttonText);
+					await page.photosTab.errorModalOKButton.click();
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(1);
 				});
 
 				await test.step("The error modal can be closed by clicking outside the modal", async () => {
-					await photos.uploadPhoto("1");
+					await page.photosTab.uploadPhoto("1");
 
-					await clickOutside(photos.page);
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(1);
+					await clickOutside(page.photosTab.page);
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(1);
 				});
 			},
 		);
@@ -172,37 +172,37 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C401" },
 			},
-			async ({ createUnitPageWithFilledTab1: _, photosComponent: photos }) => {
+			async ({ createUnitPageWithFilledTab1: page }) => {
 				await test.step("The error modal appears when uploading an invalid file type", async () => {
-					await photos.uploadPhoto("invalid_image");
+					await page.photosTab.uploadPhoto("invalid_image");
 
-					await expect(photos.errorModalText).toBeVisible();
-					await expect(photos.errorModalText).toContainText(tabs.photos.errorModals.invalidPhoto);
+					await expect(page.photosTab.errorModalText).toBeVisible();
+					await expect(page.photosTab.errorModalText).toContainText(tabs.photos.errorModals.invalidPhoto);
 				});
 
 				await test.step("The error modal can be closed by the close icon", async () => {
-					await photos.uploadPhoto("invalid_image");
+					await page.photosTab.uploadPhoto("invalid_image");
 
-					await photos.closeModalIcon.click();
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(0);
+					await page.photosTab.closeModalIcon.click();
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(0);
 				});
 
 				await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.buttonText}” button`, async () => {
-					await photos.uploadPhoto("invalid_image");
+					await page.photosTab.uploadPhoto("invalid_image");
 
-					await expect(photos.errorModalOKButton).toHaveText(tabs.photos.errorModals.buttonText);
-					await photos.errorModalOKButton.click();
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(0);
+					await expect(page.photosTab.errorModalOKButton).toHaveText(tabs.photos.errorModals.buttonText);
+					await page.photosTab.errorModalOKButton.click();
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(0);
 				});
 
 				await test.step("The error modal can be closed by clicking outside the modal", async () => {
-					await photos.uploadPhoto("invalid_image");
+					await page.photosTab.uploadPhoto("invalid_image");
 
-					await clickOutside(photos.page);
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(0);
+					await clickOutside(page.photosTab.page);
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(0);
 				});
 			},
 		);
@@ -213,37 +213,37 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C405" },
 			},
-			async ({ createUnitPageWithFilledTab1: _, photosComponent: photos }) => {
+			async ({ createUnitPageWithFilledTab1: page }) => {
 				await test.step("The error modal appears when uploading an excessively large file", async () => {
-					await photos.uploadPhoto("large_image");
+					await page.photosTab.uploadPhoto("large_image");
 
-					await expect(photos.errorModalText).toBeVisible();
-					await expect(photos.errorModalText).toContainText(tabs.photos.errorModals.invalidPhoto);
+					await expect(page.photosTab.errorModalText).toBeVisible();
+					await expect(page.photosTab.errorModalText).toContainText(tabs.photos.errorModals.invalidPhoto);
 				});
 
 				await test.step("The error modal can be closed by the close icon", async () => {
-					await photos.uploadPhoto("large_image");
+					await page.photosTab.uploadPhoto("large_image");
 
-					await photos.closeModalIcon.click();
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(0);
+					await page.photosTab.closeModalIcon.click();
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(0);
 				});
 
 				await test.step(`The error modal can be closed by the “${tabs.photos.errorModals.buttonText}” button`, async () => {
-					await photos.uploadPhoto("large_image");
+					await page.photosTab.uploadPhoto("large_image");
 
-					await expect(photos.errorModalOKButton).toHaveText(tabs.photos.errorModals.buttonText);
-					await photos.errorModalOKButton.click();
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(0);
+					await expect(page.photosTab.errorModalOKButton).toHaveText(tabs.photos.errorModals.buttonText);
+					await page.photosTab.errorModalOKButton.click();
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(0);
 				});
 
 				await test.step("The error modal can be closed by clicking outside the modal", async () => {
-					await photos.uploadPhoto("large_image");
+					await page.photosTab.uploadPhoto("large_image");
 
-					await clickOutside(photos.page);
-					await expect(photos.errorModalText).toBeHidden();
-					await expect(photos.uploadedPhotoButtons).toHaveCount(0);
+					await clickOutside(page.photosTab.page);
+					await expect(page.photosTab.errorModalText).toBeHidden();
+					await expect(page.photosTab.uploadedPhotoButtons).toHaveCount(0);
 				});
 			},
 		);
@@ -254,13 +254,7 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C390" },
 			},
-			async ({
-				createUnitPageWithFilledTab1: page,
-				categoryComponent: category,
-				adComponent: ad,
-				manufacturerComponent: manufacturer,
-				locationComponent: location,
-			}) => {
+			async ({ createUnitPageWithFilledTab1: page }) => {
 				await test.step("The button has the correct text", async () => {
 					await expect(page.cancelButton).toHaveText(BUTTONS.BACK);
 				});
@@ -273,10 +267,10 @@ test.describe(
 				});
 
 				await test.step("The data in the first tab is saved", async () => {
-					await expect(category.field).not.toBeEmpty();
-					await expect(ad.field).not.toBeEmpty();
-					await expect(manufacturer.clearButton).toBeVisible();
-					await expect(location.locationLabel).not.toBeEmpty();
+					await expect(page.mainInfoTab.categorySection.field).not.toBeEmpty();
+					await expect(page.mainInfoTab.adSection.field).not.toBeEmpty();
+					await expect(page.mainInfoTab.manufacturerSection.clearButton).toBeVisible();
+					await expect(page.mainInfoTab.locationSection.locationLabel).not.toBeEmpty();
 				});
 			},
 		);
@@ -287,18 +281,18 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C393" },
 			},
-			async ({ createUnitPageWithFilledTab1: page, photosComponent: photos }) => {
+			async ({ createUnitPageWithFilledTab1: page }) => {
 				await test.step("The button has the correct text", async () => {
 					await expect(page.nextButton).toHaveText(BUTTONS.NEXT);
 				});
 
 				await test.step("The color of the clue line is red if user didn’t upload any image", async () => {
 					await page.nextStep();
-					await expectTextColorError(photos.photosFormDescription);
+					await expectTextColorError(page.photosTab.photosFormDescription);
 				});
 
 				await test.step("The user can proceed to the next tab after uploading at least one image", async () => {
-					await photos.uploadPhoto("1");
+					await page.photosTab.uploadPhoto("1");
 					await page.nextStep();
 					await expectTabActive(page.tabList.nth(2));
 					await expect(page.pageTitle).toBeVisible();

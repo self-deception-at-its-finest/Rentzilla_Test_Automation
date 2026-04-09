@@ -43,6 +43,11 @@ export class NewUserContactsComponent extends BaseComponent {
 	readonly customerPatronymicInput: Locator;
 	readonly customerPatronymicError: Locator;
 	readonly customerCitySection: Locator;
+	readonly customerCityLabel: Locator;
+	readonly customerCityInput: Locator;
+	readonly customerCityError: Locator;
+	readonly customerCityDropdown: Locator;
+	readonly customerCityDropdownItems: Locator;
 
 	readonly contactsContainer: Locator;
 	readonly contactsLabel: Locator;
@@ -127,6 +132,13 @@ export class NewUserContactsComponent extends BaseComponent {
 		this.customerCitySection = this.mainInfoContainer
 			.getByTestId("OwnerProfileCity")
 			.getByTestId("customInputWrapper");
+		this.customerCityLabel = this.customerCitySection.locator("> div").first();
+		this.customerCityInput = this.customerCitySection.getByTestId("custom-input");
+		this.customerCityError = this.customerCitySection.getByTestId("descriptionError");
+		this.customerCityDropdown = this.customerCitySection
+			.locator("..")
+			.locator("div:not([data-testid='customInputWrapper']) > ul");
+		this.customerCityDropdownItems = this.customerCityDropdown.getByTestId("li_CityDropdown");
 
 		this.contactsContainer = this.page.getByText(tabs.contacts.yourContactsLabel).locator("..");
 		this.contactsLabel = this.contactsContainer.getByText(tabs.contacts.yourContactsLabel);
@@ -184,5 +196,10 @@ export class NewUserContactsComponent extends BaseComponent {
 
 	async chooseLegalType(type: string) {
 		await this.chooseItemInDropdown(this.legalTypeListItems.filter({ hasText: type }).first());
+	}
+
+	async chooseCity(city: string = "Київ"): Promise<void> {
+		if (await this.isDropdownVisible(this.customerCityDropdown))
+			await this.customerCityDropdownItems.filter({ hasText: city }).first().click();
 	}
 }

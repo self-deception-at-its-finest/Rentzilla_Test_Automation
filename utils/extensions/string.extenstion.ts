@@ -14,6 +14,7 @@ declare global {
 }
 
 String.prototype.capitalize = function (): string {
+	if (Array.from(this).length === 0) return "";
 	const [first, ...rest] = Array.from(this);
 	return first.toUpperCase() + rest.join("");
 };

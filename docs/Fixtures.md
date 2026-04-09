@@ -9,9 +9,7 @@ This section describes the principles of using fixtures together and in tests, t
 
 - `base.extend` must include the types of the fixtures defined inside it to ensure type safety.
 
-- Page fixtures and Component fixtures must be located in different files.
-
-## **index.ts**
+## **indexV2.ts**
 
 Contains the `mergeTests` function for merging fixtures from different files in a single place. Tests import `test` and `expect` specifically from here.
 
@@ -19,17 +17,13 @@ Contains the `mergeTests` function for merging fixtures from different files in 
 
 Contains the default `test`, which is imported into independent fixtures. Currently it is a complete analogue of `@playwright/test`, but is used because it has the potential to be extended.
 
-## pages.fixtures.ts
+## pagesV2.fixtures.ts
 
 Fixtures for regular pages and pages with customizable preconditions.
 
 ## generalComponents.fixtures.ts
 
 Shared component fixtures that do not depend on the current website page.
-
-## createUnitComponents.fixtures.ts
-
-Fixtures for components related to the `/create-unit` page.
 
 ## auth.fixtures.ts
 

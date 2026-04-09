@@ -1,10 +1,9 @@
 import { env } from "@config/env";
 import { CODES } from "@constants/codes.constants";
-import { FIELDS_ERRORS, FORBIDDEN_SYMBOLS } from "@constants/create-unit/createUnit.constants";
+import { BUTTONS, FIELDS_ERRORS, FORBIDDEN_SYMBOLS, TAB_NUMBERS } from "@constants/create-unit/createUnit.constants";
 import { tabs } from "@constants/create-unit/fields.constants";
 import { ENDPOINTS } from "@constants/endpoints.constants";
 import { test, expect } from "@fixtures/indexV2";
-import { CreateUnitPage } from "@pages/CreateUnit.page";
 import {
 	FieldData,
 	validateFieldByBothMethods,
@@ -12,7 +11,7 @@ import {
 	validateTypeIntoField,
 } from "@utils/fieldValidation";
 import { getFieldPlaceholder } from "@utils/formHelper";
-import { expectFieldDefault, expectFieldError } from "@utils/uiMatchers";
+import { expectFieldDefault, expectFieldError, expectTabActive, expectTabInactive } from "@utils/uiMatchers";
 
 const numberInputForbiddenPatterns = ["aaaaaaaaa", "!@#$%", " "];
 
@@ -31,7 +30,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C536" },
 			},
-			async ({ createUnitPageWithFilledFourTabs: _, verifiedUserContactsComponent: contacts }) => {
+			async ({ createUnitPageWithFilledFourTabs: page }) => {
+				const contacts = page.verifiedUserContactsTab;
+
 				await test.step("The title contains “Ваші контакти” text", async () => {
 					await expect(contacts.yourContactsTitle).toBeVisible();
 					await expect(contacts.yourContactsTitle).toContainText(tabs.contacts.yourContactsLabel);
@@ -64,7 +65,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C537" },
 			},
-			async ({ createUnitPageWithFilledFourTabs: _, verifiedUserContactsComponent: contacts }) => {
+			async ({ createUnitPageWithFilledFourTabs: page }) => {
+				const contacts = page.verifiedUserContactsTab;
+
 				await test.step("The section’s title has the “Контакти оператора” text", async () => {
 					await expect(contacts.contactsOfOperatorTitle).toContainText(tabs.contacts.contactsOfOperatorLabel);
 				});
@@ -238,11 +241,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C492" },
 			},
-			async ({
-				createUnitPageWithFilledFourTabsNewUser: _,
-				newUserContactsComponent: contacts,
-				newUserPage: page,
-			}) => {
+			async ({ createUnitPageWithFilledFourTabsNewUser: page }) => {
+				const contacts = page.newUserContactsTab;
+
 				await test.step("Verify the title of customer type: ⤵️", async () => {
 					await test.step("• it’s visible", async () => {
 						await expect(contacts.customerTypeLabel).toBeVisible();
@@ -289,8 +290,6 @@ test.describe(
 					expect(dropdownItems.every((item, i) => item === customerTypes[i])).toBeTruthy();
 				});
 
-				const createUnitPage = new CreateUnitPage(page);
-
 				const fopField: FieldData = {
 					input: contacts.customerTinInput,
 					label: contacts.customerTinLabel,
@@ -309,7 +308,7 @@ test.describe(
 					});
 
 					await test.step("• it cannot be empty", async () => {
-						await createUnitPage.nextStep();
+						await page.nextStep();
 						await expect(contacts.customerTinInputErrorText).toBeVisible();
 						await expect(contacts.customerTinInputErrorText).toContainText(FIELDS_ERRORS.EMPTY);
 					});
@@ -318,7 +317,7 @@ test.describe(
 				await test.step("Verify the “РНОКПП (ІПН) для ФОП” input: ⤵️", async () => {
 					await test.step("• it cannot have less than 10 digits", async () => {
 						await validateFieldByBothMethods(contacts, fopField, "123456789", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expect(fopField.input).toHaveValue("123456789");
 							await expectFieldError(fopField.input);
 							await expect(fopField.error).toHaveText(tabs.contacts.tinInputErrorText);
@@ -327,7 +326,7 @@ test.describe(
 
 					await test.step("• it cannot have more than 10 digits", async () => {
 						await validateFieldByBothMethods(contacts, fopField, "12345678901", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expect(fopField.input).toHaveValue("1234567890");
 							await expectFieldDefault(fopField.input);
 							await expect(fopField.error).toHaveCount(0);
@@ -337,7 +336,7 @@ test.describe(
 					await test.step("• it cannot have letters, specical symbols and spaces", async () => {
 						for (const pattern of numberInputForbiddenPatterns) {
 							await validateFieldByBothMethods(contacts, fopField, pattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 
 								await expect(fopField.input).toHaveValue("");
 								await expectFieldError(fopField.input);
@@ -365,7 +364,7 @@ test.describe(
 				await test.step("Verify the “РНОКПП (ІПН)” input: ⤵️", async () => {
 					await test.step("• it cannot have less than 10 digits", async () => {
 						await validateFieldByBothMethods(contacts, privateField, "123456789", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expect(privateField.input).toHaveValue("123456789");
 							await expectFieldError(privateField.input);
 							await expect(privateField.error).toHaveText(tabs.contacts.tinInputErrorText);
@@ -374,7 +373,7 @@ test.describe(
 
 					await test.step("• it cannot have more than 10 digits", async () => {
 						await validateFieldByBothMethods(contacts, privateField, "12345678901", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expect(privateField.input).toHaveValue("1234567890");
 							await expectFieldDefault(privateField.input);
 							await expect(privateField.error).toHaveCount(0);
@@ -384,7 +383,7 @@ test.describe(
 					await test.step("• it cannot have letters, specical symbols and spaces", async () => {
 						for (const pattern of numberInputForbiddenPatterns) {
 							await validateFieldByBothMethods(contacts, privateField, pattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 
 								await expect(privateField.input).toHaveValue("");
 							});
@@ -442,7 +441,7 @@ test.describe(
 				await test.step("Verify the “ЄДРПОУ для юридичних осіб” field", async () => {
 					await test.step("• it cannot have less then 8 digits", async () => {
 						await validateFieldByBothMethods(contacts, legalFields[0], "1234567", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expect(legalFields[0].input).toHaveValue("1234567");
 							await expectFieldError(legalFields[0].input);
 							await expect(legalFields[0].error).toContainText(tabs.contacts.legalNumberErrorText);
@@ -451,13 +450,13 @@ test.describe(
 
 					await test.step("• it cannot have more than 8 digits", async () => {
 						await validateTypeIntoField(contacts, legalFields[0], "123456789", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 
 							await expect(legalFields[0].input).toHaveValue("12345678");
 							await expectFieldDefault(legalFields[0].input);
 						});
 						await validateFillInField(contacts, legalFields[0], "123456789", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 
 							await expect(legalFields[0].input).toHaveValue("");
 							await expectFieldError(legalFields[0].input);
@@ -467,7 +466,7 @@ test.describe(
 					await test.step("• it can have only digits", async () => {
 						for (const pattern of numberInputForbiddenPatterns) {
 							await validateFieldByBothMethods(contacts, legalFields[0], pattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 
 								await expect(legalFields[0].input).toHaveValue("");
 							});
@@ -477,14 +476,14 @@ test.describe(
 					await test.step("• it cannot have a space as a part of the number", async () => {
 						for (const badPattern of ["12345 67", "1234567 "]) {
 							await validateTypeIntoField(contacts, legalFields[0], badPattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 								await expect(legalFields[0].input).toHaveValue("1234567");
 								await expectFieldError(legalFields[0].input);
 								await expect(legalFields[0].error).toContainText(tabs.contacts.legalNumberErrorText);
 							});
 
 							await validateFillInField(contacts, legalFields[0], badPattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 								await expect(legalFields[0].input).toHaveValue("");
 								await expect(legalFields[0].error).toContainText(FIELDS_ERRORS.EMPTY);
 							});
@@ -500,7 +499,7 @@ test.describe(
 							"12-!@ Corp. Щастя ",
 						])
 							await validateFieldByBothMethods(contacts, legalFields[1], pattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 								await expectFieldDefault(legalFields[1].input);
 								await expect(legalFields[1].input).toHaveValue(pattern.slice(0, 25));
 								await expect(legalFields[1].error).toHaveCount(0);
@@ -509,7 +508,7 @@ test.describe(
 
 					await test.step("• it cannot have these symbols: <>{};^", async () => {
 						await validateFieldByBothMethods(contacts, legalFields[1], "<>{};^", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expectFieldError(legalFields[1].input);
 							await expect(legalFields[1].input).toHaveValue("");
 						});
@@ -517,7 +516,7 @@ test.describe(
 
 					await test.step("• it cannot have spaces only", async () => {
 						await validateFieldByBothMethods(contacts, legalFields[1], " ", async () => {
-							await createUnitPage.nextStep();
+							await page.nextStep();
 							await expect(legalFields[1].input).toHaveValue("");
 							await expectFieldError(legalFields[1].input);
 							await expect(legalFields[1].error).toContainText(FIELDS_ERRORS.EMPTY);
@@ -533,7 +532,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C529" },
 			},
-			async ({ createUnitPageWithFilledFourTabsNewUser: createUnitPage, newUserContactsComponent: contacts }) => {
+			async ({ createUnitPageWithFilledFourTabsNewUser: page }) => {
+				const contacts = page.newUserContactsTab;
+
 				const customerNamesFields: FieldData[] = [
 					{
 						input: contacts.customerLastNameInput,
@@ -563,7 +564,7 @@ test.describe(
 					});
 
 					await test.step(`UI checking of “${field.labelText}” section`, async () => {
-						await createUnitPage.nextStep();
+						await page.nextStep();
 
 						await test.step(`• the label of section is “${field.labelText} ${isRequired ? "*" : ""}”`, async () => {
 							await expect(field.label).toHaveText(`${field.labelText} ${isRequired ? "*" : ""}`);
@@ -587,7 +588,7 @@ test.describe(
 					await test.step(`Verify the “${field.labelText}” field`, async () => {
 						await test.step("• it should have at least 2 letters", async () => {
 							await validateFieldByBothMethods(contacts, field, "A", async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 
 								await expect(field.input).toHaveValue("A");
 								await expect(field.error).toHaveText(
@@ -601,7 +602,7 @@ test.describe(
 							const pattern = "B".repeat(26);
 
 							await validateFieldByBothMethods(contacts, field, pattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 
 								await expectFieldDefault(field.input);
 								await expect(field.input).toHaveValue(new RegExp(pattern.slice(0, 25)));
@@ -612,7 +613,7 @@ test.describe(
 							const pattern = "12345";
 
 							await validateFieldByBothMethods(contacts, field, pattern, async () => {
-								await createUnitPage.nextStep();
+								await page.nextStep();
 
 								await expectFieldError(field.input);
 								await expect(field.input).toHaveValue(pattern);
@@ -631,7 +632,7 @@ test.describe(
 								field,
 								allowedSymbols + deniedSymbols,
 								async () => {
-									await createUnitPage.nextStep();
+									await page.nextStep();
 
 									await expect(field.input).toHaveValue(allowedSymbols);
 									await expectFieldError(field.input);
@@ -645,7 +646,7 @@ test.describe(
 						await test.step("• it cannot have spaces only", async () => {
 							if (isRequired)
 								await validateFieldByBothMethods(contacts, field, " ", async () => {
-									await createUnitPage.nextStep();
+									await page.nextStep();
 
 									await expect(field.input).toHaveValue("");
 									await expectFieldError(field.input);
@@ -656,7 +657,7 @@ test.describe(
 						await test.step("• it cannot have spaces in the names", async () => {
 							for (const pattern of ["AAA BBB", "AAABBB "])
 								await validateFieldByBothMethods(contacts, field, pattern, async () => {
-									await createUnitPage.nextStep();
+									await page.nextStep();
 
 									await expect(field.input).toHaveValue(pattern);
 									await expectFieldError(field.input);
@@ -669,7 +670,7 @@ test.describe(
 						await test.step("• the error disappear when filling the correct strings", async () => {
 							for (const pattern of ["aa", "aa-aa", "абвгд"])
 								await validateFieldByBothMethods(contacts, field, pattern, async () => {
-									await createUnitPage.nextStep();
+									await page.nextStep();
 
 									await expect(field.input).toHaveValue(pattern.capitalize());
 									await expectFieldDefault(field.input);
@@ -687,7 +688,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C547" },
 			},
-			async ({ createUnitPageWithFilledFourTabsNewUser: _, newUserContactsComponent: contacts }) => {
+			async ({ createUnitPageWithFilledFourTabsNewUser: page }) => {
+				const contacts = page.newUserContactsTab;
+
 				await test.step("The input is empty by default", async () => {
 					await expect(contacts.phoneNumberInput).toHaveValue("");
 				});
@@ -717,7 +720,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C546" },
 			},
-			async ({ createUnitPageWithFilledFourTabsNewUser: page, newUserContactsComponent: contacts }) => {
+			async ({ createUnitPageWithFilledFourTabsNewUser: page }) => {
+				const contacts = page.newUserContactsTab;
+
 				await test.step("UI checking of the Viber field: ⤵️", async () => {
 					await test.step("• has the “+380 12 345 67 89” background text", async () => {
 						expect(await getFieldPlaceholder(contacts.viberInput)).toEqual(
@@ -988,6 +993,134 @@ test.describe(
 								await expect(contacts.telegramError).toBeHidden();
 							});
 						});
+				});
+			},
+		);
+
+		test(
+			"Verify “Місто” section",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C552" },
+			},
+			async ({ createUnitPageWithFilledFourTabsNewUser: page }) => {
+				const contacts = page.newUserContactsTab;
+
+				await test.step("UI checking of the field: ⤵️", async () => {
+					await test.step("• it is empty by default", async () => {
+						await expect(contacts.customerCityInput).toHaveValue("");
+					});
+
+					await test.step("• it has the “Місто” visible title", async () => {
+						await expect(contacts.customerCityLabel).toBeVisible();
+						await expect(contacts.customerCityLabel).toHaveText(tabs.contacts.cityLabel);
+					});
+				});
+
+				await test.step("Validation of the field", async () => {
+					await test.step("• it cannot allow digits, non existing city, non-Ukrainian names, “!@#$%^&*()_+” symbols, names with spaces, more than 30 symbols", async () => {
+						const invalidPatterns = [
+							"абвгдабвгдабвгдабвгдабвгдабвгда",
+							"1234567890",
+							"ааббввгг",
+							"kyiv",
+							"!@#$%&*()_+",
+							"ки їв",
+							"київ ",
+						];
+
+						for (const pattern of invalidPatterns)
+							await validateFieldByBothMethods(
+								contacts,
+								contacts.customerCityInput,
+								pattern,
+								async () => {
+									await page.nextStep();
+									await expect(contacts.customerCityInput).toHaveValue(
+										pattern.capitalize().slice(0, 30),
+									);
+									await expectFieldError(contacts.customerCityInput);
+									await expect(contacts.customerCityError).toBeVisible();
+									await expect(contacts.customerCityError).toHaveText(tabs.contacts.cityError);
+								},
+							);
+					});
+
+					await test.step("• it denies the “<>{};^” symbols and just a space", async () => {
+						const invalidPatterns = ["<>{};^", " "];
+
+						for (const pattern of invalidPatterns)
+							await validateFieldByBothMethods(
+								contacts,
+								contacts.customerCityInput,
+								pattern,
+								async () => {
+									await page.nextStep();
+									await expect(contacts.customerCityInput).toHaveValue("");
+									await expectFieldDefault(contacts.customerCityInput);
+									await expect(contacts.customerCityError).toBeHidden();
+								},
+							);
+					});
+
+					await test.step("• it can be empty or have a valid city name", async () => {
+						const validPatterns = ["", "київ"];
+						for (const pattern of validPatterns)
+							await validateFieldByBothMethods(
+								contacts,
+								contacts.customerCityInput,
+								pattern,
+								async () => {
+									await page.nextStep();
+									await expect(contacts.customerCityInput).toHaveValue(
+										pattern.capitalize().slice(0, 30),
+									);
+									await expectFieldDefault(contacts.customerCityInput);
+									await expect(contacts.customerCityError).toBeHidden();
+								},
+							);
+					});
+				});
+
+				await test.step("The dropdown with cities appears when the user types in the field", async () => {
+					await validateFieldByBothMethods(contacts, contacts.customerCityInput, "киї", async () => {
+						await expect(contacts.customerCityDropdown).toBeVisible();
+						const firstItem = await contacts.customerCityDropdownItems.first().textContent();
+						expect(firstItem).toEqual("Київ");
+						await contacts.chooseCity();
+						await expect(contacts.customerCityInput).toHaveValue("Київ");
+
+						await page.nextStep();
+
+						await expectFieldDefault(contacts.customerCityInput);
+						await expect(contacts.customerCityError).toBeHidden();
+					});
+				});
+			},
+		);
+
+		test(
+			"Verify “Назад” button",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C538" },
+			},
+			async ({ createUnitPageWithFilledFourTabsNewUser: page }) => {
+				await test.step("The button has the correct text", async () => {
+					await expect(page.cancelButton).toHaveText(BUTTONS.BACK);
+				});
+
+				await test.step(`The user is redirected to the previous tab after clicking the “Назад” button`, async () => {
+					await page.previousStep();
+					await expectTabActive(page.tabList.nth(3));
+					for (let i = 0; i < TAB_NUMBERS.length; i++) {
+						if (i === 3) continue;
+						await expectTabInactive(page.tabList.nth(i));
+					}
+				});
+
+				await test.step("The data in the fourth tab is saved", async () => {
+					await expect(page.priceTab.priceField).toHaveValue("1000");
 				});
 			},
 		);
