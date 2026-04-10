@@ -6,6 +6,8 @@ export const ENDPOINTS = {
 		SERVICES: endpoints.api.services,
 		CRM_SERVICES: endpoints.api["crm services"],
 		UNITS: endpoints.api.units,
+		CRM_UNITS: endpoints.api["crm units"],
+		CRM_UNIT_MODERATE: (id: number) => `/api/crm/units/${id}/moderate/`,
 	},
 	HOME: endpoints.home,
 	CREATE_UNIT: endpoints["create unit"],

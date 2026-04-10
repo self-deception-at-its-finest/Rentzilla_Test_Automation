@@ -1,7 +1,5 @@
 import { createUnitConsts as data } from "@constants/create-unit/createUnit.constants";
 
-export type TabNumber = keyof typeof data.tabs;
-
 const _tabMap = {
 	mainInfo: "1",
 	photos: "2",

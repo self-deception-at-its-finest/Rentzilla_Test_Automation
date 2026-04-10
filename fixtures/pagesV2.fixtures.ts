@@ -41,40 +41,53 @@ const test = apiAuth.extend<BaseFixtures>({
 		{ box: false, title: "Manage Favorite Units State" },
 	],
 	createUnitPageWithFilledTab1: [
-		async ({ createUnitPage: _, userPage }, use) => {
-			await use(await fillTabsUpTo(userPage, 1));
+		async ({ createUnitPage }, use) => {
+			await use(await fillTabsUpTo(createUnitPage.page, 1));
 		},
 		{ box: true },
 	],
 	createUnitPageWithFilledTwoTabs: [
-		async ({ createUnitPage: _, userPage }, use) => {
-			await use(await fillTabsUpTo(userPage, 2));
+		async ({ createUnitPage }, use) => {
+			await use(await fillTabsUpTo(createUnitPage.page, 2));
 		},
 		{ box: true },
 	],
 	createUnitPageWithFilledTwoTabsAndNewService: [
-		async ({ createUnitPage: _, userPage, request }, use) => {
-			const result = await fillTabsUpTo(userPage, 3, true);
+		async ({ createUnitPage, request }, use) => {
+			const result = await fillTabsUpTo(createUnitPage.page, 3, true);
 			await use(result);
 			await new ApiHelper(request).deleteServiceByName(getAccessToken(adminFile), result.service);
 		},
 		{ box: true },
 	],
 	createUnitPageWithFilledThreeTabs: [
-		async ({ createUnitPage: _, userPage }, use) => {
-			await use(await fillTabsUpTo(userPage, 3));
+		async ({ createUnitPage }, use) => {
+			await use(await fillTabsUpTo(createUnitPage.page, 3));
 		},
 		{ box: true },
 	],
 	createUnitPageWithFilledFourTabs: [
-		async ({ createUnitPage: _, userPage }, use) => {
-			await use(await fillTabsUpTo(userPage, 4));
+		async ({ createUnitPage }, use) => {
+			await use((await fillTabsUpTo(createUnitPage.page, 4)).createUnitPage);
 		},
 		{ box: true },
 	],
 	createUnitPageWithFilledFourTabsNewUser: [
-		async ({ createUnitPageNewUser: _, newUserPage }, use) => {
-			await use(await fillTabsUpTo(newUserPage, 4));
+		async ({ createUnitPageNewUser }, use) => {
+			await use((await fillTabsUpTo(createUnitPageNewUser.page, 4)).createUnitPage);
+		},
+		{ box: true },
+	],
+	createUnitPageSuccessfullySubmitted: [
+		async ({ createUnitPage }, use) => {
+			const filledPage = await fillTabsUpTo(createUnitPage.page, 4);
+			await use(filledPage.createUnitPage);
+
+			console.log("Ad created with title: " + filledPage.title);
+			await new ApiHelper(createUnitPage.page.request).declineUnitByName(
+				getAccessToken(adminFile),
+				filledPage.title,
+			);
 		},
 		{ box: true },
 	],

@@ -1,9 +1,9 @@
 import { Page } from "@playwright/test";
 import { TestAdData } from "@custom-types/tabs.types";
-import { AdComponent } from "@components/create-unit/1/Ad.component";
-import { CategoryComponent } from "@components/create-unit/1/Category.component";
-import { LocationComponent } from "@components/create-unit/1/Location.component";
-import { ManufacturerComponent } from "@components/create-unit/1/Manufacturer.component";
+import { AdComponent } from "@components/create-unit/1/sections/Ad.component";
+import { CategoryComponent } from "@components/create-unit/1/sections/Category.component";
+import { LocationComponent } from "@components/create-unit/1/sections/Location.component";
+import { ManufacturerComponent } from "@components/create-unit/1/sections/Manufacturer.component";
 import { PhotosComponent } from "@components/create-unit/2/Photos.component";
 import { ServiceComponent } from "@components/create-unit/3/Service.component";
 import { PriceComponent } from "@components/create-unit/4/Price.component";

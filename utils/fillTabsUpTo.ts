@@ -12,6 +12,10 @@ export function fillTabsUpTo(
 	setService: boolean,
 ): Promise<{ createUnitPage: CreateUnitPage; service: string }>;
 
+export function fillTabsUpTo(page: Page, level: 4): Promise<{ createUnitPage: CreateUnitPage; title: string }>;
+
+export function fillTabsUpTo(page: Page, level: Exclude<FillLevel, 4>): Promise<CreateUnitPage>;
+
 export function fillTabsUpTo(page: Page, level: FillLevel, setService?: false): Promise<CreateUnitPage>;
 
 export async function fillTabsUpTo(page: Page, level: FillLevel, setService: boolean = false) {
@@ -35,5 +39,6 @@ export async function fillTabsUpTo(page: Page, level: FillLevel, setService: boo
 
 	await fillTab4Flow(page, ad.price);
 	await createUnitPage.nextStep();
-	return createUnitPage;
+
+	return { createUnitPage, title: ad.title };
 }

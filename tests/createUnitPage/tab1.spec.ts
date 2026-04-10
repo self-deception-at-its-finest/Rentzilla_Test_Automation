@@ -35,7 +35,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C294" },
 			},
-			async ({ createUnitPage: page, categoryComponent: category }) => {
+			async ({ createUnitPage: page }) => {
+				const category = page.mainInfoTab.categorySection;
+
 				await test.step("The page title is: ⤵️", async () => {
 					await test.step("• visible", async () => {
 						await expect(page.pageTitle).toBeVisible();
@@ -93,7 +95,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C296" },
 			},
-			async ({ createUnitPage, categoryComponent: category, userPage: page }) => {
+			async ({ createUnitPage: page }) => {
+				const category = page.mainInfoTab.categorySection;
+
 				await test.step("The title: ⤵️", async () => {
 					await test.step(`• has the «Категорія» text`, async () => {
 						await expect(category.label).toContainText(tabs.mainInfo.category.label);
@@ -118,7 +122,7 @@ test.describe(
 					});
 
 					await test.step("• requires filling.", async () => {
-						await createUnitPage.nextStep();
+						await page.nextStep();
 						await expectFieldError(category.field);
 
 						await expect(category.errorBlock).toBeVisible();
@@ -134,11 +138,7 @@ test.describe(
 					});
 
 					await test.step(`• has the «Вибір категорії технічного засобу» title`, async () => {
-						await expect(category.popupTitle).toHaveText(
-							isDesktop(page)
-								? tabs.mainInfo.category.popupTitle
-								: tabs.mainInfo.category.mobilePopupTitle,
-						);
+						await expect(category.popupTitle).toHaveText(tabs.mainInfo.category.popupTitle);
 					});
 
 					await test.step("• has the Close button", async () => {
@@ -151,12 +151,12 @@ test.describe(
 					});
 
 					await test.step("• disappears when clicking outside of it", async () => {
-						if (!isDesktop(page)) {
+						if (!isDesktop(page.page)) {
 							markStepAsSkipped("Clicking outside of modal");
 							return;
 						}
 						await category.clickCategorySelect();
-						await clickOutside(page);
+						await clickOutside(page.page);
 						await expect(category.popup).toBeHidden();
 					});
 
@@ -189,7 +189,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C297" },
 			},
-			async ({ createUnitPage: page, adComponent: ad }) => {
+			async ({ createUnitPage: page }) => {
+				const ad = page.mainInfoTab.adSection;
+
 				await test.step("The title: ⤵️", async () => {
 					await test.step(`• has the «Назва оголошення» text`, async () => {
 						await expect(ad.label).toContainText(tabs.mainInfo.ad.label);
@@ -267,7 +269,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C298" },
 			},
-			async ({ createUnitPage: page, manufacturerComponent: manufacturer }) => {
+			async ({ createUnitPage: page }) => {
+				const manufacturer = page.mainInfoTab.manufacturerSection;
+
 				await test.step("The title: ⤵️", async () => {
 					await test.step(`• has the «Виробник транспортного засобу» text`, async () => {
 						await expect(manufacturer.label).toContainText(tabs.mainInfo.manufacturer.label);
@@ -369,7 +373,9 @@ test.describe(
 				tag: ["@UI"],
 				annotation: { type: "Test case", description: "C299" },
 			},
-			async ({ createUnitPage: _, modelComponent: model }) => {
+			async ({ createUnitPage: page }) => {
+				const model = page.mainInfoTab.modelSection;
+
 				await test.step("The title: ⤵️", async () => {
 					await test.step(`• has the «Назва моделі» text`, async () => {
 						await expect(model.label).toContainText(tabs.mainInfo.model.label);
@@ -424,7 +430,9 @@ test.describe(
 				tag: "@field validation",
 				annotation: { type: "Test case", description: "C317" },
 			},
-			async ({ createUnitPage: _, specificationsComponent: specs }) => {
+			async ({ createUnitPage: page }) => {
+				const specs = page.mainInfoTab.specificationsSection;
+
 				await test.step("The Title: ⤵️", async () => {
 					await test.step(`• has the «Технічні характеристики» text`, async () => {
 						await expect(specs.label).toHaveText(tabs.mainInfo.specifications.label);
@@ -469,7 +477,9 @@ test.describe(
 				tag: "@field validation",
 				annotation: { type: "Test case", description: "C318" },
 			},
-			async ({ createUnitPage: _, detailsComponent: details }) => {
+			async ({ createUnitPage: page }) => {
+				const details = page.mainInfoTab.detailsSection;
+
 				await test.step("The Title: ⤵️", async () => {
 					await test.step(`• has the «Детальний опис» text`, async () => {
 						await expect(details.label).toHaveText(tabs.mainInfo.details.label);
@@ -512,7 +522,9 @@ test.describe(
 				tag: "@field validation",
 				annotation: { type: "Test case", description: "C319" },
 			},
-			async ({ createUnitPage: page, locationComponent: location }) => {
+			async ({ createUnitPage: page }) => {
+				const location = page.mainInfoTab.locationSection;
+
 				await test.step("The title: ⤵️", async () => {
 					await test.step(`• has the «Місце розташування технічного засобу» text`, async () => {
 						await expect(location.label).toContainText(tabs.mainInfo.location.label);
@@ -566,14 +578,14 @@ test.describe(
 				tag: ["@button validation"],
 				annotation: { type: "Test case", description: "C326" },
 			},
-			async ({ createUnitPage, userPage: page }) => {
+			async ({ createUnitPage: page }) => {
 				await test.step("The button has the correct text", async () => {
-					await expect(createUnitPage.cancelButton).toHaveText(BUTTONS.CANCEL);
+					await expect(page.cancelButton).toHaveText(BUTTONS.CANCEL);
 				});
 
 				await test.step("Clicking on the button cancels the ad creation and redirects to the main page", async () => {
-					await createUnitPage.cancelAdCreating();
-					await expect(page).toHaveURL(new RegExp(`${endpoints.home}`));
+					await page.cancelAdCreating();
+					await expect(page.page).toHaveURL(new RegExp(`${endpoints.home}`));
 				});
 			},
 		);
@@ -584,37 +596,30 @@ test.describe(
 				tag: ["@button validation"],
 				annotation: { type: "Test case", description: "C329" },
 			},
-			async ({
-				createUnitPage: page,
-				categoryComponent: category,
-				adComponent: ad,
-				manufacturerComponent: manufacturer,
-				locationComponent: location,
-				photosComponent: photos,
-			}) => {
+			async ({ createUnitPage: page }) => {
 				await test.step("The button has the correct text", async () => {
 					await expect(page.nextButton).toHaveText(BUTTONS.NEXT);
 				});
 
 				await test.step("Warnings are displayed about the need to fill in mandatory fields", async () => {
 					await page.nextStep();
-					await expect(category.errorBlock).toBeVisible();
-					await expect(ad.errorBlock).toBeVisible();
-					await expect(manufacturer.errorBlock).toBeVisible();
-					await expect(location.errorBlock).toBeVisible();
+					await expect(page.mainInfoTab.categorySection.errorBlock).toBeVisible();
+					await expect(page.mainInfoTab.adSection.errorBlock).toBeVisible();
+					await expect(page.mainInfoTab.manufacturerSection.errorBlock).toBeVisible();
+					await expect(page.mainInfoTab.locationSection.errorBlock).toBeVisible();
 				});
 
 				await test.step("When the required fields are filled in, clicking on the button: ⤵️", async () => {
 					await test.step("• displays the next tab", async () => {
-						await category.selectCategory();
-						await ad.typeAd(generateValidText());
-						await manufacturer.setManufacturer(getRandomElement(MANUFACTURERS));
-						await location.selectLocation();
+						await page.mainInfoTab.categorySection.selectCategory();
+						await page.mainInfoTab.adSection.typeAd(generateValidText());
+						await page.mainInfoTab.manufacturerSection.setManufacturer(getRandomElement(MANUFACTURERS));
+						await page.mainInfoTab.locationSection.selectLocation();
 
 						await page.nextStep();
 
 						await expectTabActive(page.tabList.nth(1));
-						await expect(photos.uploadPhotoButtonsWrapper).toBeVisible();
+						await expect(page.photosTab.uploadPhotoButtonsWrapper).toBeVisible();
 					});
 
 					await test.step("• keeps the page title visibility and text unchanged", async () => {

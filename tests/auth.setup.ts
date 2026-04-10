@@ -34,13 +34,13 @@ fs.mkdirSync(authDir, { recursive: true });
 ].forEach(({ role, email, password, fileName }) => {
 	setup.describe("Creating user browser contexts", () => {
 		setup(`authenticate role: ${role}`, async ({ request }) => {
-			if (fs.existsSync(fileName)) {
-				console.log(`“${role}” auth file already exists`);
+			if (!email || !password) {
+				console.log(`“${role}” credentials not configured, skipping`);
 				return;
 			}
 
-			if (!email || !password) {
-				console.log(`"${role}" credentials not configured, skipping`);
+			if (fs.existsSync(fileName)) {
+				console.log(`“${role}” auth file already exists`);
 				return;
 			}
 

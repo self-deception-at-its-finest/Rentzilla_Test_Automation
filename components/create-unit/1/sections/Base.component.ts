@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import type { Locator, Page } from "@playwright/test";
 import { tabs } from "@constants/create-unit/fields.constants";
 import { FieldActions } from "@components/FieldActions";
 import { Tab1KeysWithLabel } from "@custom-types/tabs.types";
