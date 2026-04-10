@@ -1,6 +1,5 @@
 import { PlaywrightTestArgs, PlaywrightWorkerArgs } from "@playwright/test";
 import { PageFixtures } from "./page.fixtures.types";
-// import { UserPageFixtures } from "./userPage.fixtures.types";
 import { GeneralComponents } from "./generalComponents.fixtures.types";
 import { UserPageFixtures } from "./userPage.fixtures.types";
 
