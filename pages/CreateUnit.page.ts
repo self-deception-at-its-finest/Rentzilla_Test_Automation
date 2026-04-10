@@ -1,6 +1,11 @@
 import type { Locator, Page } from "@playwright/test";
 import BasePage from "./Base.page";
-import { createUnitConsts as data, TabNumber } from "@constants/create-unit/createUnit.constants";
+import {
+	BUTTONS,
+	createUnitConsts,
+	createUnitConsts as data,
+	TabNumber,
+} from "@constants/create-unit/createUnit.constants";
 import { TAB_NUMBERS } from "@constants/create-unit/createUnit.constants";
 import { PriceComponent } from "@components/create-unit/4/Price.component";
 import { ServiceComponent } from "@components/create-unit/3/Service.component";
@@ -10,10 +15,12 @@ import { VerifiedUserContactsComponent } from "@components/create-unit/5/Verifie
 import { NewUserContactsComponent } from "@components/create-unit/5/NewUserContacts.component";
 
 export class CreateUnitPage extends BasePage {
+	readonly root: Locator;
 	readonly pageTitle: Locator;
 	readonly tabList: Locator;
 	readonly nextButton: Locator;
 	readonly cancelButton: Locator;
+	readonly reviewAdButton: Locator;
 	readonly successfullCreating: Locator;
 	readonly notificationContainer: Locator;
 
@@ -26,10 +33,12 @@ export class CreateUnitPage extends BasePage {
 
 	constructor(page: Page) {
 		super(page);
+		this.root = this.page.getByText(createUnitConsts.pageTitle).locator("..");
 		this.pageTitle = this.page.getByText(data.pageTitle).first();
 		this.tabList = this.page.locator('[role="tablist"] > button');
 		this.nextButton = this.page.getByTestId("nextButton");
 		this.cancelButton = this.page.getByTestId("prevButton");
+		this.reviewAdButton = this.root.getByText(BUTTONS.REVIEW);
 		this.successfullCreating = this.page.getByText(data.successfullCreatingMessage);
 
 		this.mainInfoTab = new MainInfoComponent(this.page);
@@ -71,5 +80,9 @@ export class CreateUnitPage extends BasePage {
 
 	async cancelAdCreating() {
 		await this.cancelButton.click();
+	}
+
+	async reviewAd() {
+		if (await this.reviewAdButton.isVisible()) await this.reviewAdButton.click();
 	}
 }

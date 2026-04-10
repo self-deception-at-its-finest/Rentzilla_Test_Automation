@@ -242,6 +242,24 @@ test.describe(
 				});
 			},
 		);
+
+		test(
+			"Verify “Переглянути оголошення” button",
+			{
+				tag: ["@UI"],
+				annotation: { type: "Test case", description: "C540" },
+			},
+			async ({ createUnitPageWithFilledFourTabs: page }) => {
+				await test.step("The button has the correct text", async () => {
+					await expect(page.reviewAdButton).toHaveText(BUTTONS.REVIEW);
+				});
+
+				await test.step("After clicking on the button, the user is redirected to the ad preview page", async () => {
+					await page.reviewAd();
+					await expect(page.page).toHaveURL(/\/preview\-unit\//);
+				});
+			},
+		);
 	},
 );
 
